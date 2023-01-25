@@ -1,44 +1,33 @@
 import React, { useEffect, useState } from "react";
-
-const keypressesToBraille = (keypresses: string[]) => {
-  const array = [
-    keypresses.includes(";") ? "1" : "0",
-    keypresses.includes("a") ? "1" : "0",
-    keypresses.includes("l") ? "1" : "0",
-    keypresses.includes("k") ? "1" : "0",
-    keypresses.includes("j") ? "1" : "0",
-    keypresses.includes("s") ? "1" : "0",
-    keypresses.includes("d") ? "1" : "0",
-    keypresses.includes("f") ? "1" : "0",
-  ];
-
-  const brailOffset = parseInt(array.join(""), 2);
-  const decimalBrailStart = 10240;
-
-  const decimalBrailUnicodeNumber = brailOffset + decimalBrailStart;
-
-  return String.fromCharCode(decimalBrailUnicodeNumber);
-};
+import { keypressesToBraille } from "../services/brailleService";
+import { BrailInEnglish } from "./BrailInEnglish";
+import { KeypressVisualization } from "./KeypressVisualization";
 
 export const BrailKeyboard = () => {
-  const [lastKeysPressed, setLastKeysPressed] = useState<string[]>([]);
+  const [persistentKeysPressed, setPersistentKeysPressed] = useState<string[]>(
+    []
+  );
   const [currentKeysPressed, setCurrentKeysPressed] = useState<string[]>([]);
   const [brailOutput, setBrailOutput] = useState("");
 
   useEffect(() => {
-    if (lastKeysPressed.length !== 0 && currentKeysPressed.length === 0) {
-      setBrailOutput((b) => b + keypressesToBraille(lastKeysPressed));
-      setLastKeysPressed([]);
+    if (persistentKeysPressed.length !== 0 && currentKeysPressed.length === 0) {
+      setBrailOutput((b) => b + keypressesToBraille(persistentKeysPressed));
+      setPersistentKeysPressed([]);
     }
-  }, [lastKeysPressed, currentKeysPressed]);
+  }, [persistentKeysPressed, currentKeysPressed]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
+    if (e.key === "Backspace") {
+      setBrailOutput((b) => b.slice(0, -1));
+      return;
+    }
     const addKeyIfNotPresent = (keys: string[]): string[] => {
       if (keys.includes(e.key)) return keys;
       else return [...keys, e.key];
     };
     setCurrentKeysPressed(addKeyIfNotPresent);
-    setLastKeysPressed(addKeyIfNotPresent);
+    setPersistentKeysPressed(addKeyIfNotPresent);
   };
 
   const handleKeyUp = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
@@ -51,6 +40,7 @@ export const BrailKeyboard = () => {
 
   return (
     <div>
+      <KeypressVisualization keypresses={persistentKeysPressed} />
       <div className=" m-5">
         <textarea
           className="bg-slate-100 w-full rounded-lg p-5"
@@ -60,24 +50,7 @@ export const BrailKeyboard = () => {
           rows={5}
         />
       </div>
-      <div>
-        Current Keys pressed:{" "}
-        {currentKeysPressed.map((k, i) => (
-          <span key={i + k}>{k}</span>
-        ))}
-      </div>
-      <div>
-        Last Keys pressed:{" "}
-        {lastKeysPressed.map((k, i) => (
-          <span key={i + k}>{k}</span>
-        ))}
-      </div>
-      {/* <div>
-        Last Braille:{" "}
-        <span className="outline">
-          {brailOutput}
-        </span>
-      </div> */}
+      <BrailInEnglish brailleText={brailOutput} />
     </div>
   );
 };
