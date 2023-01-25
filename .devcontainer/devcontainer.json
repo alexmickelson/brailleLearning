@@ -12,7 +12,8 @@
 		"dsznajder.es7-react-js-snippets",
 		"ms-azuretools.vscode-docker",
 		"esbenp.prettier-vscode",
-		"ms-python.python"
+		"ms-python.python",
+		"bradlc.vscode-tailwindcss"
 	],
 	"remoteUser": "developer",
 	"features": {
