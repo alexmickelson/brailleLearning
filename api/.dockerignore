@@ -1,0 +1,8 @@
+*/__pycache__/
+.pytest_cache/
+.env
+htmlcov/
+.mypy_cache
+*.env*.secret
+htmlcov/
+.vscode/

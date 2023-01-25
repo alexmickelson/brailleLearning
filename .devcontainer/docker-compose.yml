@@ -1,0 +1,55 @@
+version: "3.8"
+services:
+  editor:
+    build: .
+    volumes:
+      - ../:/app
+      - ./.bashrc:/home/developer/.bashrc
+      - ~/.ssh:/home/developer/.ssh
+      - virtualenv:/home/developer/virtualenv
+      - developer_home:/home/developer
+    working_dir: /app
+    user: root
+    command: |
+      bash -c "
+        chown -R developer:developer /home/developer/
+        chown -R developer:developer /home/developer/virtualenv
+        su - developer
+        tail -f /dev/null
+      "
+      
+
+  client:
+    build: .
+    volumes:
+      - ../:/app
+    working_dir: /app/client
+    user: developer
+    command: |
+      bash -c "
+        npm install
+        npm start
+      "
+    ports:
+      - 8080:8080
+
+  api:
+    build: .
+    volumes:
+      - ../:/app
+      - virtualenv:/home/developer/virtualenv
+    working_dir: /app/api
+    command: |
+      bash -c "
+        chown -R developer:developer /home/developer/virtualenv
+        python -m venv /home/developer/virtualenv
+        
+        su - developer
+        source /home/developer/virtualenv/bin/activate
+        pip install -r requirements.txt
+        uvicorn src.main:app --reload --port 8080 --host 0.0.0.0
+      "
+
+volumes:
+  virtualenv:
+  developer_home:
