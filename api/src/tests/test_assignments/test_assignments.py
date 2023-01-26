@@ -66,7 +66,7 @@ def test_submitted_assignments_have_grades():
     client = TestClient(app)
     correctly_submit_assignment(client)
 
-    url = "/api/assignments/grade/0"
+    url = "/api/assignments/grades/0"
     response = client.get(url)
     assert response.is_success
 

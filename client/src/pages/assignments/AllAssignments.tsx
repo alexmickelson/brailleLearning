@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Spinner } from "../../components/Spinner";
-import { AssignmentDetail } from "./AssignmentDetail";
+import { AssignmentDetail } from "./assignmentDetail/AssignmentDetail";
 import { useGetAllAssignmentsQuery } from "./assignmentHooks";
 import { Assignment } from "./assignmentModel";
 

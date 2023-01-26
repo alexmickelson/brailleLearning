@@ -1,6 +1,6 @@
 import React, { FC } from "react";
-import { BrailKeyboard } from "../brailleKeyboard/BrailKeyboard";
-import { Assignment } from "./assignmentModel";
+import { BrailKeyboard } from "../../brailleKeyboard/BrailKeyboard";
+import { Assignment } from "../assignmentModel";
 
 export const AssignmentDetail: FC<{ assignment: Assignment }> = ({
   assignment,
