@@ -2,24 +2,24 @@ import toast, { ErrorIcon } from "react-hot-toast";
 import { QueryClient } from "@tanstack/react-query";
 
 const queryClient = new QueryClient({
-  // defaultOptions: {
-  //   queries: {
-  //     refetchOnWindowFocus: false,
-  //     onError: () => {toast.error("something went wrong")},
-  //     retry: 0,
-  //   },
-  //   mutations: {
-  //     onError: () => {toast.error("something went wrong")},
-  //     retry: 0,
-  //   },
-  // },
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      onError: addErrorAsToast,
+      retry: 0,
+    },
+    mutations: {
+      onError: addErrorAsToast,
+      retry: 0,
+    },
+  },
 });
 
 export const getQueryClient = () => {
   return queryClient;
 };
 
-export function createErrorToast(message: string) {
+function createErrorToast(message: string) {
   toast(
     (t: any) => (
       <div className="flex">
