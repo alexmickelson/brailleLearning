@@ -1,12 +1,12 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { BrailKeyboard } from "./pages/BrailKeyboard";
+import { AllAssignments } from "./pages/assignments/AllAssignments";
 
 export const AppRoutes = () => {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <BrailKeyboard />,
+      element: <AllAssignments />,
     },
   ]);
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { FC } from "react";
-import { keypressesToBraille } from "../services/brailleService";
+import { keypressesToBraille } from "../../services/brailleService";
 
 export const KeypressVisualization: FC<{ keypresses: string[] }> = ({
   keypresses,

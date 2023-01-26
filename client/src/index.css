@@ -30,3 +30,16 @@ input {
         m-0
         focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none;
 }
+
+button {
+  @apply bg-transparent 
+  font-semibold 
+  py-2 px-4 border 
+  hover:border-transparent 
+  rounded
+  
+  hover:text-white
+  hover:bg-blue-500 
+  text-blue-700 
+  border-blue-500;
+}

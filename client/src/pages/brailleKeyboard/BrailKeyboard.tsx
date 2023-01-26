@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { keypressesToBraille } from "../services/brailleService";
+import { keypressesToBraille } from "../../services/brailleService";
 import { BrailInEnglish } from "./BrailInEnglish";
 import { KeypressVisualization } from "./KeypressVisualization";
 
