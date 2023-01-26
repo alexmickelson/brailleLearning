@@ -11,7 +11,10 @@ export const Grade: FC<{ assignmentId: number }> = ({ assignmentId }) => {
 
   return (
     <div>
-      Grade: {gradeQuery.data.grade ? gradeQuery.data.grade : "no submission"}
+      Grade:{" "}
+      {typeof gradeQuery.data.grade === "number"
+        ? gradeQuery.data.grade
+        : "no submission"}
     </div>
   );
 };

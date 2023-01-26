@@ -2,13 +2,12 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { getQueryClient } from "../../services/queryClient";
 import { Assignment } from "./assignmentModel";
 import axios from "axios";
-import { toast } from "react-hot-toast";
 
 const queryClient = getQueryClient();
 export const assignmentKeys = {
-  all: ["all assignments key"] as const,
+  all: ["allassignmentskey"] as const,
   grade: (assignmentId: number) =>
-    ["assignment grade key", assignmentId] as const,
+    ["assignmentgradekey", assignmentId] as const,
 };
 
 export const useGetAllAssignmentsQuery = () =>
