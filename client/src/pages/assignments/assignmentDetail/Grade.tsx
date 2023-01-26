@@ -1,8 +1,17 @@
-import React from 'react'
+import React, { FC } from "react";
+import { Spinner } from "../../../components/Spinner";
+import { useGetGradeQuery } from "../assignmentHooks";
 
-export const Grade = () => {
-  
+export const Grade: FC<{ assignmentId: number }> = ({ assignmentId }) => {
+  const gradeQuery = useGetGradeQuery(assignmentId);
+
+  if (gradeQuery.isLoading) return <Spinner />;
+  if (gradeQuery.isError) return <div>Error loading grades</div>;
+  if (!gradeQuery.data) return <div>No data for grade query</div>;
+
   return (
-    <div>Grade</div>
-  )
-}
+    <div>
+      Grade: {gradeQuery.data.grade ? gradeQuery.data.grade : "no submission"}
+    </div>
+  );
+};

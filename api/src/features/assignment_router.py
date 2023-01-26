@@ -40,7 +40,7 @@ async def get_all_assignments():
     return assignments
 
 
-@router.get("/grade/{assignment_id}")
+@router.get("/grades/{assignment_id}")
 async def get_assignment_grade():
     global grades
     return {"grade": grades[0]}

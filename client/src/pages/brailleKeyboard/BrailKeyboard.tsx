@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { keypressesToBraille } from "../../services/brailleService";
 import { BrailInEnglish } from "./BrailInEnglish";
 import { KeypressVisualization } from "./KeypressVisualization";
 
-export const BrailKeyboard = () => {
+export const BrailKeyboard: FC<{ updateBrail: (s: string) => void }> = ({
+  updateBrail,
+}) => {
   const [persistentKeysPressed, setPersistentKeysPressed] = useState<string[]>(
     []
   );
@@ -16,6 +18,10 @@ export const BrailKeyboard = () => {
       setPersistentKeysPressed([]);
     }
   }, [persistentKeysPressed, currentKeysPressed]);
+
+  useEffect(() => {
+    updateBrail(brailOutput);
+  }, [brailOutput, updateBrail]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
     if (e.key === "Backspace") {
@@ -46,6 +52,7 @@ export const BrailKeyboard = () => {
           className="bg-slate-100 w-full rounded-lg p-5"
           onKeyDown={handleKeyDown}
           onKeyUp={handleKeyUp}
+          onChange={() => {}}
           value={brailOutput}
           rows={5}
         />

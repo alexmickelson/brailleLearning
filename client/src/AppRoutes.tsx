@@ -1,5 +1,6 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 import { AllAssignments } from "./pages/assignments/AllAssignments";
 
 export const AppRoutes = () => {
@@ -10,5 +11,9 @@ export const AppRoutes = () => {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <ErrorBoundary>
+      <RouterProvider router={router} />
+    </ErrorBoundary>
+  );
 };

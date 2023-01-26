@@ -1,7 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getQueryClient } from "../../services/queryClient";
 import { Assignment } from "./assignmentModel";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 
+const queryClient = getQueryClient();
 export const assignmentKeys = {
   all: ["all assignments key"] as const,
   grade: (assignmentId: number) =>
@@ -16,8 +19,27 @@ export const useGetAllAssignmentsQuery = () =>
   });
 
 export const useGetGradeQuery = (assignmentId: number) =>
-  useQuery(assignmentKeys.grade(assignmentId), async () => {
-    const url = `/api/assignments/grade/${assignmentId}`;
-    const response = await axios.get(url);
-    return response.data;
-  });
+  useQuery(
+    assignmentKeys.grade(assignmentId),
+    async (): Promise<{ grade?: number }> => {
+      const url = `/api/assignments/grades/${assignmentId}`;
+      const response = await axios.get(url);
+      return response.data;
+    }
+  );
+
+export const useGradeSubmissionMutation = (assignmentId: number) =>
+  useMutation(
+    async (braille: string) => {
+      const url = `/api/assignments/submit/${assignmentId}`;
+      const body = {
+        braille: braille,
+      };
+      const response = await axios.post(url, body);
+      return response.data;
+    },
+    {
+      onSuccess: () =>
+        queryClient.invalidateQueries(assignmentKeys.grade(assignmentId)),
+    }
+  );

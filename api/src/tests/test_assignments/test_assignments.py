@@ -54,7 +54,7 @@ def test_can_get_assignment_list():
 def test_can_view_assignment_grade():
     client = TestClient(app)
     client.delete('/api/assignments/grades/all')
-    url = "/api/assignments/grade/0"
+    url = "/api/assignments/grades/0"
     response = client.get(url)
     assert response.is_success
 
