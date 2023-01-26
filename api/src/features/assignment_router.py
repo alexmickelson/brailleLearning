@@ -17,13 +17,13 @@ async def get_assignment_by_id(assignment_id: int):
 
 
 class AssignmentSubmission(BaseModel):
-    brail: str
+    braille: str
 
 
 @router.post("/submit/{assignment_id}")
 async def submit_assignment(assignment_id: int, body: AssignmentSubmission):
     global grades
-    translated_brail_submission = braille_service.braille_to_text(body.brail)
+    translated_brail_submission = braille_service.braille_to_text(body.braille)
     if translated_brail_submission == assignments[assignment_id]["text"]:
         grades[assignment_id] = 100.0
         return {"correctly_translated": True}

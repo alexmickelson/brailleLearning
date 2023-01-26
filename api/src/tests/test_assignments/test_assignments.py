@@ -22,7 +22,7 @@ def test_can_translate_submitted_assignment():
 
 def correctly_submit_assignment(client: TestClient):
     assignment_text = "translate this"
-    assignment_submisison = {"brail": "⠞⠗⠁⠝⠎⠇⠁⠞⠑⠀⠞⠓⠊⠎"}
+    assignment_submisison = {"braille": "⠞⠗⠁⠝⠎⠇⠁⠞⠑⠀⠞⠓⠊⠎"}
     url = "/api/assignments/submit/0"
     response = client.post(url, json=assignment_submisison)
     assert response.is_success
@@ -30,7 +30,7 @@ def correctly_submit_assignment(client: TestClient):
 
 
 def test_incorrect_brail_is_marked_incorrect():
-    incorrect_submisison = {"brail": "⠞⠗⠁⠇⠁⠞⠑⠀⠞⠓⠊⠎"}
+    incorrect_submisison = {"braille": "⠞⠗⠁⠇⠁⠞⠑⠀⠞⠓⠊⠎"}
     url = "/api/assignments/submit/0"
     client = TestClient(app)
     response = client.post(url, json=incorrect_submisison)
