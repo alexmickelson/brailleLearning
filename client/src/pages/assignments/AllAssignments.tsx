@@ -14,20 +14,26 @@ export const AllAssignments = () => {
     return <div>No assignment data (this should never display)</div>;
 
   return (
-    <div>
-      {assignmentsQuery.data.map((a) => (
-        <div key={a.id.toString()}>
-          <button className="btn" onClick={() => setSelectedAssignment(a)}>
+    <div className="flex">
+      <div className="m-5">
+        {assignmentsQuery.data.map((a) => (
+          <div
+            key={a.id.toString()}
+            onClick={() => setSelectedAssignment(a)}
+            className="outline hover:bg-slate-200 rounded-lg px-3 py-1 cursor-pointer"
+          >
             {a.name}
-          </button>
-        </div>
-      ))}
-      {selectedAssignment && (
-        <>
-          <hr />
-          <AssignmentDetail assignment={selectedAssignment} />
-        </>
-      )}
+          </div>
+        ))}
+      </div>
+      <div>
+        {selectedAssignment && (
+          <>
+            <hr />
+            <AssignmentDetail assignment={selectedAssignment} />
+          </>
+        )}
+      </div>
     </div>
   );
 };

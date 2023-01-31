@@ -1,17 +1,21 @@
 /* Typography */
-.h1 {
+h1 {
+  @apply text-5xl font-extrabold tracking-tighter;
+}
+
+h2 {
   @apply text-4xl font-extrabold tracking-tighter;
 }
 
-.h2 {
-  @apply text-3xl font-extrabold tracking-tighter;
-}
-
-.h3 {
+h3 {
   @apply text-3xl font-extrabold;
 }
 
-.h4 {
+h4 {
+  @apply text-2xl font-extrabold tracking-tight;
+}
+
+h5 {
   @apply text-2xl font-extrabold tracking-tight;
 }
 
@@ -38,8 +42,8 @@ button {
   hover:border-transparent 
   rounded
   
-  hover:text-white
-  hover:bg-blue-500 
-  text-blue-700 
-  border-blue-500;
+  hover:text-gray-200
+  bg-gray-500 
+  text-gray-100 
+  border-gray-500;
 }
