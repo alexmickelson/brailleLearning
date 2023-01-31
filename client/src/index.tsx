@@ -17,7 +17,6 @@ const oidcConfig: AuthProviderProps = {
   authority: `https://login.microsoftonline.com/${process.env.REACT_APP_MICROSOFT_TENANT}/v2.0`,
   clientId: process.env.REACT_APP_CLIENT_ID,
   redirectUri: "http://localhost:8080/",
-  // responseType: 'authorization_code',
 };
 
 const queryClient = getQueryClient();
