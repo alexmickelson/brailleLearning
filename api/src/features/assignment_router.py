@@ -1,9 +1,13 @@
 from typing import Dict
-from fastapi import APIRouter
+from fastapi import APIRouter, Request, Depends
 from pydantic import BaseModel
 from src.services import braille_service
+from src.services.oauth_service import authenticate_user
 
-router = APIRouter(prefix="/assignments")
+router = APIRouter(
+    prefix="/assignments",
+     dependencies=[Depends(authenticate_user)]
+)
 
 
 assignments = [{"id": 0, "name": "Assignment 1", "text": "translate this"}]
@@ -50,3 +54,15 @@ async def get_assignment_grade():
 async def delete_all_assignments():
     global grades
     grades = {0: None}
+
+
+class AssignmentCreation(BaseModel):
+    name: str
+    text: str
+
+
+@router.post("/new")
+async def create_assignment(body: AssignmentCreation):
+    global assignments
+    new_assignment = {"name": body.name, "text": body.text, "id": len(assignments)}
+    assignments.append(new_assignment)

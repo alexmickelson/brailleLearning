@@ -1,6 +1,8 @@
 from fastapi import FastAPI, APIRouter
 from src.features import assignment_router
+from dotenv import load_dotenv
 
+load_dotenv()
 app = FastAPI()
 
 
