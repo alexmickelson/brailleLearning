@@ -19,8 +19,10 @@ const oidcConfig: AuthProviderProps = {
     }
     const expiresDate = new Date(0);
     expiresDate.setUTCSeconds(user.profile.exp ?? 0);
+    
     const token = user.id_token;
-    console.log(user);
+    // console.log(user);
+    console.log("Cookie expires at", expiresDate);
     window.location.search = "";
     document.cookie = `jwt=${token}; expires=${expiresDate.toUTCString()}; SameSite=Strict; path=/api;`;
   },

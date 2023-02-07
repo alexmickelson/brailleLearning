@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Spinner } from "../../../components/Spinner";
+import { Spinner } from "../../../sharedComponents/Spinner";
 import { useGetGradeQuery } from "../assignmentHooks";
 
 export const Grade: FC<{ assignmentId: number }> = ({ assignmentId }) => {
@@ -10,8 +10,8 @@ export const Grade: FC<{ assignmentId: number }> = ({ assignmentId }) => {
   if (!gradeQuery.data) return <div>No data for grade query</div>;
 
   return (
-    <div>
-      Grade:{" "}
+    <div className="ml-3 text-gray-500">
+      Assignment Grade:{" "}
       {typeof gradeQuery.data.grade === "number"
         ? gradeQuery.data.grade
         : "no submission"}

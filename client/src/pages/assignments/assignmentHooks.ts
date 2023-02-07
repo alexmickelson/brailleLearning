@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getQueryClient } from "../../services/queryClient";
-import { Assignment } from "./assignmentModel";
+import { Assignment } from "../../models/assignmentModel";
 import axios from "axios";
 
 const queryClient = getQueryClient();

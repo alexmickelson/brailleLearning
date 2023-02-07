@@ -23,9 +23,11 @@ function createErrorToast(message: string) {
   toast(
     (t: any) => (
       <div className="flex">
-        <ErrorIcon />
-        <div> {message}</div>
-        <button onClick={() => toast.dismiss(t.id)} className="">
+        <div className="my-auto">
+          <ErrorIcon />
+        </div>
+        <div className="text-center m-3 p-1">{message}</div>
+        <button onClick={() => toast.dismiss(t.id)} className="my-auto">
           X
         </button>
       </div>

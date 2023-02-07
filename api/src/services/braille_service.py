@@ -70,7 +70,11 @@ text = {v: k for k, v in braille.items()}
 
 
 def braille_to_text(incoming: str):
+    for i in incoming:
+        if i not in text.keys():
+            raise Exception(f"{i} is not a translatable braille character")
     return "".join([text[l] for l in incoming])
+
 
 def text_to_braille(incoming: str):
     return "".join([braille[l] for l in incoming])

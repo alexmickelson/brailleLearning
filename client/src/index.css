@@ -47,3 +47,16 @@ button {
   text-gray-100 
   border-gray-500;
 }
+
+a.active {
+  @apply border-white 
+  border-b-2
+  transition-all;
+}
+
+hr {
+  @apply border-2 border-slate-600 m-3;
+}
+:root {
+  font-family: Verdana, sans-serif;
+}

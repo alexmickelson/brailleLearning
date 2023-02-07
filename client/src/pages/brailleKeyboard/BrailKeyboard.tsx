@@ -55,6 +55,7 @@ export const BrailKeyboard: FC<{ updateBrail: (s: string) => void }> = ({
           onChange={() => {}}
           value={brailOutput}
           rows={5}
+          placeholder="Click here to type braille"
         />
       </div>
       <BrailInEnglish brailleText={brailOutput} />

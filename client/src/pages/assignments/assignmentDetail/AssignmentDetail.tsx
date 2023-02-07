@@ -1,8 +1,8 @@
 import React, { FC, useState } from "react";
-import { Spinner } from "../../../components/Spinner";
+import { Spinner } from "../../../sharedComponents/Spinner";
 import { BrailKeyboard } from "../../brailleKeyboard/BrailKeyboard";
-import { useGetGradeQuery, useGradeSubmissionMutation } from "../assignmentHooks";
-import { Assignment } from "../assignmentModel";
+import { useGradeSubmissionMutation } from "../assignmentHooks";
+import { Assignment } from "../../../models/assignmentModel";
 import { Grade } from "./Grade";
 
 export const AssignmentDetail: FC<{ assignment: Assignment }> = ({
@@ -12,9 +12,24 @@ export const AssignmentDetail: FC<{ assignment: Assignment }> = ({
   const gradeSubmissionMutation = useGradeSubmissionMutation(assignment.id);
 
   return (
-    <div>
-      <div>{assignment.text}</div>
-      <Grade assignmentId={assignment.id} />
+    <div className="m-3">
+      <h1 className="text-center">{assignment.name}</h1>
+      <div
+        className="
+          text-center
+          border-4
+          rounded-lg
+          m-5
+          p-2
+          bg-slate-200
+          border-slate-300
+        "
+      >
+        <div>
+          <strong>Translate the Following Text:</strong>
+        </div>
+        <div>{assignment.text}</div>
+      </div>
       <BrailKeyboard updateBrail={setBrailInput} />
 
       <div className="flex justify-center">
@@ -25,6 +40,7 @@ export const AssignmentDetail: FC<{ assignment: Assignment }> = ({
       <div className="flex justify-center">
         {gradeSubmissionMutation.isLoading && <Spinner />}
       </div>
+      <Grade assignmentId={assignment.id} />
     </div>
   );
 };

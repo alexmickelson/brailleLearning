@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Spinner } from "../../components/Spinner";
+import { Spinner } from "../../sharedComponents/Spinner";
 import { AssignmentDetail } from "./assignmentDetail/AssignmentDetail";
 import { useGetAllAssignmentsQuery } from "./assignmentHooks";
-import { Assignment } from "./assignmentModel";
+import { Assignment } from "../../models/assignmentModel";
 
 export const AllAssignments = () => {
   const assignmentsQuery = useGetAllAssignmentsQuery();
@@ -16,20 +16,33 @@ export const AllAssignments = () => {
   return (
     <div className="flex">
       <div className="m-5">
+        <h5>Assignments: </h5>
         {assignmentsQuery.data.map((a) => (
           <div
             key={a.id.toString()}
             onClick={() => setSelectedAssignment(a)}
-            className="outline hover:bg-slate-200 rounded-lg px-3 py-1 cursor-pointer"
+            className="
+            my-3
+            px-3 
+            py-1 
+            cursor-pointer
+            bg-slate-200 
+
+            transition-all
+            duration-300
+            hover:outline
+            hover:scale-110
+            hover:text-slate-100
+            hover:bg-slate-800
+            "
           >
             {a.name}
           </div>
         ))}
       </div>
-      <div>
+      <div className="w-full">
         {selectedAssignment && (
           <>
-            <hr />
             <AssignmentDetail assignment={selectedAssignment} />
           </>
         )}
