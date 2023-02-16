@@ -15,7 +15,7 @@ services:
       context: client/
       args:
         - REACT_APP_CLIENT_ID=${REACT_APP_CLIENT_ID}
-        - REACT_APP_MICROSOFT_TENANT=${REACT_APP_MICROSOFT_TENANT}
+        - REACT_APP_AUTHORITY=${REACT_APP_AUTHORITY}
         - REACT_APP_HOST=${REACT_APP_HOST}
     container_name: braille_client
     restart: always
