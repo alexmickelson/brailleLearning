@@ -1,0 +1,42 @@
+version: "3.8"
+services:
+  api:
+    build: api/
+    container_name: braille_api
+    restart: always
+    environment:
+      - TZ=US/Central
+  
+  client:
+    build: client/
+    container_name: braille_client
+    restart: always
+    environment:
+      - TZ=US/Central
+
+  proxy:
+    image: lscr.io/linuxserver/swag
+    container_name: braille_swag
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=US/Central
+      - URL=braille.alexmickelson.guru
+      # - SUBDOMAINS=www,
+      - VALIDATION=http
+      # - CERTPROVIDER= #optional
+      # - DNSPLUGIN=cloudflare #optional
+      # - DUCKDNSTOKEN=<token> #optional
+      - EMAIL=alexmickelson96@gmail.com
+      # - ONLY_SUBDOMAINS=false #optional
+      # - EXTRA_DOMAINS=<extradomains> #optional
+      - STAGING=true #optional
+    volumes:
+      - ./nginx.conf:/config/nginx/site-confs/default.conf
+      - /data/swag/:/config/
+    ports:
+      - 443:443
+      - 80:80 #optional
+    restart: unless-stopped
