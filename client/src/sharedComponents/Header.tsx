@@ -7,6 +7,8 @@ export const Header = () => {
   const auth = useAuth();
   const isAdmin = useIsAdmin();
 
+  console.log(auth.userData);
+
   return (
     <header className=" h-24 bg-gray-800 flex">
       <NavLink

@@ -13,10 +13,10 @@ jobs:
 
       - name: build and deploy
         env: 
-          JWKS_URL: https://login.microsoftonline.com/${{ vars.REACT_APP_MICROSOFT_TENANT }}/discovery/keys
+          JWKS_URL: ${{ vars.REACT_APP_AUTHORITY }}/.well-known/jwks.json
           AUTH_AUDIENCE: ${{ vars.REACT_APP_CLIENT_ID }}
           REACT_APP_CLIENT_ID: ${{ vars.REACT_APP_CLIENT_ID }}
-          REACT_APP_MICROSOFT_TENANT: ${{ vars.REACT_APP_MICROSOFT_TENANT }}
+          REACT_APP_AUTHORITY: ${{ vars.REACT_APP_AUTHORITY }}
           REACT_APP_HOST: ${{ vars.REACT_APP_HOST }}
         run: |
           docker-compose build

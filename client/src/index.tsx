@@ -9,7 +9,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider, AuthProviderProps } from "oidc-react";
 
 const oidcConfig: AuthProviderProps = {
-  authority: `https://login.microsoftonline.com/${process.env.REACT_APP_MICROSOFT_TENANT}/v2.0`,
+  authority: process.env.REACT_APP_AUTHORITY, 
   clientId: process.env.REACT_APP_CLIENT_ID,
   redirectUri: process.env.REACT_APP_HOST,
   onSignIn: async (user) => {
@@ -17,15 +17,17 @@ const oidcConfig: AuthProviderProps = {
       console.log("could not sign in user");
       return;
     }
+    console.log(user);
     const expiresDate = new Date(0);
     expiresDate.setUTCSeconds(user.profile.exp ?? 0);
     
     const token = user.id_token;
-    // console.log(user);
     console.log("Cookie expires at", expiresDate);
     window.location.search = "";
     document.cookie = `jwt=${token}; expires=${expiresDate.toUTCString()}; SameSite=Strict; path=/api;`;
   },
+  scope: "openid profile email",
+  responseType: "code"
 };
 
 const queryClient = getQueryClient();

@@ -1,4 +1,5 @@
 import json
+from pprint import pprint
 from typing import Optional
 import jwt
 import os
@@ -38,6 +39,7 @@ def get_user(token: str):
         algorithms=["RS256"],
         verify=False,
     )
+    pprint(raw_user)
     user = User(
         email=raw_user["email"],
         token=token,
