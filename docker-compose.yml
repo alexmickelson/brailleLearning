@@ -8,7 +8,13 @@ services:
       - TZ=US/Central
   
   client:
-    build: client/
+    build: 
+      context: client/
+      args:
+        - REACT_APP_CLIENT_ID=${REACT_APP_CLIENT_ID}
+        - REACT_APP_MICROSOFT_TENANT=${REACT_APP_MICROSOFT_TENANT}
+
+
     container_name: braille_client
     restart: always
     environment:

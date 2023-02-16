@@ -1,5 +1,8 @@
 FROM node:18-alpine as builder
 
+ARG REACT_APP_CLIENT_ID
+ARG REACT_APP_MICROSOFT_TENANT
+
 WORKDIR /app
 COPY . .
 RUN npm i 
