@@ -11,7 +11,7 @@ import { AuthProvider, AuthProviderProps } from "oidc-react";
 const oidcConfig: AuthProviderProps = {
   authority: `https://login.microsoftonline.com/${process.env.REACT_APP_MICROSOFT_TENANT}/v2.0`,
   clientId: process.env.REACT_APP_CLIENT_ID,
-  redirectUri: process.env.REACT_APP_CLIENT_ID,
+  redirectUri: process.env.REACT_APP_HOST,
   onSignIn: async (user) => {
     if (!user) {
       console.log("could not sign in user");
