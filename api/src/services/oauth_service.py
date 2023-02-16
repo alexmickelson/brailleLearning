@@ -39,7 +39,7 @@ def get_user(token: str):
         algorithms=["RS256"],
         verify=False,
     )
-    pprint(raw_user)
+    # pprint(raw_user)
     user = User(
         email=raw_user["email"],
         token=token,

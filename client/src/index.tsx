@@ -17,7 +17,7 @@ const oidcConfig: AuthProviderProps = {
       console.log("could not sign in user");
       return;
     }
-    console.log(user);
+    // console.log(user);
     const expiresDate = new Date(0);
     expiresDate.setUTCSeconds(user.profile.exp ?? 0);
     
