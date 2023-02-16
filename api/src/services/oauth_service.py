@@ -40,11 +40,17 @@ def get_user(token: str):
         verify=False,
     )
     # pprint(raw_user)
-    user = User(
-        email=raw_user["email"],
-        token=token,
-    )
-    return user
+    if "email" in raw_user.keys():
+        user = User(
+            email=raw_user["email"],
+            token=token,
+        )
+        return user
+    else:
+        return User(
+            token=token,
+            email=None
+        )
 
 
 async def authenticate_user(request: Request):
