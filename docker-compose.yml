@@ -8,7 +8,6 @@ services:
       - TZ=US/Central
       - JWKS_URL=${JWKS_URL}
       - AUTH_AUDIENCE=${AUTH_AUDIENCE}
-
   
   client:
     build: 

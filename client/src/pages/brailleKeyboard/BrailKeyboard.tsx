@@ -23,25 +23,36 @@ export const BrailKeyboard: FC<{ updateBrail: (s: string) => void }> = ({
     updateBrail(brailOutput);
   }, [brailOutput, updateBrail]);
 
+  const validKeys = ["a", "s", "d", "f", "j", "k", "l", ";'"];
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
     if (e.key === "Backspace") {
       setBrailOutput((b) => b.slice(0, -1));
       return;
     }
-    const addKeyIfNotPresent = (keys: string[]): string[] => {
-      if (keys.includes(e.key)) return keys;
-      else return [...keys, e.key];
-    };
-    setCurrentKeysPressed(addKeyIfNotPresent);
-    setPersistentKeysPressed(addKeyIfNotPresent);
+    if (e.key === " ") {
+      setBrailOutput((b) => b + " ");
+      return;
+    }
+
+    if (validKeys.includes(e.key)) {
+      const addKeyIfNotPresent = (keys: string[]): string[] => {
+        if (keys.includes(e.key)) return keys;
+        else return [...keys, e.key];
+      };
+      setCurrentKeysPressed(addKeyIfNotPresent);
+      setPersistentKeysPressed(addKeyIfNotPresent);
+    }
   };
 
   const handleKeyUp = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
-    setCurrentKeysPressed((keys) => {
-      const newList = [...keys].filter((k) => k !== e.key);
+    if (validKeys.includes(e.key)) {
+      setCurrentKeysPressed((keys) => {
+        const newList = [...keys].filter((k) => k !== e.key);
 
-      return newList;
-    });
+        return newList;
+      });
+    }
   };
 
   return (

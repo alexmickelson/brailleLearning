@@ -18,14 +18,15 @@ const KeyVisualization: FC<{ k: string; keypresses: string[] }> = ({
     </div>
   );
 };
-export const KeypressVisualization: FC<{ keypresses: string[] }> = ({
-  keypresses,
-}) => {
-  const keys1 = ["a", "s", "d", "f"];
-  const keys2 = ["j", "k", "l", ";"];
+export const KeypressVisualization: FC<{
+  keypresses: string[];
+  eightKeys?: boolean;
+}> = ({ keypresses, eightKeys = false }) => {
+  const keys1 = eightKeys ? ["a", "s", "d", "f"] : ["s", "d", "f"];
+  const keys2 = eightKeys ? ["j", "k", "l", ";"] : ["j", "k", "l"];
   return (
     <div>
-      <div className="grid grid-cols-9">
+      <div className={eightKeys ? "grid grid-cols-9" : "grid grid-cols-7"}>
         {keys1.map((k) => (
           <KeyVisualization k={k} keypresses={keypresses} />
         ))}
