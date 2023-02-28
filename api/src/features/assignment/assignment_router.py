@@ -1,7 +1,7 @@
 from typing import Dict, List, Optional
 from fastapi import APIRouter, Request, Depends
 from pydantic import BaseModel, Field
-from src.models.assignment import Assignment, AssignmentType
+from src.features.assignment.assignment_models import Assignment, AssignmentType
 from src.services import braille_service
 from src.services.oauth_service import authenticate_user
 
