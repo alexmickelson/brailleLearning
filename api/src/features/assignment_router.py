@@ -1,16 +1,29 @@
-from typing import Dict
+from typing import Dict, List, Optional
 from fastapi import APIRouter, Request, Depends
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from src.services import braille_service
 from src.services.oauth_service import authenticate_user
 
-router = APIRouter(
-    prefix="/assignments",
-     dependencies=[Depends(authenticate_user)]
-)
+from pydantic import BaseModel
+
+router = APIRouter(prefix="/assignments", dependencies=[Depends(authenticate_user)])
 
 
-assignments = [{"id": 0, "name": "Assignment 1", "text": "translate this"}]
+class Assignment(BaseModel):
+    id: int
+    name: str
+    text: str
+    show_reference_braille: bool
+
+
+assignments: List[Assignment] = [
+    Assignment(
+        id=0,
+        name="Assignment 1",
+        text="translate this",
+        show_reference_braille=False,
+    )
+]
 
 grades: Dict[int, None | float] = {0: None}
 
@@ -28,7 +41,7 @@ class AssignmentSubmission(BaseModel):
 async def submit_assignment(assignment_id: int, body: AssignmentSubmission):
     global grades
     translated_brail_submission = braille_service.braille_to_text(body.braille)
-    if translated_brail_submission == assignments[assignment_id]["text"]:
+    if translated_brail_submission == assignments[assignment_id].text:
         grades[assignment_id] = 100.0
         return {"correctly_translated": True}
     else:
@@ -59,10 +72,21 @@ async def delete_all_assignments():
 class AssignmentCreation(BaseModel):
     name: str
     text: str
+    show_reference_braille: Optional[bool] = Field(default=False)
 
 
 @router.post("/new")
 async def create_assignment(body: AssignmentCreation):
     global assignments
-    new_assignment = {"name": body.name, "text": body.text, "id": len(assignments)}
+    new_assignment = Assignment(
+        name=body.name,
+        text=body.text,
+        id=len(assignments),
+        show_reference_braille=body.show_reference_braille
+        if body.show_reference_braille is not None
+        else False,
+    )
     assignments.append(new_assignment)
+    return new_assignment
+
+

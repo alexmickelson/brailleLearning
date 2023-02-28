@@ -4,7 +4,7 @@
 # notes
 
 - [ ] number the letter indicators (f 1, d 2, s 3, j 4, k 5, l 6)
-- [ ] dont include a and ;
+- [x] dont include a and ;
 - [ ] assignments
   - [ ] option to show a reference
   - [ ] option to hide text live feed
