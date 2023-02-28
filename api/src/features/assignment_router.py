@@ -1,6 +1,7 @@
 from typing import Dict, List, Optional
 from fastapi import APIRouter, Request, Depends
 from pydantic import BaseModel, Field
+from src.models.assignment import Assignment, AssignmentType
 from src.services import braille_service
 from src.services.oauth_service import authenticate_user
 
@@ -9,19 +10,14 @@ from pydantic import BaseModel
 router = APIRouter(prefix="/assignments", dependencies=[Depends(authenticate_user)])
 
 
-class Assignment(BaseModel):
-    id: int
-    name: str
-    text: str
-    show_reference_braille: bool
-
-
 assignments: List[Assignment] = [
     Assignment(
         id=0,
         name="Assignment 1",
         text="translate this",
         show_reference_braille=False,
+        show_print_feed=False,
+        type=AssignmentType.STRING_TO_BRAILLE,
     )
 ]
 
@@ -73,6 +69,8 @@ class AssignmentCreation(BaseModel):
     name: str
     text: str
     show_reference_braille: Optional[bool] = Field(default=False)
+    show_print_feed: Optional[bool] = Field(default=False)
+    type: Optional[AssignmentType] = Field(default=AssignmentType.STRING_TO_BRAILLE)
 
 
 @router.post("/new")
@@ -82,11 +80,15 @@ async def create_assignment(body: AssignmentCreation):
         name=body.name,
         text=body.text,
         id=len(assignments),
-        show_reference_braille=body.show_reference_braille
-        if body.show_reference_braille is not None
-        else False,
+        show_reference_braille=(
+            body.show_reference_braille
+            if body.show_reference_braille is not None
+            else False
+        ),
+        show_print_feed=(
+            body.show_print_feed if body.show_print_feed is not None else False
+        ),
+        type=(body.type if body.type is not None else AssignmentType.STRING_TO_BRAILLE),
     )
     assignments.append(new_assignment)
     return new_assignment
-
-
