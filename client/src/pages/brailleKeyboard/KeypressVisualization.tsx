@@ -4,13 +4,12 @@ import { keypressesToBraille } from "../../services/brailleService";
 
 export const KeypressVisualization: FC<{
   keypresses: string[];
-  eightKeys?: boolean;
-}> = ({ keypresses, eightKeys = false }) => {
-  const keys1 = eightKeys ? ["a", "s", "d", "f"] : ["s", "d", "f"];
-  const keys2 = eightKeys ? ["j", "k", "l", ";"] : ["j", "k", "l"];
+}> = ({ keypresses }) => {
+  const keys1 = ["s", "d", "f"];
+  const keys2 = ["j", "k", "l"];
   return (
     <div>
-      <div className={eightKeys ? "grid grid-cols-9" : "grid grid-cols-7"}>
+      <div className={"grid grid-cols-7"}>
         {keys1.map((k, i) => (
           <KeyVisualization k={k} index={3 - i} keypresses={keypresses} />
         ))}
@@ -20,7 +19,7 @@ export const KeypressVisualization: FC<{
         {keys2.map((k, i) => (
           <KeyVisualization
             k={k}
-            index={eightKeys ? 5 : 4 + i}
+            index={4 + i}
             keypresses={keypresses}
           />
         ))}

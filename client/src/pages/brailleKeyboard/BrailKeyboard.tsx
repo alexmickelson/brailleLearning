@@ -23,7 +23,7 @@ export const BrailKeyboard: FC<{ updateBrail: (s: string) => void }> = ({
     updateBrail(brailOutput);
   }, [brailOutput, updateBrail]);
 
-  const validKeys = ["a", "s", "d", "f", "j", "k", "l", ";'"];
+  const validKeys = [ "s", "d", "f", "j", "k", "l"];
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
     if (e.key === "Backspace") {

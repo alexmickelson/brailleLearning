@@ -7,7 +7,11 @@ from src.services.oauth_service import authenticate_user
 
 from pydantic import BaseModel
 
-router = APIRouter(prefix="/assignments", dependencies=[Depends(authenticate_user)])
+router = APIRouter(
+    prefix="/assignments",
+    dependencies=[Depends(authenticate_user)],
+    tags=["Assignments"],
+)
 
 
 assignments: List[Assignment] = [
