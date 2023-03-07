@@ -2,36 +2,39 @@ import React, { useEffect, useState } from "react";
 import { FaSun, FaMoon } from "react-icons/fa";
 
 export const ThemeToggle = () => {
-  const [theme, setTheme] = useState<string>();
+
+
+  const storedTheme = localStorage.getItem("theme");
+  const userSystemDarkTheme = window.matchMedia(
+    "(prefers-color-scheme: dark)"
+  ).matches;
+  const defaultTheme = storedTheme === "dark" || (!storedTheme && userSystemDarkTheme) ? "dark" : "light"
+
+  const [theme, setTheme] = useState<string>(defaultTheme);
 
   useEffect(() => {
-    if (
-      localStorage.theme === "dark" ||
-      (!("theme" in localStorage) &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches)
-    ) {
-      setTheme("dark");
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
     } else {
-      setTheme("light");
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
     }
-  }, []);
-  useEffect(() => {
-    if (theme === "dark") document.documentElement.classList.add("dark");
-    else document.documentElement.classList.remove("dark");
   }, [theme]);
+
   return (
-      <div className="rounded-full p-2 my-auto">
-        {theme === "dark" ? (
-          <FaSun
-            onClick={() => setTheme("light")}
-            className="text-gray-500 dark:text-gray-400 text-2xl cursor-pointer"
-          />
-        ) : (
-          <FaMoon
-            onClick={() => setTheme("dark")}
-            className="text-gray-500 dark:text-gray-400 text-2xl cursor-pointer"
-          />
-        )}
-      </div>
+    <div className="rounded-full p-2 my-auto">
+      {theme === "dark" ? (
+        <FaSun
+          onClick={() => setTheme("light")}
+          className="text-gray-200 text-2xl cursor-pointer"
+        />
+      ) : (
+        <FaMoon
+          onClick={() => setTheme("dark")}
+          className="text-gray-800 dark:text-gray-400 text-2xl cursor-pointer"
+        />
+      )}
+    </div>
   );
 };

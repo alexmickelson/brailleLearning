@@ -24,8 +24,8 @@ export const AssignmentDetail: FC<{ assignment: Assignment }> = ({
           bg-slate-200
           border-slate-300
 
-          dark:bg-slate-800
-          dark:border-slate-700
+          dark:bg-theme-secondary
+          dark:border-theme
         "
       >
         <div>

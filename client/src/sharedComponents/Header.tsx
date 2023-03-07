@@ -8,16 +8,15 @@ export const Header = () => {
   const auth = useAuth();
   const isAdmin = useIsAdmin();
 
-  console.log(auth.userData);
-
   return (
-    <header className=" h-24 bg-gray-800 flex">
+    <header className=" h-24 bg-theme dark:bg-theme-secondary flex">
       <NavLink
         to={"/"}
         className="
-          text-gray-200 
+        text-white
+          dark:text-black 
           my-auto 
-          mx-3 
+          mx-3
           border-none
           text-5xl font-extrabold tracking-tighter
         "
