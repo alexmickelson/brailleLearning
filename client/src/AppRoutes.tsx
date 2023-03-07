@@ -1,9 +1,6 @@
 import { useAuth } from "oidc-react";
 import { Toaster } from "react-hot-toast";
-import {
-  Route,
-  Routes,
-} from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { ErrorBoundary } from "./sharedComponents/ErrorBoundary";
 import { Header } from "./sharedComponents/Header";
 import { AdminMenu } from "./pages/admin/AdminMenu";
@@ -16,7 +13,14 @@ export const AppRoutes = () => {
 
   return (
     <>
-      <div className=" h-screen ">
+      <div
+        className=" 
+          h-screen 
+          transition-all duration-500 
+          dark:bg-black
+          dark:text-white
+        "
+      >
         <Toaster />
         <Header />
 

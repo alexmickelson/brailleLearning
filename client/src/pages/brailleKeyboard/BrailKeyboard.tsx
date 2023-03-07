@@ -60,7 +60,14 @@ export const BrailKeyboard: FC<{ updateBrail: (s: string) => void }> = ({
       <KeypressVisualization keypresses={persistentKeysPressed} />
       <div className=" m-5">
         <textarea
-          className="bg-slate-100 w-full rounded-lg p-5"
+          className="
+            w-full 
+            rounded-lg 
+            p-5
+            
+            bg-slate-100
+            dark:bg-slate-700
+          "
           onKeyDown={handleKeyDown}
           onKeyUp={handleKeyUp}
           onChange={() => {}}

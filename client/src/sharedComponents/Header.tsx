@@ -2,6 +2,7 @@ import React from "react";
 import { useAuth } from "oidc-react";
 import { useIsAdmin } from "../services/userService";
 import { NavLink } from "react-router-dom";
+import { ThemeToggle } from "./ThemeToggle";
 
 export const Header = () => {
   const auth = useAuth();
@@ -38,6 +39,7 @@ export const Header = () => {
           Admin
         </NavLink>
       )}
+      <ThemeToggle />
       {auth && auth.userData && (
         <button onClick={() => auth.signOut()} className="my-auto mx-3">
           Log out!

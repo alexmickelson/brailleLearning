@@ -35,11 +35,11 @@ const KeyVisualization: FC<{
   index?: number;
 }> = ({ k, keypresses, index }) => {
   const colorStyle = keypresses.includes(k)
-    ? " bg-slate-800 text-white "
-    : " bg-slate-200 ";
+    ? " bg-slate-800 text-white dark:bg-slate-600 dark:text-black"
+    : " bg-slate-200 dark:bg-slate-800 ";
 
   const numberStyle = keypresses.includes(k)
-    ? " text-gray-400 "
+    ? " text-gray-400 dark:text-gray-400 "
     : " text-gray-600 ";
 
   return (
