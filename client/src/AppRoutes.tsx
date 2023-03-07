@@ -17,7 +17,7 @@ export const AppRoutes = () => {
         className=" 
           h-screen 
           transition-all duration-500 
-          dark:bg-black
+          dark:bg-gray-900
           dark:text-gray-50
         "
       >
