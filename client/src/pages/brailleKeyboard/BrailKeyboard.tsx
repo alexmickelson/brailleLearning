@@ -65,8 +65,9 @@ export const BrailKeyboard: FC<{ updateBrail: (s: string) => void }> = ({
             rounded-lg 
             p-5
             
-            bg-slate-100
-            dark:bg-slate-700
+            bg-slate-100          
+            dark:bg-gray-700
+            dark:border-gray-600
           "
           onKeyDown={handleKeyDown}
           onKeyUp={handleKeyUp}

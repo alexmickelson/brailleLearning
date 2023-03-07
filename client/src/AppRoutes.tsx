@@ -18,7 +18,7 @@ export const AppRoutes = () => {
           h-screen 
           transition-all duration-500 
           dark:bg-black
-          dark:text-neutral-300
+          dark:text-gray-50
         "
       >
         <Toaster />

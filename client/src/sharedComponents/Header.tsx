@@ -13,8 +13,8 @@ export const Header = () => {
       <NavLink
         to={"/"}
         className="
-        text-white
-          dark:text-black 
+          text-white
+          dark:text-gray-50 
           my-auto 
           mx-3
           border-none
@@ -28,7 +28,7 @@ export const Header = () => {
         <NavLink
           to="/admin"
           className="
-            text-slate-100
+            text-gray-100
             w-min
             my-auto
             mx-3

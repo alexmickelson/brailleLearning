@@ -27,8 +27,8 @@ export const AllAssignments = () => {
             py-1 
             cursor-pointer
             bg-slate-200 
-            dark:bg-theme-secondary
-            dark:border-theme-800
+            dark:bg-gray-700
+            dark:border-gray-800
             dark:border-2
 
             transition-all
@@ -37,7 +37,7 @@ export const AllAssignments = () => {
             hover:text-slate-100
             hover:bg-slate-800
 
-            dark:hover:bg-neutral-800
+            dark:hover:bg-gray-800
             "
           >
             {a.name}

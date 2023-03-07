@@ -17,15 +17,14 @@ export const AssignmentDetail: FC<{ assignment: Assignment }> = ({
       <div
         className="
           text-center
-          border-4
           rounded-lg
           m-5
           p-2
           bg-slate-200
           border-slate-300
 
-          dark:bg-theme-secondary
-          dark:border-theme
+          dark:bg-gray-700
+          dark:border-gray-800
         "
       >
         <div>
