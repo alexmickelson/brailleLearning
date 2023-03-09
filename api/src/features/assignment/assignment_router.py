@@ -2,6 +2,7 @@ from typing import Dict, List, Optional
 from fastapi import APIRouter, Request, Depends
 from pydantic import BaseModel, Field
 from src.features.assignment.assignment_models import Assignment, AssignmentType
+from src.features.assignment.submissions.submissions_service import SubmissionsService
 from src.services import braille_service
 from src.services.oauth_service import authenticate_user
 
@@ -25,8 +26,6 @@ assignments: List[Assignment] = [
     )
 ]
 
-grades: Dict[int, None | float] = {0: None}
-
 
 @router.get("/details/{assignment_id}")
 async def get_assignment_by_id(assignment_id: int):
@@ -38,14 +37,17 @@ class AssignmentSubmission(BaseModel):
 
 
 @router.post("/submit/{assignment_id}")
-async def submit_assignment(assignment_id: int, body: AssignmentSubmission):
-    global grades
+async def submit_assignment(
+    assignment_id: int,
+    body: AssignmentSubmission,
+    submissions_service: SubmissionsService = Depends(),
+):
     translated_brail_submission = braille_service.braille_to_text(body.braille)
     if translated_brail_submission == assignments[assignment_id].text:
-        grades[assignment_id] = 100.0
+        submissions_service.assign_grade_for_assignment(assignment_id, 100.0)
         return {"correctly_translated": True}
     else:
-        grades[assignment_id] = 0.0
+        submissions_service.assign_grade_for_assignment(assignment_id, 0.0)
         return {
             "correctly_translated": False,
             "actual_translation": translated_brail_submission,
@@ -58,15 +60,18 @@ async def get_all_assignments():
 
 
 @router.get("/grades/{assignment_id}")
-async def get_assignment_grade():
-    global grades
-    return {"grade": grades[0]}
+async def get_assignment_grade(
+    assignment_id: int,
+    submissions_service: SubmissionsService = Depends(),
+):
+    grade = submissions_service.get_grade_for_assignment(assignment_id)
+    return {"grade": grade}
 
 
 @router.delete("/grades/all")
-async def delete_all_assignments():
-    global grades
-    grades = {0: None}
+async def delete_all_grades(
+    submissions_service: SubmissionsService = Depends(),):
+    submissions_service.delete_all_grades()
 
 
 class AssignmentCreation(BaseModel):

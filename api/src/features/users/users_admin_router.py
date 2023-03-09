@@ -23,7 +23,6 @@ class AdminCreateRequest(BaseModel):
 @router.post("/")
 def create_admin(body: AdminCreateRequest):
     global admins
-
     admins.append(User(email=body.email, token=""))
 
 
