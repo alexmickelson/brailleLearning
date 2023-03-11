@@ -1,3 +1,9 @@
+from dotenv import load_dotenv
+
+from src.features.assignment.assignment_models import AssignmentType
+
+load_dotenv()
+
 import pytest
 from fastapi.testclient import TestClient
 from src.main import app
@@ -10,3 +16,20 @@ def authenticated_client():
     client = TestClient(app)
     yield client
     app.dependency_overrides[authenticate_user] = authenticate_user
+
+
+def create_assignment(
+    authenticated_client: TestClient, name: str = "Default Assignment"
+):
+    body = {
+        "name": name,
+        "text": "translate this other thing",
+        "show_reference_braille": False,
+        "show_print_feed": False,
+        "type": AssignmentType.STRING_TO_BRAILLE,
+    }
+    url = "/api/assignments/new"
+
+    response = authenticated_client.post(url, json=body)
+    assert response.is_success
+    return response.json()

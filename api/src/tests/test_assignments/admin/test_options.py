@@ -32,5 +32,6 @@ def test_can_create_assignment_with_live_print_feed(authenticated_client: TestCl
 
     id = response.json()["id"]
     assignment_response = authenticated_client.get(f"/api/assignments/details/{id}")
+    print(assignment_response.json())
     assert assignment_response.is_success
     assert assignment_response.json()["show_print_feed"] == True

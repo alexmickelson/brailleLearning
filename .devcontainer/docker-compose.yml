@@ -52,6 +52,13 @@ services:
     ports:
       - 3000:8080
 
+  database:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=braille
+      - POSTGRES_PASSWORD=wenaf4lweofnsod
+      - POSTGRES_DB=braille
+
 volumes:
   virtualenv:
   developer_home:

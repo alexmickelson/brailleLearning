@@ -1,4 +1,5 @@
 from enum import Enum
+from uuid import UUID
 from pydantic import BaseModel
 
 
@@ -8,7 +9,7 @@ class AssignmentType(str, Enum):
 
 
 class Assignment(BaseModel):
-    id: int
+    id: UUID
     name: str
     text: str
     show_reference_braille: bool

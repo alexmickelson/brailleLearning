@@ -1,24 +1,60 @@
 from typing import Dict
+from uuid import UUID
+from fastapi import Depends
 from pydantic import BaseModel
 
-grades: Dict[int, None | float] = {0: None}
+from src.services.db_service import get_run_sql
+
 
 class Submission(BaseModel):
-    pass
+    id: UUID
+    name: str
+    text: str
+    # answers: list[str]
 
 
 class SubmissionsService:
-    def get_grade_for_assignment(self, assignment_id: int):
-        global grades
-        return grades[assignment_id]
+    def __init__(self, run_sql=Depends(get_run_sql)) -> None:
+        self.run_sql = run_sql
 
-    def assign_grade_for_assignment(self, assignment_id: int, grade: float):
-        global grades
-        grades[assignment_id] = grade
+    async def get_grade_for_assignment(self, assignment_id: UUID):
+        sql = """
+            select 
+                *
+            from Submissions
+            where assignment_id = %(assignment_id)s
+        """
+        params = {"assignment_id": assignment_id}
+        results = await self.run_sql(sql, params)
 
-    def delete_all_grades(self):
-        global grades
-        grades = {0: None}
+        if len(results) == 0:
+            return None
 
-    def get_submissions_for_assignment(self, assignment_id: int):
-        return grades.values()
+        return [Submission.parse_obj(r) for r in results][0]
+
+    async def assign_grade_for_assignment(self, assignment_id: UUID, grade: float):
+        sql = """
+            update Submissions
+            set grade = %(grade)s
+            where assignment_id = %(assignment_id)s
+        """
+        params = {"assignment_id": assignment_id, "grade": grade}
+        await self.run_sql(sql, params)
+
+    async def delete_all_grades(self):
+        sql = """
+            truncate Submissions
+        """
+        await self.run_sql(sql, {})
+
+    async def get_submissions_for_assignment(self, assignment_id: UUID):
+        sql = """
+            select 
+                *
+            from Submissions
+            where assignment_id = %(assignment_id)s
+        """
+        params = {"assignment_id": assignment_id}
+        results = await self.run_sql(sql, params)
+
+        return [Submission.parse_obj(r) for r in results]

@@ -1,4 +1,5 @@
 from typing import Dict, List, Optional
+from uuid import UUID
 from fastapi import APIRouter, Request, Depends
 from pydantic import BaseModel, Field
 from src.features.assignment.submissions.submissions_service import SubmissionsService
@@ -13,8 +14,8 @@ router = APIRouter(
 
 
 @router.get("/{assignment_id}/submissions")
-def get_assignment_submissions(
-    assignment_id: str,
+async def get_assignment_submissions(
+    assignment_id: UUID,
     submissions_service: SubmissionsService = Depends(),
 ):
-    return submissions_service.get_submissions_for_assignment(assignment_id)
+    return await submissions_service.get_submissions_for_assignment(assignment_id)

@@ -25,6 +25,9 @@ packaging==23.0
 pathspec==0.10.3
 platformdirs==2.6.2
 pluggy==1.0.0
+psycopg==3.1.8
+psycopg-binary==3.1.8
+psycopg-pool==3.1.6
 pycparser==2.21
 pydantic==1.10.4
 PyJWT==2.6.0

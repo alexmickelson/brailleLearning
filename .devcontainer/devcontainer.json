@@ -6,15 +6,18 @@
 	"workspaceFolder": "/app",
 	"shutdownAction": "stopCompose",
 	"service": "editor",
-	"settings": {},
-	"extensions": [
-		"dbaeumer.vscode-eslint",
-		"dsznajder.es7-react-js-snippets",
-		"ms-azuretools.vscode-docker",
-		"esbenp.prettier-vscode",
-		"ms-python.python",
-		"bradlc.vscode-tailwindcss"
-	],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"dbaeumer.vscode-eslint",
+				"dsznajder.es7-react-js-snippets",
+				"ms-azuretools.vscode-docker",
+				"esbenp.prettier-vscode",
+				"ms-python.python",
+				"bradlc.vscode-tailwindcss"
+			]
+		}
+	},
 	"remoteUser": "developer",
 	"features": {
 		"docker-from-docker": "latest"
