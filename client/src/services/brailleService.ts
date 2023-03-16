@@ -21,53 +21,79 @@ export const keypressesToBraille = (keypresses: string[]) => {
 };
 
 const singleCharacterBraille = (braille: string) => {
-
-  const brailleArray = braille.split("");
-
-  const currentCharacter = textLookup[brailleArray[0]];
+  const currentCharacter = textLookup[braille.substring(0, 1)];
 
   if (symbolIndicators.includes(currentCharacter)) {
     if (currentCharacter.includes("capital")) {
-      if (brailleArray.length < 2) return "";
+      if (braille.length < 2) return "";
 
-      const nextSymbol = brailleArray[1];
-      const currentCharacter = textLookup[nextSymbol!];
-      const restOfArray = brailleArray.slice(2);
+      const nextSymbol = braille.substring(1, 2);
       return (
-        currentCharacter.toUpperCase() + brailleToText(restOfArray.join(""))
+        brailleToText(nextSymbol).toUpperCase() +
+        brailleToText(braille.substring(2))
       );
     }
-
   }
 
-  const restOfArray = brailleArray.slice(1);
-  return textLookup[currentCharacter] + brailleToText(restOfArray.join(""));
-}
+  return currentCharacter + brailleToText(braille.substring(1));
+};
+
+const twoCharacterBraille = (braille: string) => {
+  const currentCharacter = textLookup[braille.substring(0, 2)];
+
+  if (symbolIndicators.includes(currentCharacter)) {
+    if (currentCharacter.includes("italic")) {
+      if (braille.length < 3) return "";
+
+      const nextSymbol = braille.substring(2, 3);
+
+      return (
+        "<italic>" +
+        brailleToText(nextSymbol) +
+        "</italic>" +
+        braille.substring(3)
+      );
+    }
+  }
+
+  return textLookup[currentCharacter] + brailleToText(braille.substring(2));
+};
 
 export const brailleToText = (braille: string): string => {
-  const brailleThreeCharacters = Object.keys(textLookup).filter(k => k.length === 3);
-  const brailleTwoCharacters = Object.keys(textLookup).filter(k => k.length === 2);
-  const brailleOneCharacters = Object.keys(textLookup).filter(k => k.length === 1);
+  const brailleThreeCharacters = Object.keys(textLookup).filter(
+    (k) => k.length === 3
+  );
+  const brailleTwoCharacters = Object.keys(textLookup).filter(
+    (k) => k.length === 2
+  );
+  const brailleOneCharacters = Object.keys(textLookup).filter(
+    (k) => k.length === 1
+  );
 
   if (braille.length === 0) return "";
 
+  const isTwoCharacterBraille =
+    braille.length > 1 &&
+    brailleTwoCharacters.includes(braille.substring(0, 2));
+  // console.log("two character braille", braille, isTwoCharacterBraille);
 
+  if (isTwoCharacterBraille) return twoCharacterBraille(braille);
 
+  return singleCharacterBraille(braille);
+  // if (braille.length > 2 && braille.substring(0, 3) in brailleThreeCharacters)
+  //   return threeCharacterBraille
 
+  // if (currentCharacter.includes("italic")) {
+  //   if (brailleArray.length < 3) return "";
 
-    // if (currentCharacter.includes("italic")) {
-    //   if (brailleArray.length < 3) return "";
-
-    //   const nextSymbol = brailleArray[2];
-    //   const currentCharacter = textLookup[nextSymbol!];
-    //   const restOfArray = brailleArray.slice(3);
-    //   return (
-    //     "<italic/>" +
-    //     currentCharacter +
-    //     "</italic>" +
-    //     brailleToText(restOfArray.join(""))
-    //   );
-    // }
+  //   const nextSymbol = brailleArray[2];
+  //   const currentCharacter = textLookup[nextSymbol!];
+  //   const restOfArray = brailleArray.slice(3);
+  //   return (
+  //     "<italic/>" +
+  //     currentCharacter +
+  //     "</italic>" +
+  //     brailleToText(restOfArray.join(""))
+  //   );
+  // }
 };
-
-
