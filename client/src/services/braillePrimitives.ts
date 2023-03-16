@@ -90,7 +90,7 @@ export const textLookup: { [key: string]: string } = {
   "⠰": "[symbol]",
   "⠰⠰": "[word]",
   "⠰⠰⠰": "[passage]",
-  "⠰⠄ ": "[grade 1 terminator]",
+  "⠰⠄": "[grade 1 terminator]",
 
   "⠨⠆": symbols.italicSymbol,
   "⠨⠂": symbols.italicWord,

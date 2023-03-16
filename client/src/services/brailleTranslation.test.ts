@@ -47,3 +47,14 @@ it("can italicise word", () => {
   const actual = brailleToText(fullBraille)
   expect(actual).toBe(expected)
 });
+
+it("can capitalize word", () => {
+  const capitalizeWord = "⠠⠠";
+  
+  const fullBraille = capitalizeWord + aboutInBraille + " " + aboutInBraille
+
+  const expected = "ABOUT about"
+  const actual = brailleToText(fullBraille)
+  expect(actual).toBe(expected)
+
+})

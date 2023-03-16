@@ -1,5 +1,6 @@
 import {
   symbolIndicators,
+  symbols,
   textLookup,
   wordIndicators,
 } from "./braillePrimitives";
@@ -32,59 +33,46 @@ export const brailleToText = (braille: string): string => {
 
   const currentTextCharacter = textLookup[currentBrailleCharacter];
 
-  if (currentBrailleCharacter.length === 2) {
-    if (symbolIndicators.includes(currentTextCharacter)) {
-      if (currentTextCharacter.includes("italic")) {
-        if (braille.length < 3) return "";
+  const isSymbol = Object.values(symbols).includes(currentTextCharacter);
 
-        const nextSymbol = braille.substring(2, 3); // assumes single charater follows
+  const splitFunction = symbolIndicators.includes(currentTextCharacter)
+    ? splitOutNextBrailleCharacter
+    : splitOutNextBrailleWord;
 
-        return (
-          "<italic>" +
-          brailleToText(nextSymbol) +
-          "</italic>" +
-          braille.substring(3)
-        );
-      }
-    } else if (wordIndicators.includes(currentTextCharacter)) {
-      console.log(currentBrailleCharacter, restOfBraille);
-      
-      const [currentBrailleWord, restOfBrailleWithoutWord] =
-        splitOutNextBrailleWord(restOfBraille);
+  if (isSymbol) {
+    const [nestedCurrentBrailleCharacter, nestedRestOfBraille] =
+      splitFunction(restOfBraille);
 
-      if (currentTextCharacter.includes("italic")) {
-        return (
-          "<italic>" +
-          brailleToText(currentBrailleWord) +
-          "</italic>" +
-          brailleToText(restOfBrailleWithoutWord)
-        );
-      }
-    } else {
-      return currentTextCharacter + brailleToText(restOfBraille);
-    }
-  }
-
-  // length of 1 implied
-  if (symbolIndicators.includes(currentTextCharacter)) {
-    if (currentTextCharacter.includes("capital")) {
-      if (braille.length < 2) return "";
-
-      const nextSymbol = braille.substring(1, 2);
+    if (currentTextCharacter.includes("italic"))
       return (
-        brailleToText(nextSymbol).toUpperCase() +
-        brailleToText(braille.substring(2))
+        "<italic>" +
+        brailleToText(nestedCurrentBrailleCharacter) +
+        "</italic>" +
+        brailleToText(nestedRestOfBraille)
       );
-    }
+
+    if (currentTextCharacter.includes("capital"))
+      return (
+        brailleToText(nestedCurrentBrailleCharacter).toUpperCase() +
+        brailleToText(nestedRestOfBraille)
+      );
+    console.log(
+      "is symbol, but braille translation hot handled like symbol: " +
+        currentBrailleCharacter +
+        " " +
+        currentTextCharacter
+    );
   }
 
-  return currentTextCharacter + brailleToText(braille.substring(1));
+  return currentTextCharacter + brailleToText(restOfBraille);
 };
 
 const splitOutNextBrailleCharacter = (braille: string) => {
   const brailleThreeCharacters = Object.keys(textLookup).filter(
     (k) => k.length === 3
   );
+  console.log(brailleThreeCharacters);
+  
   const brailleTwoCharacters = Object.keys(textLookup).filter(
     (k) => k.length === 2
   );
@@ -99,11 +87,11 @@ const splitOutNextBrailleCharacter = (braille: string) => {
   if (isTwoCharacterBraille)
     return [braille.substring(0, 2), braille.substring(2)];
 
-  return [braille.substring(0, 1), braille.substring(2)];
+  return [braille.substring(0, 1), braille.substring(1)];
 };
 
 const splitOutNextBrailleWord = (braille: string) => {
   const wordArray = braille.split(" ");
-  
+
   return [wordArray[0], " " + wordArray.slice(1).join(" ")];
 };
