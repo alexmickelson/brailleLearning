@@ -11,9 +11,9 @@ def test_can_translate_submitted_assignment(authenticated_client: TestClient):
 
 
 def correctly_submit_assignment(authenticated_client: TestClient):
-    assignment = create_assignment(authenticated_client)
-
     assignment_text = "translate this"
+    assignment = create_assignment(authenticated_client, translate_text=assignment_text)
+
     assignment_submisison = {"braille": "⠞⠗⠁⠝⠎⠇⠁⠞⠑⠀⠞⠓⠊⠎"}
     url = f"/api/assignments/submit/{assignment['id']}"
     response = authenticated_client.post(url, json=assignment_submisison)
@@ -40,9 +40,12 @@ def test_can_get_assignment_list(authenticated_client: TestClient):
     response = authenticated_client.get(url)
     assert response.is_success
 
-    assert response.json()[0]["id"] == assignment["id"]
-    assert response.json()[0]["name"] == assignment["name"]
-    assert response.json()[0]["text"] == assignment["text"]
+    all_assignments = response.json()
+    created_assignment = [a for a in all_assignments if a["id"] == assignment["id"]][0]
+
+    assert created_assignment["id"] == assignment["id"]
+    assert created_assignment["name"] == assignment["name"]
+    assert created_assignment["text"] == assignment["text"]
 
 
 def test_can_view_assignment_grade(authenticated_client: TestClient):
@@ -58,14 +61,15 @@ def test_can_view_assignment_grade(authenticated_client: TestClient):
 
 def test_submitted_assignments_have_grades(authenticated_client: TestClient):
     correctly_submit_assignment(authenticated_client)
-    assignment = create_assignment(authenticated_client)
-
-    
+    assignment = create_assignment(
+        authenticated_client, translate_text="translate this"
+    )
 
     assignment_submisison = {"braille": "⠞⠗⠁⠝⠎⠇⠁⠞⠑⠀⠞⠓⠊⠎"}
     submit_url = f"/api/assignments/submit/{assignment['id']}"
     response = authenticated_client.post(submit_url, json=assignment_submisison)
-
+    assert response.is_success
+    assert response.json()["correctly_translated"]
 
     url = f"/api/assignments/grades/{assignment['id']}"
     response = authenticated_client.get(url)

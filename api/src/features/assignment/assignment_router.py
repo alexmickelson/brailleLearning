@@ -16,6 +16,7 @@ router = APIRouter(
     tags=["Assignments"],
 )
 
+user_id = "testuser"
 
 # assignments: List[Assignment] = [
 #     Assignment(
@@ -41,7 +42,6 @@ async def get_assignment_by_id(
 class AssignmentSubmission(BaseModel):
     braille: str
 
-
 @router.post("/submit/{assignment_id}")
 async def submit_assignment(
     assignment_id: UUID,
@@ -51,11 +51,14 @@ async def submit_assignment(
 ):
     translated_brail_submission = braille_service.braille_to_text(body.braille)
     assignment = await assignment_service.get_assignment(assignment_id)
+
+    print(assignment.text)
+    print(translated_brail_submission)
     if translated_brail_submission == assignment.text:
-        await submissions_service.assign_grade_for_assignment(assignment_id, 100.0)
+        await submissions_service.assign_grade_for_assignment(user_id, assignment_id, 100.0)
         return {"correctly_translated": True}
     else:
-        await submissions_service.assign_grade_for_assignment(assignment_id, 0.0)
+        await submissions_service.assign_grade_for_assignment(user_id, assignment_id, 0.0)
         return {
             "correctly_translated": False,
             "actual_translation": translated_brail_submission,
@@ -72,7 +75,7 @@ async def get_assignment_grade(
     assignment_id: UUID,
     submissions_service: SubmissionsService = Depends(),
 ):
-    grade = await submissions_service.get_grade_for_assignment(assignment_id)
+    grade = await submissions_service.get_grade_for_assignment(assignment_id, user_id)
     return {"grade": grade}
 
 

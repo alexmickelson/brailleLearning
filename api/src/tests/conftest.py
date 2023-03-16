@@ -19,11 +19,13 @@ def authenticated_client():
 
 
 def create_assignment(
-    authenticated_client: TestClient, name: str = "Default Assignment"
+    authenticated_client: TestClient,
+    name: str = "Default Assignment",
+    translate_text: str = "translate this other thing",
 ):
     body = {
         "name": name,
-        "text": "translate this other thing",
+        "text": translate_text,
         "show_reference_braille": False,
         "show_print_feed": False,
         "type": AssignmentType.STRING_TO_BRAILLE,

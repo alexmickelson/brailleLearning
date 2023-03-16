@@ -1,12 +1,12 @@
-from typing import Optional
+from typing import Optional, Type
 from uuid import UUID
 from fastapi import Depends
 from src.features.assignment.assignment_models import Assignment, AssignmentType
-from src.services.db_service import get_run_sql
+from src.services.db_service import RunSql
 
 
 class AssignmentService:
-    def __init__(self, local=Depends(get_run_sql)) -> None:
+    def __init__(self, local: RunSql = Depends()) -> None:
         self.run_sql = local
 
     async def create_assignment(
@@ -43,7 +43,7 @@ class AssignmentService:
 
     async def delete_all_assignments(self):
         sql = "TRUNCATE Assignment"
-        await self.run_sql(sql)
+        await self.run_sql(sql, {})
 
     async def get_assignment(self, id: UUID):
         sql = """
@@ -53,7 +53,7 @@ class AssignmentService:
         """
         params = {"id": id}
         assignments = await self.run_sql(sql, params, output_class=Assignment)
-        print('assignments', assignments)
+        print("assignments", assignments)
         return assignments[0]
 
     async def get_all_assignments(self):

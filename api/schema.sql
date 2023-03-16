@@ -3,11 +3,12 @@
 
 drop table if exists Submissions;
 drop table if exists Assignment;
+drop table if exists UserAccount;
 
-create table User(
+create table UserAccount (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   identitfier TEXT
-)
+);
 
 create table Assignment (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -22,5 +23,6 @@ create table Submissions (
   id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   assignment_id     UUID NOT NULL REFERENCES Assignment (id),
   user_id           TEXT NOT NULL,
-  grade             FLOAT
+  grade             FLOAT,
+  submitted_text    TEXT
 );
