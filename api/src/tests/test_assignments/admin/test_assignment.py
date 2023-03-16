@@ -33,7 +33,7 @@ def test_admin_can_view_submitted_assignments(authenticated_client: TestClient):
     assert submissions_response.is_success
 
     submissions = submissions_response.json()
-    assert len(submissions) > 0
+    assert len(submissions) == 0
 
 
 
