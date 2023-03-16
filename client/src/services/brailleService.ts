@@ -1,4 +1,8 @@
-import { symbolIndicators, textLookup } from "./braillePrimitives";
+import {
+  symbolIndicators,
+  textLookup,
+  wordIndicators,
+} from "./braillePrimitives";
 
 export const keypressesToBraille = (keypresses: string[]) => {
   const array = [
@@ -20,12 +24,12 @@ export const keypressesToBraille = (keypresses: string[]) => {
   return String.fromCharCode(decimalBrailUnicodeNumber);
 };
 
-
 export const brailleToText = (braille: string): string => {
   if (braille.length === 0) return "";
 
   const [currentBrailleCharacter, restOfBraille] =
     splitOutNextBrailleCharacter(braille);
+
   const currentTextCharacter = textLookup[currentBrailleCharacter];
 
   if (currentBrailleCharacter.length === 2) {
@@ -40,6 +44,20 @@ export const brailleToText = (braille: string): string => {
           brailleToText(nextSymbol) +
           "</italic>" +
           braille.substring(3)
+        );
+      }
+    } else if (wordIndicators.includes(currentTextCharacter)) {
+      console.log(currentBrailleCharacter, restOfBraille);
+      
+      const [currentBrailleWord, restOfBrailleWithoutWord] =
+        splitOutNextBrailleWord(restOfBraille);
+
+      if (currentTextCharacter.includes("italic")) {
+        return (
+          "<italic>" +
+          brailleToText(currentBrailleWord) +
+          "</italic>" +
+          brailleToText(restOfBrailleWithoutWord)
         );
       }
     } else {
@@ -61,7 +79,6 @@ export const brailleToText = (braille: string): string => {
   }
 
   return currentTextCharacter + brailleToText(braille.substring(1));
-
 };
 
 const splitOutNextBrailleCharacter = (braille: string) => {
@@ -80,7 +97,13 @@ const splitOutNextBrailleCharacter = (braille: string) => {
     brailleTwoCharacters.includes(braille.substring(0, 2));
 
   if (isTwoCharacterBraille)
-    return [braille.substring(0, 2), braille.substring(3)];
+    return [braille.substring(0, 2), braille.substring(2)];
 
   return [braille.substring(0, 1), braille.substring(2)];
+};
+
+const splitOutNextBrailleWord = (braille: string) => {
+  const wordArray = braille.split(" ");
+  
+  return [wordArray[0], " " + wordArray.slice(1).join(" ")];
 };

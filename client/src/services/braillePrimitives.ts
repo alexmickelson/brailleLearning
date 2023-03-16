@@ -40,7 +40,8 @@ export const passageStartIndicators = [
 ];
 
 export const textLookup: { [key: string]: string } = {
-  // "⠀": " ",
+  "⠀": " ",
+  " ": " ",
   "⠁": "a",
   "⠃": "b",
   "⠉": "c",
