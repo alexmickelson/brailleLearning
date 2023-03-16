@@ -8,6 +8,9 @@ export const Header = () => {
   const auth = useAuth();
   const isAdmin = useIsAdmin();
 
+  console.log(auth.userData?.profile);
+  console.log(auth.userData?.id_token);
+
   return (
     <header className=" h-24 bg-theme dark:bg-theme-secondary flex">
       <NavLink
@@ -40,7 +43,15 @@ export const Header = () => {
       )}
       <ThemeToggle />
       {auth && auth.userData && (
-        <button onClick={() => auth.signOut()} className="my-auto mx-3">
+        <button
+          onClick={() => {
+            auth.signOut();
+            window.location.replace(
+              process.env.REACT_APP_AUTHORITY + "/oidc/logout"
+            );
+          }}
+          className="my-auto mx-3"
+        >
           Log out!
         </button>
       )}

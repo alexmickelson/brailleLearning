@@ -40,17 +40,11 @@ def get_user(token: str):
         verify=False,
     )
     # pprint(raw_user)
-    if "email" in raw_user.keys():
-        user = User(
-            email=raw_user["email"],
-            token=token,
-        )
-        return user
-    else:
-        return User(
-            token=token,
-            email=None
-        )
+    user = User(
+        sub=raw_user["sub"],
+        name=raw_user["name"],
+    )
+    return user
 
 
 async def authenticate_user(request: Request):
@@ -71,3 +65,6 @@ async def authenticate_user(request: Request):
                 return user
 
     raise HTTPException(status_code=403, detail="Authorization Token Not Found")
+
+
+# async def authorize_admin_user(request: Request)

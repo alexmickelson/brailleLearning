@@ -6,8 +6,9 @@ drop table if exists Assignment;
 drop table if exists UserAccount;
 
 create table UserAccount (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  identitfier TEXT
+  sub  TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  is_admin boolean
 );
 
 create table Assignment (

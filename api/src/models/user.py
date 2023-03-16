@@ -3,5 +3,5 @@ from pydantic import BaseModel
 
 
 class User(BaseModel):
-    email: Optional[str]
-    token: str
+    sub: str
+    name: str
