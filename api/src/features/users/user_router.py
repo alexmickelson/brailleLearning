@@ -14,9 +14,7 @@ router = APIRouter(
 
 @router.get("/profile")
 async def get_profile(
-    user: UserProfile = Depends(authenticate_user),
+    profile: UserProfile = Depends(authenticate_user),
     user_service: UserService = Depends(),
 ):
-    profile = await user_service.get_profile(user.sub)
-    print(profile)
     return profile

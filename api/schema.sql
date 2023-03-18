@@ -8,7 +8,7 @@ drop table if exists UserAccount;
 create table UserAccount (
   sub  TEXT PRIMARY KEY,
   name TEXT NOT NULL,
-  is_admin boolean
+  is_admin boolean DEFAULT FALSE
 );
 
 create table Assignment (
@@ -30,3 +30,4 @@ create table Submissions (
 
 
 -- truncate assignment cascade;
+-- update useraccount set is_admin = true where sub = 'google-oauth2|115592117519410910374';

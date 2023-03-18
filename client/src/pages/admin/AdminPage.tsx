@@ -1,10 +1,14 @@
 import { useIsAdmin } from "../../services/userService";
-import { SideNavigation } from "../assignments/SideNavigation";
+import { adminViewOptions, SideNavigation } from "./SideNavigation";
 import { AdminAssignments } from "./assignmentList/AdminAssignments";
-import { NewAssignment } from "./NewAssignment";
+import { useState } from "react";
+import { AdminUserManagement } from "./AdminUserManagement";
 
 export const AdminPage = () => {
   const isAdmin = useIsAdmin();
+  const [selectedView, setSelectedView] = useState(
+    adminViewOptions.assignments
+  );
 
   if (!isAdmin) return <div>Unauthorized</div>;
 
@@ -13,9 +17,14 @@ export const AdminPage = () => {
       <br />
       <h1 className="text-center">Admin Menu</h1>
       <div className="flex">
-        <SideNavigation />
+        <SideNavigation setView={setSelectedView} />
         <div className="m-5 grow">
-          <AdminAssignments />
+          {selectedView === adminViewOptions.assignments && (
+            <AdminAssignments />
+          )}
+          {selectedView === adminViewOptions.users && (
+            <AdminUserManagement />
+          )}
         </div>
       </div>
     </div>

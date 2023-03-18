@@ -18,7 +18,7 @@ signing_key: PyJWK | None = None
 
 async def authenticate_user(request: Request, user_service: UserService = Depends()):
     user = await __get_user_from_request(request)
-    profile = await user_service.get_profile(user.sub)
+    profile = await user_service.get_profile(user.sub, user.name)
     return profile
 
 
@@ -46,7 +46,6 @@ def __get_user(token: str):
         algorithms=["RS256"],
         verify=False,
     )
-    # pprint(raw_user)
     user = User(
         sub=raw_user["sub"],
         name=raw_user["name"],
