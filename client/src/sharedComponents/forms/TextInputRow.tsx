@@ -59,6 +59,16 @@ export const TextInputRow: FC<Props> = ({
   const inputClasses = `
     rounded-lg
     p-3
+    dark:bg-gray-700
+    dark:text-gray-50
+
+    dark:border
+
+    dark:border-gray-100
+    dark:active:border-gray-400
+    dark:focus:border-gray-400
+    outline-none
+    
     ${validationClasses}
   `;
 

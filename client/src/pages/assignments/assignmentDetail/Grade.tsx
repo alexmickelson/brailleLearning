@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { Spinner } from "../../../sharedComponents/Spinner";
 import { useGetGradeQuery } from "../assignmentHooks";
 
-export const Grade: FC<{ assignmentId: number }> = ({ assignmentId }) => {
+export const Grade: FC<{ assignmentId: string }> = ({ assignmentId }) => {
   const gradeQuery = useGetGradeQuery(assignmentId);
 
   if (gradeQuery.isLoading) return <Spinner />;

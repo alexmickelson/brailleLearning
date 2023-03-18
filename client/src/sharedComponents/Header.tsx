@@ -8,9 +8,6 @@ export const Header = () => {
   const auth = useAuth();
   const isAdmin = useIsAdmin();
 
-  console.log(auth.userData?.profile);
-  console.log(auth.userData?.id_token);
-
   return (
     <header className=" h-24 bg-theme dark:bg-theme-secondary flex">
       <NavLink

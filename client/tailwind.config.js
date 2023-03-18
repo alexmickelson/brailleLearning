@@ -42,3 +42,6 @@ module.exports = {
   plugins: [],
   darkMode: "class",
 };
+
+// color ideas
+// #324b77 - neutral blue?

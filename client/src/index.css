@@ -56,7 +56,11 @@ a.active {
 }
 
 hr {
-  @apply border-2 border-slate-600 m-3;
+  @apply 
+    border-2 
+    border-slate-600 
+    dark:border-gray-100
+    m-3;
 }
 :root {
   font-family: Verdana, sans-serif;

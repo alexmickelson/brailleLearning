@@ -6,7 +6,7 @@ import axios from "axios";
 const queryClient = getQueryClient();
 export const assignmentKeys = {
   all: ["allassignmentskey"] as const,
-  grade: (assignmentId: number) =>
+  grade: (assignmentId: string) =>
     ["assignmentgradekey", assignmentId] as const,
 };
 
@@ -17,7 +17,7 @@ export const useGetAllAssignmentsQuery = () =>
     return response.data;
   });
 
-export const useGetGradeQuery = (assignmentId: number) =>
+export const useGetGradeQuery = (assignmentId: string) =>
   useQuery(
     assignmentKeys.grade(assignmentId),
     async (): Promise<{ grade?: number }> => {
@@ -27,7 +27,7 @@ export const useGetGradeQuery = (assignmentId: number) =>
     }
   );
 
-export const useGradeSubmissionMutation = (assignmentId: number) =>
+export const useGradeSubmissionMutation = (assignmentId: string) =>
   useMutation(
     async (braille: string) => {
       const url = `/api/assignments/submit/${assignmentId}`;

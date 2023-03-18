@@ -3,7 +3,7 @@ import { Toaster } from "react-hot-toast";
 import { Route, Routes } from "react-router-dom";
 import { ErrorBoundary } from "./sharedComponents/ErrorBoundary";
 import { Header } from "./sharedComponents/Header";
-import { AdminMenu } from "./pages/admin/AdminMenu";
+import { AdminPage } from "./pages/admin/AdminPage";
 import { AllAssignments } from "./pages/assignments/AllAssignments";
 import { useIsAdmin } from "./services/userService";
 
@@ -29,7 +29,7 @@ export const AppRoutes = () => {
           {auth && auth.userData && (
             <Routes>
               <Route path="/" element={<AllAssignments />} />
-              {isAdmin && <Route path="/admin" element={<AdminMenu />} />}
+              {isAdmin && <Route path="/admin" element={<AdminPage />} />}
             </Routes>
           )}
           {auth && !auth.userData && (

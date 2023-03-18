@@ -27,3 +27,6 @@ create table Submissions (
   grade             FLOAT,
   submitted_text    TEXT
 );
+
+
+-- truncate assignment cascade;

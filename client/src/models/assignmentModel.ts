@@ -1,5 +1,5 @@
 export interface Assignment {
-  id: number;
+  id: string;
   name: string;
   text: string;
 }

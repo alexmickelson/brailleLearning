@@ -26,13 +26,18 @@ export const NewAssignment: FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
         m-3
         p-3
         border-4 
-        bg-slate-200 
         rounded-xl
+
+        bg-slate-200 
         text-slate-700
+        dark:bg-gray-700
+        dark:text-gray-50
+
+        
       "
     >
       <h5 className="text-center">Create a New Assignment</h5>
-      <hr />
+      <hr/>
       <form
         onSubmit={(e) => {
           e.preventDefault();
