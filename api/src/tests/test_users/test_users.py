@@ -51,9 +51,9 @@ async def test_admin_can_get_all_users(authenticated_client: TestClient):
 
 @pytest.mark.asyncio
 async def test_non_admin_cannot_get_all_users(authenticated_client: TestClient):
-    user = await generate_user()
+    user = await generate_user(False)
 
-    app.dependency_overrides[authorize_admin] = lambda: user
+    app.dependency_overrides[authorize_admin] = authorize_admin
     url = "/api/admin/users/all"
     response = authenticated_client.get(url)
     assert response.status_code == 403
