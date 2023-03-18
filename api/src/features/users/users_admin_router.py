@@ -4,12 +4,11 @@ from pydantic import BaseModel, Field
 from src.features.assignment.assignment_models import Assignment, AssignmentType
 from src.features.users.user_service import UserService
 from src.models.user import User
-from src.services import braille_service
-from src.services.oauth_service import authenticate_user
+from src.services.oauth_service import authorize_admin
 
 router = APIRouter(
     prefix="/admin/users",
-    dependencies=[Depends(authenticate_user)],
+    dependencies=[Depends(authorize_admin)],
     tags=["Admin Actions"],
 )
 

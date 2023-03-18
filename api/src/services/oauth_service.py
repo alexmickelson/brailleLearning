@@ -22,6 +22,13 @@ async def authenticate_user(request: Request, user_service: UserService = Depend
     return profile
 
 
+async def authorize_admin(request: Request, user_service: UserService = Depends()):
+    profile = await authenticate_user(request, user_service)
+    if profile.is_admin:
+        return profile
+    raise HTTPException(status_code=403, detail={"detail": "unauthorized"})
+
+
 def __set_audience_and_key(token: str):
     global audience
     global signing_key

@@ -37,7 +37,7 @@ export const useUpdateAssignemntMutation = (assignmentId: string) =>
 
 export const useAllUsersQuery = () =>
   useQuery(adminKeys.allUsers, async (): Promise<UserProfile[]> => {
-    const url = "/api/users/all";
+    const url = "/api/admin/users/all";
     const response = await axios.get(url);
     return response.data;
   });

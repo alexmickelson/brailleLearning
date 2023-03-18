@@ -6,7 +6,7 @@ from src.main import app
 from src.features.users.user_service import UserService
 from src.models.user import User, UserProfile
 from src.services.db_service import RunSql
-from src.services.oauth_service import authenticate_user
+from src.services.oauth_service import authenticate_user, authorize_admin
 
 
 @pytest.mark.asyncio
@@ -36,6 +36,7 @@ async def test_can_get_profile(authenticated_client: TestClient):
 
     assert response.json()["is_admin"] == True
 
+
 @pytest.mark.asyncio
 async def test_admin_can_get_all_users(authenticated_client: TestClient):
     user = await generate_user()
@@ -47,18 +48,32 @@ async def test_admin_can_get_all_users(authenticated_client: TestClient):
 
     assert len(response.json()) > 0
 
-async def generate_user():
+
+@pytest.mark.asyncio
+async def test_non_admin_cannot_get_all_users(authenticated_client: TestClient):
+    user = await generate_user()
+
+    app.dependency_overrides[authorize_admin] = lambda: user
+    url = "/api/admin/users/all"
+    response = authenticated_client.get(url)
+    assert response.status_code == 403
+
+
+async def generate_user(is_admin: bool = True):
     user_service = UserService(RunSql())
     salt = "".join(random.choices(string.ascii_letters, k=5))
     sub = salt + "alexmickelsonguru"
     name = "generated user" + sub
     await user_service.create_user(sub, name)
-    return UserProfile(sub=sub, name=name, is_admin=True)
+    return UserProfile(sub=sub, name=name, is_admin=is_admin)
 
 
 def make_user_admin(authenticated_client, user):
     url = "/api/admin/users/"
     body = {"sub": user.sub}
 
+    app.dependency_overrides[authorize_admin] = lambda: UserProfile(
+        sub="some", name="admin", is_admin=True
+    )
     create_response = authenticated_client.post(url, json=body)
     assert create_response.is_success
