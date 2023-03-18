@@ -15,8 +15,9 @@ export const AppRoutes = () => {
     <>
       <div
         className=" 
-          h-screen 
-          transition-all duration-500 
+          min-h-screen
+          pb-1
+          transition-all duration-500
           dark:bg-gray-900
           dark:text-gray-50
         "

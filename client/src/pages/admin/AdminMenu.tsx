@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useIsAdmin } from "../../services/userService";
+import { useGetAllAssignmentsQuery } from "../assignments/assignmentHooks";
+import { AdminAssignments } from "./assignment/AdminAssignments";
 import { NewAssignment } from "./NewAssignment";
 
 export const AdminMenu = () => {
@@ -12,7 +14,7 @@ export const AdminMenu = () => {
     <div className="container mx-auto">
       <br />
       <h1 className="text-center">Admin Menu</h1>
-
+      <AdminAssignments />
       <div className="m-5">
         {!showNewAssignment && (
           <button onClick={() => setShowNewAssignment(true)}>

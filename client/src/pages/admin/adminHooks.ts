@@ -1,7 +1,9 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-export const adminKeys = {};
+export const adminKeys = {
+};
+
 
 export const useCreateAssignmentMutation = () =>
   useMutation(async (assignmentOptions: { name: string; text: string }) => {
