@@ -41,6 +41,20 @@ class AssignmentService:
         result = await self.run_sql(sql, params, output_class=Assignment)
         return result[0]
 
+    async def update(self, assignment_id: UUID, name: str, text: str):
+        sql = """
+            update Assignment
+            set name = %(name)s,
+                text = %(text)s
+            where id = %(assignment_id)s
+        """
+        params = {
+            "name": name,
+            "text": text,
+            "assignment_id": assignment_id,
+        }
+        await self.run_sql(sql, params)
+
     async def delete_all_assignments(self):
         sql = "TRUNCATE Assignment"
         await self.run_sql(sql, {})

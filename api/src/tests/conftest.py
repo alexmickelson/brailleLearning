@@ -1,9 +1,7 @@
 from dotenv import load_dotenv
-
-from src.features.assignment.assignment_models import AssignmentType
-
 load_dotenv()
 
+from src.features.assignment.assignment_models import AssignmentType
 import pytest
 from fastapi.testclient import TestClient
 from src.main import app

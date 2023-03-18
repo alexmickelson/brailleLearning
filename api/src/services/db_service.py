@@ -7,20 +7,26 @@ import os
 
 T = TypeVar("T", bound=BaseModel)
 
+pool: AsyncConnectionPool | None = None
+
 
 class RunSql:
     async def __call__(
         self, sql: str, params: Dict[str, Any], output_class: Optional[Type[T]] = None
     ):
-        db_user = os.environ["POSTGRES_USER"]
-        db_password = os.environ["POSTGRES_PASSWORD"]
-        db_name = os.environ["POSTGRES_DB"]
-        db_host = os.environ["POSTGRES_HOST"]
+        global pool
 
-        pool = AsyncConnectionPool(
-            conninfo=f"dbname={db_name} user={db_user} password={db_password} host={db_host}"
-        )
-        await pool.open()
+        if not pool:
+            db_user = os.environ["POSTGRES_USER"]
+            db_password = os.environ["POSTGRES_PASSWORD"]
+            db_name = os.environ["POSTGRES_DB"]
+            db_host = os.environ["POSTGRES_HOST"]
+
+            pool = AsyncConnectionPool(
+                conninfo=f"dbname={db_name} user={db_user} password={db_password} host={db_host}"
+            )
+            await pool.open()
+
         async with pool.connection() as conn:
             async with conn.cursor(
                 row_factory=class_row(output_class)

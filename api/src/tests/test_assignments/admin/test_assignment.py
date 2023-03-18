@@ -23,6 +23,7 @@ def test_non_authenticated_users_cannot_create_assignment():
     response = client.post(url, json=body)
     assert response.status_code == 403
 
+
 def test_admin_can_view_submitted_assignments(authenticated_client: TestClient):
     name = "Assignment 5"
     assignment = create_assignment(authenticated_client, name)
@@ -35,6 +36,24 @@ def test_admin_can_view_submitted_assignments(authenticated_client: TestClient):
     submissions = submissions_response.json()
     assert len(submissions) == 0
 
+
+def test_admin_can_update_assinment(authenticated_client: TestClient):
+    name = "Assignment 5"
+    assignment = create_assignment(authenticated_client, name)
+    assignment_id = assignment["id"]
+
+    url = f"/api/assignments/{assignment_id}"
+    updated_name = "Assignment 5 - updated"
+    body = {"name": updated_name, "text": "totally different this time"}
+    response = authenticated_client.put(url, json=body)
+    assert response.is_success
+
+    assignments_url = "/api/assignments/all"
+    assignments_response = authenticated_client.get(assignments_url)
+    assert assignments_response.is_success
+
+    assignment_names = [i["name"] for i in assignments_response.json() if i['id'] == assignment_id]
+    assert updated_name in assignment_names
 
 
 # def test_admin_can_override_assignment(authenticated_client: TestClient):

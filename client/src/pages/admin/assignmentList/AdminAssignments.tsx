@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Spinner } from "../../../sharedComponents/Spinner";
 import { useGetAllAssignmentsQuery } from "../../assignments/assignmentHooks";
+import { NewAssignment } from "../NewAssignment";
 import { AssignmentCard } from "./AssignmentCard";
 import { ManageAssignment } from "./ManageAssignment";
+import { GoArrowLeft } from "react-icons/go";
 
 export const AdminAssignments = () => {
   const assignmentsQuery = useGetAllAssignmentsQuery();
@@ -18,17 +20,34 @@ export const AdminAssignments = () => {
   );
   return (
     <>
-      <div className="flex gap-4 my-3">
-        {assignmentsQuery.data.map((d) => (
-          <AssignmentCard
-            assignment={d}
-            key={d.id}
-            selectAssignment={setSelectedAssignmentId}
-          />
-        ))}
-      </div>
+      {!selectedAssignment && (
+        <>
+          <NewAssignment />
+          <br />
+          <div className="flex flex-wrap gap-4 my-3">
+            {assignmentsQuery.data.map((d) => (
+              <AssignmentCard
+                assignment={d}
+                key={d.id}
+                selectAssignment={setSelectedAssignmentId}
+              />
+            ))}
+          </div>
+        </>
+      )}
       {selectedAssignment && (
-        <ManageAssignment assignment={selectedAssignment} />
+        <>
+          <button onClick={() => setSelectedAssignmentId(undefined)}>
+            <div className="flex">
+              <GoArrowLeft className="my-auto mr-3" /> Back
+            </div>
+          </button>
+          <ManageAssignment
+            key={selectedAssignment.id}
+            assignment={selectedAssignment}
+            onSaveCallback={() => setSelectedAssignmentId(undefined)}
+          />
+        </>
       )}
     </>
   );

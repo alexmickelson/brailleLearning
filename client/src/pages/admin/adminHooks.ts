@@ -16,3 +16,16 @@ export const useCreateAssignmentMutation = () =>
       onSuccess: () => queryClient.invalidateQueries(assignmentKeys.all),
     }
   );
+
+export const useUpdateAssignemntMutation = (assignmentId: string) =>
+  useMutation(async ({ name, text }: { name: string; text: string }) => {
+    const url = `/api/assignments/${assignmentId}`;
+    const body = {
+      name,
+      text,
+    };
+    await axios.put(url, body);
+  },
+  {
+    onSuccess: () => queryClient.invalidateQueries(assignmentKeys.all),
+  });

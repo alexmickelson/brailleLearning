@@ -42,6 +42,7 @@ async def get_assignment_by_id(
 class AssignmentSubmission(BaseModel):
     braille: str
 
+
 @router.post("/submit/{assignment_id}")
 async def submit_assignment(
     assignment_id: UUID,
@@ -55,10 +56,14 @@ async def submit_assignment(
     print(assignment.text)
     print(translated_brail_submission)
     if translated_brail_submission == assignment.text:
-        await submissions_service.assign_grade_for_assignment(user_id, assignment_id, 100.0)
+        await submissions_service.assign_grade_for_assignment(
+            user_id, assignment_id, 100.0
+        )
         return {"correctly_translated": True}
     else:
-        await submissions_service.assign_grade_for_assignment(user_id, assignment_id, 0.0)
+        await submissions_service.assign_grade_for_assignment(
+            user_id, assignment_id, 0.0
+        )
         return {
             "correctly_translated": False,
             "actual_translation": translated_brail_submission,
@@ -112,3 +117,19 @@ async def create_assignment(
         type=(body.type if body.type is not None else AssignmentType.STRING_TO_BRAILLE),
     )
     return new_assignment
+
+
+class AssignmentUpdate(BaseModel):
+    name: str
+    text: str
+
+
+@router.put("/{assignment_id}")
+async def update_assignment(
+    assignment_id: UUID,
+    body: AssignmentUpdate,
+    assignment_service: AssignmentService = Depends(),
+):
+    await assignment_service.update(
+        assignment_id=assignment_id, name=body.name, text=body.text
+    )

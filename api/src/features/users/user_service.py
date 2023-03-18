@@ -1,6 +1,10 @@
+from cachetools import LRUCache, cached
+from cachetools.keys import hashkey
 from fastapi import Depends
-from src.models.user import User
+from src.models.user import User, UserProfile
 from src.services.db_service import RunSql
+
+users_cache: LRUCache = LRUCache(maxsize=100)
 
 
 class UserService:
@@ -15,6 +19,7 @@ class UserService:
         """
         params = {"sub": sub}
         await self.run_sql(sql, params)
+        users_cache.clear()
 
     async def get_all_admins(self):
         sql = """
@@ -32,3 +37,18 @@ class UserService:
         """
         params = {"name": name, "sub": sub}
         await self.run_sql(sql, params)
+        users_cache.clear()
+
+    @cached(cache=users_cache, key=lambda _self, sub: hashkey(sub))
+    async def get_profile(self, sub: str):
+        sql = """
+            select 
+                sub,
+                name,
+                is_admin
+            from UserAccount
+            where sub = %(sub)s
+        """
+        params = {"sub": sub}
+        users = await self.run_sql(sql, params, output_class=UserProfile)
+        return users[0]

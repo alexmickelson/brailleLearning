@@ -7,7 +7,28 @@ import {
 import { Spinner } from "../../sharedComponents/Spinner";
 import { useCreateAssignmentMutation } from "./adminHooks";
 
-export const NewAssignment: FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
+export const NewAssignment = () => {
+  const [showNewAssignment, setShowNewAssignment] = useState(false);
+  return (
+    <>
+      {!showNewAssignment && (
+        <button onClick={() => setShowNewAssignment(true)}>
+          Add Assignment?
+        </button>
+      )}
+      {showNewAssignment && (
+        <>
+          <button className="" onClick={() => setShowNewAssignment(false)}>
+            Hide New Assignment
+          </button>
+          <NewAssignmentForm onSubmit={() => setShowNewAssignment(false)} />
+        </>
+      )}
+    </>
+  );
+};
+
+const NewAssignmentForm: FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
   const createMutation = useCreateAssignmentMutation();
   const nameControl = useTextInput("", {
     min: 3,
@@ -32,12 +53,10 @@ export const NewAssignment: FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
         text-slate-700
         dark:bg-gray-700
         dark:text-gray-50
-
-        
       "
     >
       <h5 className="text-center">Create a New Assignment</h5>
-      <hr/>
+      <hr />
       <form
         onSubmit={(e) => {
           e.preventDefault();

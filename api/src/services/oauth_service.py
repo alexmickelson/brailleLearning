@@ -8,11 +8,18 @@ import requests
 from fastapi import Request, HTTPException, Depends
 from jwt import PyJWKClient
 from jwt import PyJWK
+from src.features.users.user_service import UserService
 
 from src.models.user import User
 
 audience = None
 signing_key: PyJWK | None = None
+
+
+async def authenticate_user(request: Request, user_service: UserService = Depends()):
+    user = await __get_user_from_request(request)
+    profile = await user_service.get_profile(user.sub)
+    return profile
 
 
 def __set_audience_and_key(token: str):
@@ -24,7 +31,7 @@ def __set_audience_and_key(token: str):
     signing_key = jwks_client.get_signing_key_from_jwt(token)
 
 
-def get_user(token: str):
+def __get_user(token: str):
     global audience
     global signing_key
     if not audience or not signing_key:
@@ -47,12 +54,11 @@ def get_user(token: str):
     return user
 
 
-async def authenticate_user(request: Request):
+async def __get_user_from_request(request: Request):
     if "Authorization" in request.headers:
         auth_header = request.headers["Authorization"]
         token = auth_header.split(" ")[1]
-        user = get_user(token)
-        request.state.user = user
+        user = __get_user(token)
         return user
 
     if "Cookie" in request.headers:
@@ -60,11 +66,7 @@ async def authenticate_user(request: Request):
         for cookie in cookie_list:
             if "jwt=" in cookie:
                 jwt = cookie.replace("jwt=", "")
-                user = get_user(jwt)
-                request.state.user = user
+                user = __get_user(jwt)
                 return user
 
     raise HTTPException(status_code=403, detail="Authorization Token Not Found")
-
-
-# async def authorize_admin_user(request: Request)
