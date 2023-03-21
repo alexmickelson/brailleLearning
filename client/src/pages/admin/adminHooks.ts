@@ -46,17 +46,32 @@ export const useAllUsersQuery = () =>
     }));
   });
 
-export const useMakeAdminMutation = () =>
-  useMutation(
-    async (userSub: string) => {
-      const url = `/api/admin/users/`;
-      const body = {
-        sub: userSub,
-      };
+  export const useMakeAdminMutation = () =>
+    useMutation(
+      async (userSub: string) => {
+        const url = `/api/admin/users/makeAdmin`;
+        const body = {
+          sub: userSub,
+        };
+  
+        await axios.put(url, body);
+      },
+      {
+        onSuccess: () => queryClient.invalidateQueries(adminKeys.allUsers),
+      }
+    );
 
-      await axios.put(url, body);
-    },
-    {
-      onSuccess: () => queryClient.invalidateQueries(adminKeys.allUsers),
-    }
-  );
+    export const useRemoveAdminMutation = () =>
+    useMutation(
+      async (userSub: string) => {
+        const url = `/api/admin/users/removeAdmin`;
+        const body = {
+          sub: userSub,
+        };
+  
+        await axios.put(url, body);
+      },
+      {
+        onSuccess: () => queryClient.invalidateQueries(adminKeys.allUsers),
+      }
+    );

@@ -20,12 +20,20 @@ class AdminCreateRequest(BaseModel):
     sub: str
 
 
-@router.put("/")
+@router.put("/makeAdmin")
 async def create_admin(
     body: AdminCreateRequest,
     user_service: UserService = Depends(),
 ):
     await user_service.make_user_admin(body.sub)
+
+
+@router.put("/removeAdmin")
+async def remove_admin(
+    body: AdminCreateRequest,
+    user_service: UserService = Depends(),
+):
+    await user_service.remove_user_admin(body.sub)
 
 
 @router.get("/admins")
@@ -34,7 +42,9 @@ async def get_all_admins(
 ):
     return await user_service.get_all_admins()
 
+
 @router.get("/all")
 async def get_all_users(
-    user_service: UserService = Depends(),):
+    user_service: UserService = Depends(),
+):
     return await user_service.get_all_users()

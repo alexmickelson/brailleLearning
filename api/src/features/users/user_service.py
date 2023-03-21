@@ -21,6 +21,16 @@ class UserService:
         await self.run_sql(sql, params)
         users_cache.clear()
 
+    async def remove_user_admin(self, sub: str):
+        sql = """
+            update UserAccount
+            set is_admin = false
+            where sub = %(sub)s
+        """
+        params = {"sub": sub}
+        await self.run_sql(sql, params)
+        users_cache.clear()
+
     async def get_all_admins(self):
         sql = """
             select * from UserAccount

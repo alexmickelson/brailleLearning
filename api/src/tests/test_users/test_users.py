@@ -20,8 +20,25 @@ async def test_can_create_admin(authenticated_client: TestClient):
 
     print(admins_response.json())
     new_admin = [a for a in admins_response.json() if a["sub"] == user.sub]
-
     assert len(new_admin) > 0
+
+
+@pytest.mark.asyncio
+async def test_can_remove_admin(authenticated_client: TestClient):
+    user = await generate_user()
+    make_user_admin(authenticated_client, user)
+
+    remove_url = "/api/admin/users/removeAdmin"
+    body = {"sub": user.sub}
+    assert authenticated_client.put(remove_url, json=body).is_success
+
+    url = "/api/admin/users/admins"
+    admins_response = authenticated_client.get(url)
+    assert admins_response.is_success
+
+    print(admins_response.json())
+    new_admin = [a for a in admins_response.json() if a["sub"] == user.sub]
+    assert len(new_admin) == 0
 
 
 @pytest.mark.asyncio
@@ -69,7 +86,7 @@ async def generate_user(is_admin: bool = True):
 
 
 def make_user_admin(authenticated_client, user):
-    url = "/api/admin/users/"
+    url = "/api/admin/users/makeAdmin"
     body = {"sub": user.sub}
 
     app.dependency_overrides[authorize_admin] = lambda: UserProfile(
