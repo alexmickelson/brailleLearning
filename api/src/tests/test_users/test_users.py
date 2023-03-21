@@ -75,5 +75,5 @@ def make_user_admin(authenticated_client, user):
     app.dependency_overrides[authorize_admin] = lambda: UserProfile(
         sub="some", name="admin", is_admin=True
     )
-    create_response = authenticated_client.post(url, json=body)
+    create_response = authenticated_client.put(url, json=body)
     assert create_response.is_success

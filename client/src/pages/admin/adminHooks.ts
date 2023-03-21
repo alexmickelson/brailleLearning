@@ -20,7 +20,7 @@ export const useCreateAssignmentMutation = () =>
     }
   );
 
-export const useUpdateAssignemntMutation = (assignmentId: string) =>
+export const useUpdateAssignmentMutation = (assignmentId: string) =>
   useMutation(
     async ({ name, text }: { name: string; text: string }) => {
       const url = `/api/assignments/${assignmentId}`;
@@ -39,5 +39,24 @@ export const useAllUsersQuery = () =>
   useQuery(adminKeys.allUsers, async (): Promise<UserProfile[]> => {
     const url = "/api/admin/users/all";
     const response = await axios.get(url);
-    return response.data;
+    return response.data.map((u: any) => ({
+      name: u.name,
+      isAdmin: u.is_admin,
+      sub: u.sub,
+    }));
   });
+
+export const useMakeAdminMutation = () =>
+  useMutation(
+    async (userSub: string) => {
+      const url = `/api/admin/users/`;
+      const body = {
+        sub: userSub,
+      };
+
+      await axios.put(url, body);
+    },
+    {
+      onSuccess: () => queryClient.invalidateQueries(adminKeys.allUsers),
+    }
+  );

@@ -4,13 +4,13 @@ import {
   TextInputRow,
   useTextInput,
 } from "../../../sharedComponents/forms/TextInputRow";
-import { useUpdateAssignemntMutation } from "../adminHooks";
+import { useUpdateAssignmentMutation } from "../adminHooks";
 
 export const ManageAssignment: FC<{
   assignment: Assignment;
   onSaveCallback: () => void;
 }> = ({ assignment, onSaveCallback }) => {
-  const updateAssignmentMutation = useUpdateAssignemntMutation(assignment.id);
+  const updateAssignmentMutation = useUpdateAssignmentMutation(assignment.id);
   const nameControl = useTextInput(assignment.name);
   const textControl = useTextInput(assignment.text);
   return (

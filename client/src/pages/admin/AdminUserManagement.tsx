@@ -1,20 +1,38 @@
 import React from "react";
 import { Spinner } from "../../sharedComponents/Spinner";
-import { useAllUsersQuery } from "./adminHooks";
+import { useAllUsersQuery, useMakeAdminMutation } from "./adminHooks";
 
 export const AdminUserManagement = () => {
   const usersQuery = useAllUsersQuery();
-
+  const makeAdminMutation = useMakeAdminMutation();
   if (usersQuery.isLoading) return <Spinner />;
   if (usersQuery.isError) return <div>Error loading users</div>;
   if (!usersQuery.data) return <div>no user data</div>;
 
   return (
     <div>
-      AdminUserManagement
-      {usersQuery.data.map((u) => (
-        <div key={u.sub}>{u.name}</div>
-      ))}
+      <h3>AdminUserManagement</h3>
+      <table className="table-auto w-full">
+        <thead className="text-left">
+          <th>Name</th>
+          <th>Is Admin</th>
+          <th>SUB</th>
+        </thead>
+        <tbody>
+          {usersQuery.data.map((u) => (
+            <tr key={u.sub}>
+              <td>{u.name}</td>
+              <td>{u.isAdmin ? "True" : "False"}</td>
+              <td>{u.sub}</td>
+              <td>
+                <button onClick={() => makeAdminMutation.mutate(u.sub)}>
+                  Make Admin
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

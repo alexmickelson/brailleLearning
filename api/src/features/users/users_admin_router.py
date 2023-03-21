@@ -20,7 +20,7 @@ class AdminCreateRequest(BaseModel):
     sub: str
 
 
-@router.post("/")
+@router.put("/")
 async def create_admin(
     body: AdminCreateRequest,
     user_service: UserService = Depends(),
