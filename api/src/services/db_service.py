@@ -27,10 +27,15 @@ class RunSql:
             )
             await pool.open()
 
-        async with pool.connection() as conn:
-            async with conn.cursor(
-                row_factory=class_row(output_class)
-            ) if output_class else conn.cursor() as cur:
-                res = await cur.execute(sql, params)  # type: ignore
-                await conn.commit()
-                return await cur.fetchall() if res.description else []
+        try:
+            async with pool.connection() as conn:
+                async with conn.cursor(
+                    row_factory=class_row(output_class)
+                ) if output_class else conn.cursor() as cur:
+                    res = await cur.execute(sql, params)  # type: ignore
+                    await conn.commit()
+                    return await cur.fetchall() if res.description else []
+        except Exception as e:
+            print(sql)
+            print(params)
+            raise e

@@ -15,10 +15,10 @@ export const ManageAssignment: FC<{
   const textControl = useTextInput(assignment.text);
   return (
     <div className="m-auto">
-      Update Assignment
+      <h3 className="text-center">Update Assignment</h3>
       <form
         onSubmit={(e) => {
-          e.preventDefault()
+          e.preventDefault();
           updateAssignmentMutation
             .mutateAsync({
               name: nameControl.value,
@@ -29,8 +29,9 @@ export const ManageAssignment: FC<{
       >
         <TextInputRow label="Assignment Name" control={nameControl} />
         <TextInputRow label="Text" control={textControl} isTextArea={true} />
-
-        <button>Save</button>
+        <div className="flex justify-center">
+          <button className="m-3">Save</button>
+        </div>
       </form>
     </div>
   );

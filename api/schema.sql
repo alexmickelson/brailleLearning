@@ -1,4 +1,4 @@
--- export PGPASSWORD=$POSTGRES_PASSWORD && psql -U $POSTGRES_USER $POSTGRES_DB
+-- psql -U $POSTGRES_USER $POSTGRES_DB
 
 
 drop table if exists Submissions;

@@ -1,6 +1,7 @@
 from fastapi.testclient import TestClient
 from src.main import app
-from src.tests.conftest import create_assignment
+from src.models.user import UserProfile
+from src.tests.conftest import admin_client, create_assignment
 
 
 def test_admin_can_create_assignment(authenticated_client: TestClient):
@@ -45,14 +46,19 @@ def test_admin_can_update_assinment(authenticated_client: TestClient):
     url = f"/api/assignments/{assignment_id}"
     updated_name = "Assignment 5 - updated"
     body = {"name": updated_name, "text": "totally different this time"}
-    response = authenticated_client.put(url, json=body)
+
+    user = UserProfile(sub="", name="", is_admin=True)
+    with admin_client(user):
+        response = authenticated_client.put(url, json=body)
     assert response.is_success
 
     assignments_url = "/api/assignments/all"
     assignments_response = authenticated_client.get(assignments_url)
     assert assignments_response.is_success
 
-    assignment_names = [i["name"] for i in assignments_response.json() if i['id'] == assignment_id]
+    assignment_names = [
+        i["name"] for i in assignments_response.json() if i["id"] == assignment_id
+    ]
     assert updated_name in assignment_names
 
 

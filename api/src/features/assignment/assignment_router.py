@@ -6,7 +6,7 @@ from src.features.assignment.assignment_models import Assignment, AssignmentType
 from src.features.assignment.assignment_service import AssignmentService
 from src.features.assignment.submissions.submissions_service import SubmissionsService
 from src.services import braille_service
-from src.services.oauth_service import authenticate_user
+from src.services.oauth_service import authenticate_user, authorize_admin
 
 from pydantic import BaseModel
 
@@ -101,7 +101,9 @@ class AssignmentCreation(BaseModel):
 
 @router.post("/new")
 async def create_assignment(
-    body: AssignmentCreation, assignment_service: AssignmentService = Depends()
+    body: AssignmentCreation,
+    assignment_service: AssignmentService = Depends(),
+    user=Depends(authorize_admin),
 ):
     new_assignment = await assignment_service.create_assignment(
         name=body.name,
@@ -129,6 +131,7 @@ async def update_assignment(
     assignment_id: UUID,
     body: AssignmentUpdate,
     assignment_service: AssignmentService = Depends(),
+    user=Depends(authorize_admin),
 ):
     await assignment_service.update(
         assignment_id=assignment_id, name=body.name, text=body.text
