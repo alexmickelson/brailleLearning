@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Spinner } from "../../sharedComponents/Spinner";
 import { AssignmentDetail } from "./assignmentDetail/AssignmentDetail";
-import { useGetAllAssignmentsQuery } from "./assignmentHooks";
 import { Assignment } from "../../models/assignmentModel";
+import { useAllAssignmentsQuery } from "../../hooks/assignmentHooks";
 
 export const AllAssignments = () => {
-  const assignmentsQuery = useGetAllAssignmentsQuery();
+  const assignmentsQuery = useAllAssignmentsQuery();
   const [selectedAssignment, setSelectedAssignment] = useState<Assignment>();
 
   if (assignmentsQuery.isLoading) return <Spinner />;

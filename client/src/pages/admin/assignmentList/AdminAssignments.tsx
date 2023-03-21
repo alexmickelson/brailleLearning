@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Spinner } from "../../../sharedComponents/Spinner";
-import { useGetAllAssignmentsQuery } from "../../assignments/assignmentHooks";
 import { NewAssignment } from "../NewAssignment";
 import { AssignmentCard } from "./AssignmentCard";
 import { ManageAssignment } from "./ManageAssignment";
 import { GoArrowLeft } from "react-icons/go";
+import { useAllAssignmentsQuery } from "../../../hooks/assignmentHooks";
 
 export const AdminAssignments = () => {
-  const assignmentsQuery = useGetAllAssignmentsQuery();
+  const assignmentsQuery = useAllAssignmentsQuery();
   const [selectedAssignmentId, setSelectedAssignmentId] = useState<string>();
 
   if (assignmentsQuery.isLoading) return <Spinner />;

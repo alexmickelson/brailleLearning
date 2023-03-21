@@ -25,18 +25,33 @@ export const Header = () => {
       </NavLink>
       <div className="flex-grow"></div>
       {isAdmin && (
-        <NavLink
-          to="/admin"
-          className="
+        <>
+          <NavLink
+            to="/grading"
+            className="
             text-gray-100
             w-min
             my-auto
             mx-3
             font-bold
           "
-        >
-          Admin
-        </NavLink>
+          >
+            Grading
+          </NavLink>
+
+          <NavLink
+            to="/admin"
+            className="
+            text-gray-100
+            w-min
+            my-auto
+            mx-3
+            font-bold
+          "
+          >
+            Admin
+          </NavLink>
+        </>
       )}
       <ThemeToggle />
       {auth && auth.userData && (

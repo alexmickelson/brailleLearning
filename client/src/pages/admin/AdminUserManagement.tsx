@@ -1,10 +1,15 @@
 import React from "react";
 import { Spinner } from "../../sharedComponents/Spinner";
-import { useAllUsersQuery, useMakeAdminMutation } from "./adminHooks";
+import {
+  useAllUsersQuery,
+  useMakeAdminMutation,
+  useRemoveAdminMutation,
+} from "./adminHooks";
 
 export const AdminUserManagement = () => {
   const usersQuery = useAllUsersQuery();
   const makeAdminMutation = useMakeAdminMutation();
+  const removeAdminMutation = useRemoveAdminMutation();
   if (usersQuery.isLoading) return <Spinner />;
   if (usersQuery.isError) return <div>Error loading users</div>;
   if (!usersQuery.data) return <div>no user data</div>;
@@ -25,9 +30,15 @@ export const AdminUserManagement = () => {
               <td>{u.isAdmin ? "True" : "False"}</td>
               <td>{u.sub}</td>
               <td>
-                <button onClick={() => makeAdminMutation.mutate(u.sub)}>
-                  Make Admin
-                </button>
+                {u.isAdmin ? (
+                  <button onClick={() => removeAdminMutation.mutate(u.sub)}>
+                    Remove Admin
+                  </button>
+                ) : (
+                  <button onClick={() => makeAdminMutation.mutate(u.sub)}>
+                    Make Admin
+                  </button>
+                )}
               </td>
             </tr>
           ))}

@@ -76,6 +76,18 @@ async def test_non_admin_cannot_get_all_users(authenticated_client: TestClient):
     assert response.status_code == 403
 
 
+@pytest.mark.asyncio
+async def test_non_admin_cannot_make_or_remove_admin(authenticated_client: TestClient):
+    user = await generate_user(False)
+    body = {"sub": user.sub}
+    make_url = "/api/admin/users/makeAdmin"
+    make_response = authenticated_client.put(make_url, json=body)
+    assert make_response.status_code == 403
+    remove_url = "/api/admin/users/removeAdmin"
+    remove_response = authenticated_client.put(remove_url, json=body)
+    assert remove_response.status_code == 403
+
+
 async def generate_user(is_admin: bool = True):
     user_service = UserService(RunSql())
     salt = "".join(random.choices(string.ascii_letters, k=5))

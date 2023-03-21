@@ -6,6 +6,8 @@ import { Header } from "./sharedComponents/Header";
 import { AdminPage } from "./pages/admin/AdminPage";
 import { AllAssignments } from "./pages/assignments/AllAssignments";
 import { useIsAdmin } from "./services/userService";
+import { GradingPage } from "./pages/grading/GradingPage";
+import { GradeAssignmentPage } from "./pages/grading/GradeAssignmentPage";
 
 export const AppRoutes = () => {
   const auth = useAuth();
@@ -30,6 +32,8 @@ export const AppRoutes = () => {
             <Routes>
               <Route path="/" element={<AllAssignments />} />
               {isAdmin && <Route path="/admin" element={<AdminPage />} />}
+              {isAdmin && <Route path="/grading" element={<GradingPage />} />}
+              {isAdmin && <Route path="/grading/:assignmentId" element={<GradeAssignmentPage />} />}
             </Routes>
           )}
           {auth && !auth.userData && (
