@@ -10,6 +10,5 @@ export const printDate = (datestring: string | Date) => {
 };
 
 function pad(num: number) {
-  var s = "00" + num;
-  return s.substr(s.length - 2);
+  return num.toString().padStart(1, "0");
 }
