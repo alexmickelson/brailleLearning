@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { Assignment } from "../../../models/assignmentModel";
+import { Assignment } from "../../../../models/assignmentModel";
 
 export const AssignmentCard: FC<{
   assignment: Assignment;

@@ -13,8 +13,13 @@ from src.services.oauth_service import authenticate_user, authorize_admin
 
 
 @pytest.fixture()
-def authenticated_client():
-    app.dependency_overrides[authenticate_user] = lambda: {}
+def test_user():
+    return UserProfile(sub="testUser", name="test user", is_admin=False)
+
+
+@pytest.fixture()
+def authenticated_client(test_user: UserProfile):
+    app.dependency_overrides[authenticate_user] = lambda: test_user
     client = TestClient(app)
     yield client
     app.dependency_overrides[authenticate_user] = authenticate_user
@@ -43,6 +48,6 @@ def create_assignment(
 
 @contextmanager
 def admin_client(user: UserProfile):
-    app.dependency_overrides[authorize_admin] =  lambda : user
+    app.dependency_overrides[authorize_admin] = lambda: user
     yield
     app.dependency_overrides[authorize_admin] = authorize_admin

@@ -1,8 +1,8 @@
 import { useIsAdmin } from "../../services/userService";
 import { adminViewOptions, SideNavigation } from "./SideNavigation";
-import { AdminAssignments } from "./assignmentList/AdminAssignments";
 import { useState } from "react";
 import { AdminUserManagement } from "./AdminUserManagement";
+import { AdminAssignments } from "./assignmentManagement/assignmentList/AdminAssignments";
 
 export const AdminPage = () => {
   const isAdmin = useIsAdmin();
@@ -22,9 +22,7 @@ export const AdminPage = () => {
           {selectedView === adminViewOptions.assignments && (
             <AdminAssignments />
           )}
-          {selectedView === adminViewOptions.users && (
-            <AdminUserManagement />
-          )}
+          {selectedView === adminViewOptions.users && <AdminUserManagement />}
         </div>
       </div>
     </div>

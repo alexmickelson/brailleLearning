@@ -1,4 +1,5 @@
 
+from datetime import datetime
 from typing import Optional
 from uuid import UUID
 
@@ -11,4 +12,5 @@ class Submission(BaseModel):
     user_id: str
     grade: float
     submitted_text: Optional[str]
+    submitted_date: datetime
     # answers: list[str]

@@ -7,6 +7,7 @@ import { axiosClient } from "../../utils/axiosClient";
 const queryClient = getQueryClient();
 export const adminKeys = {
   allUsers: ["all users"] as const,
+  user: (userId: string) => ["all users", userId] as const,
 };
 
 export const useCreateAssignmentMutation = () =>
@@ -41,6 +42,22 @@ export const useAllUsersQuery = () =>
     const response = await axiosClient.get(url);
     return response.data;
   });
+
+export const useUserProfileQuery = (userId: string) => {
+  const allUsersQuery = useAllUsersQuery();
+  const userQuery = useQuery(
+    adminKeys.user(userId),
+    async () => {
+      const user = allUsersQuery.data?.find((u) => u.sub === userId);
+      if (!user) throw Error(`Could not find user with sub: ${userId}`);
+      return user;
+    },
+    {
+      enabled: !!allUsersQuery.data,
+    }
+  );
+  return userQuery;
+};
 
 export const useMakeAdminMutation = () =>
   useMutation(

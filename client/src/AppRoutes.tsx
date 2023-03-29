@@ -6,8 +6,8 @@ import { Header } from "./sharedComponents/Header";
 import { AdminPage } from "./pages/admin/AdminPage";
 import { AllAssignments } from "./pages/assignments/AllAssignments";
 import { useIsAdmin } from "./services/userService";
-import { GradingPage } from "./pages/grading/GradingPage";
-import { GradeAssignmentPage } from "./pages/grading/GradeAssignmentPage";
+import { GradingPage } from "./pages/admin/grading/GradingPage";
+import { GradeAssignmentPage } from "./pages/admin/grading/GradeAssignmentPage";
 
 export const AppRoutes = () => {
   const auth = useAuth();

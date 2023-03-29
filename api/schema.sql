@@ -25,7 +25,8 @@ create table Submissions (
   assignment_id     UUID NOT NULL REFERENCES Assignment (id),
   user_id           TEXT NOT NULL,
   grade             FLOAT,
-  submitted_text    TEXT
+  submitted_text    TEXT,
+  submitted_date    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 

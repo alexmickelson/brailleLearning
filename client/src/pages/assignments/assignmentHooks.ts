@@ -19,10 +19,10 @@ export const useGetGradeQuery = (assignmentId: string) =>
     }
   );
 
-export const useGradeSubmissionMutation = (assignmentId: string) =>
+export const useSubmitAssignmentMutation = (assignmentId: string) =>
   useMutation(
     async (braille: string) => {
-      const url = `/api/assignments/submit/${assignmentId}`;
+      const url = `/api/submissions/${assignmentId}`;
       const body = {
         braille: braille,
       };

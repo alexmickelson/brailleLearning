@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 import { Spinner } from "../../../sharedComponents/Spinner";
 import { BrailKeyboard } from "../../brailleKeyboard/BrailKeyboard";
-import { useGradeSubmissionMutation } from "../assignmentHooks";
+import { useSubmitAssignmentMutation } from "../assignmentHooks";
 import { Assignment } from "../../../models/assignmentModel";
 import { Grade } from "./Grade";
 
@@ -9,7 +9,7 @@ export const AssignmentDetail: FC<{ assignment: Assignment }> = ({
   assignment,
 }) => {
   const [brailInput, setBrailInput] = useState("");
-  const gradeSubmissionMutation = useGradeSubmissionMutation(assignment.id);
+  const gradeSubmissionMutation = useSubmitAssignmentMutation(assignment.id);
 
   return (
     <div className="m-3">

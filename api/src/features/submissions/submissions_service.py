@@ -3,9 +3,9 @@ from typing import Dict
 from uuid import UUID
 from fastapi import Depends
 from pydantic import BaseModel
-from src.features.assignment.submissions.submisison_model import Submission
 
 from src.services.db_service import RunSql
+from src.features.submissions.submisison_model import Submission
 
 
 class SubmissionsService:
@@ -29,16 +29,21 @@ class SubmissionsService:
         pprint(results)
         return results[0].grade
 
-    async def assign_grade_for_assignment(
-        self, user_id: str, assignment_id: UUID, grade: float
+    async def submit_assignment(
+        self, user_id: str, assignment_id: UUID, braille_text: str, grade: float
     ):
         sql = """
             INSERT INTO Submissions
-                (user_id, assignment_id, grade)
+                (user_id, assignment_id, grade, submitted_text)
             values
-                (%(user_id)s, %(assignment_id)s, %(grade)s)
+                (%(user_id)s, %(assignment_id)s, %(grade)s, %(braille_text)s)
         """
-        params = {"assignment_id": assignment_id, "grade": grade, "user_id": user_id}
+        params = {
+            "assignment_id": assignment_id,
+            "grade": grade,
+            "user_id": user_id,
+            "braille_text": braille_text,
+        }
         await self.run_sql(sql, params)
 
     async def delete_all_grades(self):
@@ -58,3 +63,12 @@ class SubmissionsService:
         results = await self.run_sql(sql, params, output_class=Submission)
 
         return results
+
+    async def override_grade(self, submission_id: UUID, grade: float):
+        sql = """
+            update Submissions
+            set grade = %(grade)s
+            where id = %(submission_id)s
+        """
+        params = {"grade": grade, "submission_id": submission_id}
+        await self.run_sql(sql, params)

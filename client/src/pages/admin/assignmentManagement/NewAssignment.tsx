@@ -3,9 +3,9 @@ import { toast } from "react-hot-toast";
 import {
   TextInputRow,
   useTextInput,
-} from "../../sharedComponents/forms/TextInputRow";
-import { Spinner } from "../../sharedComponents/Spinner";
-import { useCreateAssignmentMutation } from "./adminHooks";
+} from "../../../sharedComponents/forms/TextInputRow";
+import { Spinner } from "../../../sharedComponents/Spinner";
+import { useCreateAssignmentMutation } from "../adminHooks";
 
 export const NewAssignment = () => {
   const [showNewAssignment, setShowNewAssignment] = useState(false);

@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useAllAssignmentsQuery } from "../../hooks/assignmentHooks";
-import { Spinner } from "../../sharedComponents/Spinner";
+import { useAllAssignmentsQuery } from "../../../hooks/assignmentHooks";
+import { Spinner } from "../../../sharedComponents/Spinner";
 
 export const GradingPage = () => {
   const assignmentsQuery = useAllAssignmentsQuery();

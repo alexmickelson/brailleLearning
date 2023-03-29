@@ -67,7 +67,7 @@ class AssignmentService:
         """
         params = {"id": id}
         assignments = await self.run_sql(sql, params, output_class=Assignment)
-        print("assignments", assignments)
+        # print("assignments", assignments)
         return assignments[0]
 
     async def get_all_assignments(self):

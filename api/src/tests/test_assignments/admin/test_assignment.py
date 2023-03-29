@@ -30,7 +30,7 @@ def test_admin_can_view_submitted_assignments(authenticated_client: TestClient):
     assignment = create_assignment(authenticated_client, name)
     assignment_id = assignment["id"]
 
-    submissions_url = f"/api/assignment/{assignment_id}/submissions"
+    submissions_url = f"/api/submissions/{assignment_id}/all"
     submissions_response = authenticated_client.get(submissions_url)
     assert submissions_response.is_success
 
@@ -61,19 +61,3 @@ def test_admin_can_update_assinment(authenticated_client: TestClient):
     ]
     assert updated_name in assignment_names
 
-
-# def test_admin_can_override_assignment(authenticated_client: TestClient):
-#     name = "Assignment 4"
-#     assignment = create_assignment(authenticated_client, name)
-
-#     assignment_id = assignment["id"]
-#     submission_url = f"/api/submit/{assignment_id}"
-#     submission_body = {"braille": ""}
-#     submission_response = authenticated_client.post(
-#         submission_url, json=submission_body
-#     )
-#     assert submission_response.is_success
-
-#     get_grade_url = '/api/submission/'
-
-#     override_grade_url = f"/api/submit/"

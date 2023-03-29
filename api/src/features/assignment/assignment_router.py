@@ -4,7 +4,8 @@ from fastapi import APIRouter, Request, Depends
 from pydantic import BaseModel, Field
 from src.features.assignment.assignment_models import Assignment, AssignmentType
 from src.features.assignment.assignment_service import AssignmentService
-from src.features.assignment.submissions.submissions_service import SubmissionsService
+from src.features.submissions.submissions_service import SubmissionsService
+from src.models.user import UserProfile
 from src.services import braille_service
 from src.services.oauth_service import authenticate_user, authorize_admin
 
@@ -16,19 +17,6 @@ router = APIRouter(
     tags=["Assignments"],
 )
 
-user_id = "testuser"
-
-# assignments: List[Assignment] = [
-#     Assignment(
-#         id=0,
-#         name="Assignment 1",
-#         text="translate this",
-#         show_reference_braille=False,
-#         show_print_feed=False,
-#         type=AssignmentType.STRING_TO_BRAILLE,
-#     )
-# ]
-
 
 @router.get("/details/{assignment_id}")
 async def get_assignment_by_id(
@@ -39,37 +27,6 @@ async def get_assignment_by_id(
     return assignment
 
 
-class AssignmentSubmission(BaseModel):
-    braille: str
-
-
-@router.post("/submit/{assignment_id}")
-async def submit_assignment(
-    assignment_id: UUID,
-    body: AssignmentSubmission,
-    submissions_service: SubmissionsService = Depends(),
-    assignment_service: AssignmentService = Depends(),
-):
-    translated_brail_submission = braille_service.braille_to_text(body.braille)
-    assignment = await assignment_service.get_assignment(assignment_id)
-
-    print(assignment.text)
-    print(translated_brail_submission)
-    if translated_brail_submission == assignment.text:
-        await submissions_service.assign_grade_for_assignment(
-            user_id, assignment_id, 100.0
-        )
-        return {"correctly_translated": True}
-    else:
-        await submissions_service.assign_grade_for_assignment(
-            user_id, assignment_id, 0.0
-        )
-        return {
-            "correctly_translated": False,
-            "actual_translation": translated_brail_submission,
-        }
-
-
 @router.get("/all")
 async def get_all_assignments(assignment_service: AssignmentService = Depends()):
     return await assignment_service.get_all_assignments()
@@ -78,9 +35,12 @@ async def get_all_assignments(assignment_service: AssignmentService = Depends())
 @router.get("/grades/{assignment_id}")
 async def get_assignment_grade(
     assignment_id: UUID,
+    profile: UserProfile = Depends(authenticate_user),
     submissions_service: SubmissionsService = Depends(),
 ):
-    grade = await submissions_service.get_grade_for_assignment(assignment_id, user_id)
+    grade = await submissions_service.get_grade_for_assignment(
+        assignment_id, profile.sub
+    )
     return {"grade": grade}
 
 
@@ -103,7 +63,7 @@ class AssignmentCreation(BaseModel):
 async def create_assignment(
     body: AssignmentCreation,
     assignment_service: AssignmentService = Depends(),
-    user=Depends(authorize_admin),
+    user: UserProfile=Depends(authorize_admin),
 ):
     new_assignment = await assignment_service.create_assignment(
         name=body.name,

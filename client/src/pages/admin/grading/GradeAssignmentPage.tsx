@@ -1,8 +1,9 @@
 import React, { FC } from "react";
 import { useParams } from "react-router-dom";
-import { useAssignmentDetailsQuery } from "../../hooks/assignmentHooks";
-import { Spinner } from "../../sharedComponents/Spinner";
-import { useSubmissionsQuery } from "./GradingHooks";
+import { useAssignmentDetailsQuery } from "../../../hooks/assignmentHooks";
+import { Spinner } from "../../../sharedComponents/Spinner";
+import { useOverrideGradeMutation, useSubmissionsQuery } from "./GradingHooks";
+import { GradingSubmissionDetail } from "./GradingSubmissionDetail";
 
 export const GradeAssignmentPage = () => {
   const { assignmentId } = useParams();
@@ -26,13 +27,21 @@ const WrappedGradeAssignmentPage: FC<{ assignmentId: string }> = ({
     return <div>Error loading assignment submissions</div>;
   if (!submissionsQuery.data) return <div>no assignment submission data</div>;
 
-    console.log(submissionsQuery.data);
-    
   return (
     <div>
-      <h1 className="text-center">Grade: {assignmentDetailsQuery.data.name}</h1>
-      <div>Assignment Text: {assignmentDetailsQuery.data.text}</div>
-
+      <h1 className="text-center">
+        Grading: {assignmentDetailsQuery.data.name}
+      </h1>
+      <div className="m-3 text-center">
+        <h5>Assignment Text:</h5>
+        <div>{assignmentDetailsQuery.data.text}</div>
+      </div>
+      <hr />
+      <div>
+        {submissionsQuery.data.map((s) => (
+          <GradingSubmissionDetail key={s.id} submission={s} />
+        ))}
+      </div>
     </div>
   );
 };

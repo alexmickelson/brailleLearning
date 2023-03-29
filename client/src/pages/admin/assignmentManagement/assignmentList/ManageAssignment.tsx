@@ -1,10 +1,7 @@
 import React, { FC } from "react";
-import { Assignment } from "../../../models/assignmentModel";
-import {
-  TextInputRow,
-  useTextInput,
-} from "../../../sharedComponents/forms/TextInputRow";
-import { useUpdateAssignmentMutation } from "../adminHooks";
+import { Assignment } from "../../../../models/assignmentModel";
+import { useTextInput, TextInputRow } from "../../../../sharedComponents/forms/TextInputRow";
+import { useUpdateAssignmentMutation } from "../../adminHooks";
 
 export const ManageAssignment: FC<{
   assignment: Assignment;
