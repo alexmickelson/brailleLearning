@@ -12,6 +12,7 @@ services:
       - POSTGRES_USER=braille
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=braille
+      - POSTGRES_HOST=database
   
   client:
     build: 
@@ -32,7 +33,6 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=braille
       - TZ=America/Denver
-
 
   proxy:
     image: lscr.io/linuxserver/swag
