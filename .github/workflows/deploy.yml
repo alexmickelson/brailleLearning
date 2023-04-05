@@ -2,38 +2,31 @@ name: Build and Deploy
 on: 
   push:
   workflow_dispatch:
+env: 
+  JWKS_URL: ${{ vars.REACT_APP_AUTHORITY }}/.well-known/jwks.json
+  AUTH_AUDIENCE: ${{ vars.REACT_APP_CLIENT_ID }}
+  REACT_APP_CLIENT_ID: ${{ vars.REACT_APP_CLIENT_ID }}
+  REACT_APP_AUTHORITY: ${{ vars.REACT_APP_AUTHORITY }}
+  REACT_APP_HOST: ${{ vars.REACT_APP_HOST }}
+  POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
 jobs:
   build:
-    runs-on: [home-server]
+    runs-on: home-server
     steps:
       - name: checkout repo
         uses: actions/checkout@v2
 
       - name: build and deploy
-        env: 
-          JWKS_URL: ${{ vars.REACT_APP_AUTHORITY }}/.well-known/jwks.json
-          AUTH_AUDIENCE: ${{ vars.REACT_APP_CLIENT_ID }}
-          REACT_APP_CLIENT_ID: ${{ vars.REACT_APP_CLIENT_ID }}
-          REACT_APP_AUTHORITY: ${{ vars.REACT_APP_AUTHORITY }}
-          REACT_APP_HOST: ${{ vars.REACT_APP_HOST }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         run: |
           docker-compose build
           docker-compose push
   deploy:
-    runs-on: [self-hosted]
+    runs-on: prod-server
     steps:
       - name: checkout repo
         uses: actions/checkout@v2
 
       - name: build and deploy
-        env: 
-          JWKS_URL: ${{ vars.REACT_APP_AUTHORITY }}/.well-known/jwks.json
-          AUTH_AUDIENCE: ${{ vars.REACT_APP_CLIENT_ID }}
-          REACT_APP_CLIENT_ID: ${{ vars.REACT_APP_CLIENT_ID }}
-          REACT_APP_AUTHORITY: ${{ vars.REACT_APP_AUTHORITY }}
-          REACT_APP_HOST: ${{ vars.REACT_APP_HOST }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         run: |
           docker-compose pull
           docker-compose up -d
