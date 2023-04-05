@@ -28,5 +28,6 @@ jobs:
 
       - name: build and deploy
         run: |
-          docker-compose pull
+          docker pull server.alexmickelson.guru:5000/braille_client
+          docker pull server.alexmickelson.guru:5000/braille_api
           docker-compose up -d
