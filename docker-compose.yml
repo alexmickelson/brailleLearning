@@ -2,12 +2,16 @@ version: "3.3"
 services:
   api:
     build: api/
+    image: server.alexmickelson.guru:5000/braille_api
     container_name: braille_api
     restart: always
     environment:
       - TZ=US/Central
       - JWKS_URL=${JWKS_URL}
       - AUTH_AUDIENCE=${AUTH_AUDIENCE}
+      - POSTGRES_USER=braille
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=braille
   
   client:
     build: 
@@ -16,10 +20,19 @@ services:
         - REACT_APP_CLIENT_ID=${REACT_APP_CLIENT_ID}
         - REACT_APP_AUTHORITY=${REACT_APP_AUTHORITY}
         - REACT_APP_HOST=${REACT_APP_HOST}
+    image: server.alexmickelson.guru:5000/braille_client
     container_name: braille_client
     restart: always
     environment:
       - TZ=US/Central
+  database:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=braille
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=braille
+      - TZ=America/Denver
+
 
   proxy:
     image: lscr.io/linuxserver/swag
