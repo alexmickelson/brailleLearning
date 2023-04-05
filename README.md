@@ -17,3 +17,19 @@
   - [ ] track time to complete
   - [ ] assignment prerequisites
   - [ ] assignment open date
+
+
+
+Hear
+
+H - ea - ar
+
+
+wea - the - r
+not: wea - th - er
+- because the is strong and th and er are lower
+- strong contraction > strong groupsign > everything else
+- wordsign gets precedence if it is the entire word
+- some shortform words can be used as parts of words
+  - can be followed by "'s"
+- grade 1 is just letters, grade 2 is where non alphabetic characters happen

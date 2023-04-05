@@ -182,7 +182,8 @@ export const textLookup: { [key: string]: string } = {
   "⠳": "out",
   "⠌": "still",
 
-  //strong groupsigns
+  //strong groupsigns - strong means dot on top left and right bottom
+  // strong groupsigns are prefered over lower groups signs
   // "⠡": "ch",
   // "⠩": "sh",
   // "⠹": "th",
@@ -216,7 +217,7 @@ export const textLookup: { [key: string]: string } = {
   // '⠔': 'in',
   // '⠴': 'was',
 
-  //initial letter contractions
+  //initial letter contractions - works standalone or in a word
   "⠐⠙": "day",
   "⠐⠑": "ever",
   "⠐⠋": "father",
@@ -251,7 +252,7 @@ export const textLookup: { [key: string]: string } = {
   "⠸⠺": "world",
   "⠸⠮": "their",
 
-  //final letter groupsigns
+  //final letter groupsigns - works in middle or end of a word
   "⠨⠙": "ound",
   "⠨⠑": "ance",
   "⠨⠝": "sion",
