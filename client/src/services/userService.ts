@@ -17,6 +17,7 @@ export const useUserProfileQuery = (userSub: string | undefined) =>
   useQuery(["is admin query", userSub], async (): Promise<UserProfile> => {
     const url = `/api/user/profile`;
     const response = await axios.get(url);
+
     return {
       name: response.data.name,
       sub: response.data.sub,

@@ -23,11 +23,20 @@ export const useCreateAssignmentMutation = () =>
 
 export const useUpdateAssignmentMutation = (assignmentId: string) =>
   useMutation(
-    async ({ name, text }: { name: string; text: string }) => {
+    async ({
+      name,
+      text,
+      showLivePreview,
+    }: {
+      name: string;
+      text: string;
+      showLivePreview: boolean;
+    }) => {
       const url = `/api/assignments/${assignmentId}`;
       const body = {
         name,
         text,
+        showLivePreview,
       };
       await axiosClient.put(url, body);
     },

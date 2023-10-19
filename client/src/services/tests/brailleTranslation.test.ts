@@ -1,4 +1,4 @@
-import { brailleToText } from "./brailleService";
+import { brailleToText } from "../brailleService";
 
 const aboutInBraille = "⠁⠃⠕⠥⠞";
 it("Can translate standard braille", () => {
@@ -58,3 +58,4 @@ it("can capitalize word", () => {
   expect(actual).toBe(expected)
 
 })
+

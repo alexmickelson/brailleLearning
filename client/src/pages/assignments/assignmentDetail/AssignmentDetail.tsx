@@ -10,6 +10,7 @@ export const AssignmentDetail: FC<{ assignment: Assignment }> = ({
 }) => {
   const [brailInput, setBrailInput] = useState("");
   const gradeSubmissionMutation = useSubmitAssignmentMutation(assignment.id);
+  const autoGradeFeatureFlag = process.env.REACT_APP_AUTOGRADING;
 
   return (
     <div className="m-3">
@@ -42,7 +43,7 @@ export const AssignmentDetail: FC<{ assignment: Assignment }> = ({
       <div className="flex justify-center">
         {gradeSubmissionMutation.isLoading && <Spinner />}
       </div>
-      <Grade assignmentId={assignment.id} />
+      {autoGradeFeatureFlag && <Grade assignmentId={assignment.id} />}
     </div>
   );
 };

@@ -3,7 +3,7 @@
 
 # notes
 
-- [ ] number the letter indicators (f 1, d 2, s 3, j 4, k 5, l 6)
+- [x] number the letter indicators (f 1, d 2, s 3, j 4, k 5, l 6)
 - [x] dont include a and ;
 - [ ] assignments
   - [ ] option to show a reference
@@ -33,3 +33,5 @@ not: wea - th - er
 - some shortform words can be used as parts of words
   - can be followed by "'s"
 - grade 1 is just letters, grade 2 is where non alphabetic characters happen
+
+https://iceb.org/Rules%20of%20Unified%20English%20Braille%202013.pdf

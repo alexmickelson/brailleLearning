@@ -32,3 +32,4 @@ create table Submissions (
 
 -- truncate assignment cascade;
 -- update useraccount set is_admin = true where sub = 'google-oauth2|115592117519410910374';
+-- update useraccount set is_admin = true where name = 'alex mickelson';

@@ -19,7 +19,6 @@ services:
         su - developer
         tail -f /dev/null
       "
-      
 
   client:
     build: .
@@ -50,6 +49,8 @@ services:
         
         su - developer
         source /home/developer/virtualenv/bin/activate
+        pip3 install -U pyjwt
+        pip install "uvicorn[standard]" fastapi psycopg psycopg_pool PyJWT cryptography requests cachetools
         pip install -r requirements.txt
         uvicorn src.main:app --reload --port 8080 --host 0.0.0.0
       "

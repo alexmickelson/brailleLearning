@@ -198,7 +198,7 @@ export const textLookup: { [key: string]: string } = {
   "⠬": "ing",
 
   //lower groupsigns
-  // '⠬': 'ea',
+  // '⠂': 'ea',
   // "⠆": "bb",
   // '⠒': 'cc',
   // '⠖': 'ff',
@@ -217,7 +217,10 @@ export const textLookup: { [key: string]: string } = {
   // '⠔': 'in',
   // '⠴': 'was',
 
-  //initial letter contractions - works standalone or in a word
+  // initial letter contractions 
+  // works standalone or in a word
+  // a two-cell braille sign formed by dot 5, dots 45
+  // or dots 456 followed by the first letter or groupsign of the word
   "⠐⠙": "day",
   "⠐⠑": "ever",
   "⠐⠋": "father",

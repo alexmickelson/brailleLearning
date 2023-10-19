@@ -2,7 +2,6 @@ import {
   symbolIndicators,
   symbols,
   textLookup,
-  wordIndicators,
 } from "./braillePrimitives";
 
 export const keypressesToBraille = (keypresses: string[]) => {
@@ -71,7 +70,6 @@ const splitOutNextBrailleCharacter = (braille: string) => {
   const brailleThreeCharacters = Object.keys(textLookup).filter(
     (k) => k.length === 3
   );
-  console.log(brailleThreeCharacters);
   
   const brailleTwoCharacters = Object.keys(textLookup).filter(
     (k) => k.length === 2

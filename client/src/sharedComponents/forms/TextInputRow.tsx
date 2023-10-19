@@ -28,7 +28,7 @@ interface Props {
   isTextArea?: boolean;
   rows?: number;
   autoFocus?: boolean;
-  columnSpan?: number;
+  // columnSpan?: number;
 }
 
 export const TextInputRow: FC<Props> = ({
@@ -38,7 +38,6 @@ export const TextInputRow: FC<Props> = ({
   isTextArea = false,
   rows = 4,
   autoFocus = false,
-  columnSpan = 1,
 }) => {
   const salt = Math.random();
   const [hasBeenTouched, setHasBeenTouched] = useState(false);
@@ -73,7 +72,7 @@ export const TextInputRow: FC<Props> = ({
   `;
 
   return (
-    <div className={`col-span-${columnSpan}`}>
+    <div>
       {displayLabel && (
         <div className={labelClasses}>
           <label htmlFor={computedLabel} className="col-form-label">

@@ -12,6 +12,7 @@ import { GradeAssignmentPage } from "./pages/admin/grading/GradeAssignmentPage";
 export const AppRoutes = () => {
   const auth = useAuth();
   const isAdmin = useIsAdmin();
+  
 
   return (
     <>
