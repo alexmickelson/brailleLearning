@@ -7,6 +7,7 @@ import {
   useSubmitAssignmentMutation,
 } from "../../hooks/assignmentHooks";
 import { useNavigate } from "react-router-dom";
+import { SubmissionList } from "./SubmissionList";
 
 export const StudentAssignment: FC<{ assignmentId: string }> = ({
   assignmentId,
@@ -24,7 +25,7 @@ export const StudentAssignment: FC<{ assignmentId: string }> = ({
 
   const submitAssignment = () =>
     submissionMutation.mutateAsync(brailInput).then(() => navigate("/"));
-    
+
   return (
     <div className="m-3">
       <h1 className="text-center">{assignmentQuery.data.name}</h1>
@@ -62,6 +63,9 @@ export const StudentAssignment: FC<{ assignmentId: string }> = ({
         {submissionMutation.isLoading && <Spinner />}
       </div>
       {autoGradeFeatureFlag && <Grade assignmentId={assignmentQuery.data.id} />}
+
+      <hr />
+      <SubmissionList assignmentId={assignmentId} />
     </div>
   );
 };

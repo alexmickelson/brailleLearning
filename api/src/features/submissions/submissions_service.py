@@ -52,7 +52,7 @@ class SubmissionsService:
         """
         await self.run_sql(sql, {})
 
-    async def get_submissions_for_assignment(self, assignment_id: UUID):
+    async def get_all_students_submissions_for_assignment(self, assignment_id: UUID):
         sql = """
             select 
                 *
@@ -60,6 +60,21 @@ class SubmissionsService:
             where assignment_id = %(assignment_id)s
         """
         params = {"assignment_id": assignment_id}
+        results = await self.run_sql(sql, params, output_class=Submission)
+
+        return results
+
+    async def get_assignment_submissions_for_student(
+        self, assignment_id: UUID, student_sub: str
+    ):
+        sql = """
+            select 
+                *
+            from Submissions
+            where assignment_id = %(assignment_id)s
+                and user_id = %(student_sub)s
+        """
+        params = {"assignment_id": assignment_id, "student_sub": student_sub}
         results = await self.run_sql(sql, params, output_class=Submission)
 
         return results

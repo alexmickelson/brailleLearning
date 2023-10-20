@@ -8,6 +8,8 @@ import { getQueryClient } from "./services/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider, AuthProviderProps } from "oidc-react";
 
+
+const queryClient = getQueryClient();
 const oidcConfig: AuthProviderProps = {
   authority: process.env.REACT_APP_AUTHORITY,
   clientId: process.env.REACT_APP_CLIENT_ID,
@@ -27,13 +29,13 @@ const oidcConfig: AuthProviderProps = {
     document.cookie = `jwt=${token}; expires=${expiresDate.toUTCString()}; SameSite=Strict; path=/api;`;
   },
   onSignOut: () => {
+    queryClient.clear();
     document.cookie = `jwt=; expires=${new Date(0).toUTCString()};  SameSite=Strict; path=/api;`;
   },
   scope: "openid profile email",
   responseType: "code",
 };
 
-const queryClient = getQueryClient();
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );

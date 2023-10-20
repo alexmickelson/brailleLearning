@@ -44,6 +44,18 @@ async def get_assignment_grade(
     return {"grade": grade}
 
 
+@router.get("/submissions/{assignment_id}")
+async def get_student_assignment_submissions(
+    assignment_id: UUID,
+    profile: UserProfile = Depends(authenticate_user),
+    submissions_service: SubmissionsService = Depends(),
+):
+    submissions = await submissions_service.get_assignment_submissions_for_student(
+        assignment_id=assignment_id, student_sub=profile.sub
+    )
+    return submissions
+
+
 @router.delete("/grades/all")
 async def delete_all_grades(
     submissions_service: SubmissionsService = Depends(),

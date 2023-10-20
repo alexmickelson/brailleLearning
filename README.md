@@ -19,6 +19,8 @@
   - [ ] assignment open date
 
 
+- [ ] assignment total points
+
 
 Hear
 

@@ -20,7 +20,9 @@ async def get_assignment_submissions(
     assignment_id: UUID,
     submissions_service: SubmissionsService = Depends(),
 ):
-    return await submissions_service.get_submissions_for_assignment(assignment_id)
+    return await submissions_service.get_all_students_submissions_for_assignment(
+        assignment_id
+    )
 
 
 class AssignmentSubmission(BaseModel):
