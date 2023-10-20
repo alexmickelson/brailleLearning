@@ -8,7 +8,6 @@ import { getQueryClient } from './services/queryClient.tsx';
 import { App } from './App.tsx';
 
 
-
 const queryClient = getQueryClient();
 const oidcConfig: AuthProviderProps = {
   authority: import.meta.env.VITE_AUTHORITY,

@@ -59,6 +59,13 @@ export const StudentAssignment: FC<{ assignmentId: string }> = ({
           Submit
         </button>
       </div>
+
+      {assignmentQuery.data.showReferenceBraille && (
+        <>
+          <div>Reference: {assignmentQuery.data.referenceBraille}</div>
+        </>
+      )}
+
       <div className="flex justify-center">
         {submissionMutation.isPending && <Spinner />}
       </div>

@@ -24,7 +24,7 @@ services:
     build: .
     volumes:
       - ../:/app
-    working_dir: /app/client-vite
+    working_dir: /app/client
     user: developer
     command: |
       bash -c "
