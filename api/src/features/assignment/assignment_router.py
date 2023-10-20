@@ -55,7 +55,7 @@ class AssignmentCreation(BaseModel):
     name: str
     text: str
     show_reference_braille: Optional[bool] = Field(default=False)
-    show_print_feed: Optional[bool] = Field(default=False)
+    show_live_preview: Optional[bool] = Field(default=False)
     type: Optional[AssignmentType] = Field(default=AssignmentType.STRING_TO_BRAILLE)
 
 
@@ -63,20 +63,23 @@ class AssignmentCreation(BaseModel):
 async def create_assignment(
     body: AssignmentCreation,
     assignment_service: AssignmentService = Depends(),
-    user: UserProfile=Depends(authorize_admin),
+    user: UserProfile = Depends(authorize_admin),
 ):
+    show_live_preview = (
+        body.show_live_preview if body.show_live_preview is not None else False
+    )
+    type = body.type if body.type is not None else AssignmentType.STRING_TO_BRAILLE
+    show_reference_braille = (
+        body.show_reference_braille
+        if body.show_reference_braille is not None
+        else False
+    )
     new_assignment = await assignment_service.create_assignment(
         name=body.name,
         text=body.text,
-        show_reference_braille=(
-            body.show_reference_braille
-            if body.show_reference_braille is not None
-            else False
-        ),
-        show_print_feed=(
-            body.show_print_feed if body.show_print_feed is not None else False
-        ),
-        type=(body.type if body.type is not None else AssignmentType.STRING_TO_BRAILLE),
+        show_reference_braille=show_reference_braille,
+        show_live_preview=show_live_preview,
+        type=type,
     )
     return new_assignment
 

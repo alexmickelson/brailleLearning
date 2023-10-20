@@ -14,27 +14,27 @@ class AssignmentService:
         name: str,
         text: str,
         show_reference_braille: Optional[bool],
-        show_print_feed: Optional[bool],
+        show_live_preview: Optional[bool],
         type: Optional[AssignmentType],
     ):
         sql = """
             INSERT INTO Assignment
-                (name, text, show_reference_braille, show_print_feed, type)
+                (name, text, show_reference_braille, show_live_preview, type)
             values
-                (%(name)s, %(text)s, %(show_reference_braille)s, %(show_print_feed)s, %(type)s)
+                (%(name)s, %(text)s, %(show_reference_braille)s, %(show_live_preview)s, %(type)s)
             returning
                 id,
                 name,
                 text,
                 show_reference_braille,
-                show_print_feed,
+                show_live_preview,
                 type
         """
         params = {
             "name": name,
             "text": text,
             "show_reference_braille": show_reference_braille,
-            "show_print_feed": show_print_feed,
+            "show_live_preview": show_live_preview,
             "type": type,
         }
 

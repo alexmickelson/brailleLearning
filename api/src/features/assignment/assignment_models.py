@@ -13,5 +13,5 @@ class Assignment(BaseModel):
     name: str
     text: str
     show_reference_braille: bool
-    show_print_feed: bool
+    show_live_preview: bool
     type: AssignmentType

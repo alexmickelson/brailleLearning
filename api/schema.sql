@@ -16,7 +16,7 @@ create table Assignment (
   name TEXT NOT NULL,
   text TEXT NOT NULL,
   show_reference_braille boolean,
-  show_print_feed boolean,
+  show_live_preview boolean,
   type TEXT
 );
 

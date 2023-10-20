@@ -17,7 +17,7 @@ export const ManageAssignment: FC<{
   const updateAssignmentMutation = useUpdateAssignmentMutation(assignment.id);
   const nameControl = useTextInput(assignment.name);
   const textControl = useTextInput(assignment.text);
-  const livePreviewControl = useCheckInput(assignment.showReference);
+  const livePreviewControl = useCheckInput(assignment.showLivePreview);
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
@@ -25,7 +25,7 @@ export const ManageAssignment: FC<{
       .mutateAsync({
         name: nameControl.value,
         text: textControl.value,
-        sho
+        showLivePreview: livePreviewControl.value,
       })
       .then(() => onSaveCallback());
   };
