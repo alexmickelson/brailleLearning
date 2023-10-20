@@ -1,12 +1,10 @@
-import React, { useState } from "react";
 import { Spinner } from "../../sharedComponents/Spinner";
-import { AssignmentDetail } from "./assignmentDetail/AssignmentDetail";
-import { Assignment } from "../../models/assignmentModel";
 import { useAllAssignmentsQuery } from "../../hooks/assignmentHooks";
+import { useNavigate } from "react-router-dom";
 
 export const AllAssignments = () => {
+  const navigate = useNavigate()
   const assignmentsQuery = useAllAssignmentsQuery();
-  const [selectedAssignment, setSelectedAssignment] = useState<Assignment>();
 
   if (assignmentsQuery.isLoading) return <Spinner />;
   if (assignmentsQuery.isError) return <div>Error loading all assignments</div>;
@@ -20,7 +18,7 @@ export const AllAssignments = () => {
         {assignmentsQuery.data.map((a) => (
           <div
             key={a.id.toString()}
-            onClick={() => setSelectedAssignment(a)}
+            onClick={() => navigate("/assignment/" + a.id)}
             className="
             my-3
             px-3 
@@ -43,13 +41,6 @@ export const AllAssignments = () => {
             {a.name}
           </div>
         ))}
-      </div>
-      <div className="w-full">
-        {selectedAssignment && (
-          <>
-            <AssignmentDetail assignment={selectedAssignment} />
-          </>
-        )}
       </div>
     </div>
   );

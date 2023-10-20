@@ -11,7 +11,12 @@ export const KeypressVisualization: FC<{
     <div>
       <div className={"grid grid-cols-7"}>
         {keys1.map((k, i) => (
-          <KeyVisualization k={k} index={3 - i} keypresses={keypresses} />
+          <KeyVisualization
+            key={k}
+            k={k}
+            index={3 - i}
+            keypresses={keypresses}
+          />
         ))}
         <div
           className="
@@ -27,7 +32,12 @@ export const KeypressVisualization: FC<{
           {keypressesToBraille(keypresses)}
         </div>
         {keys2.map((k, i) => (
-          <KeyVisualization k={k} index={4 + i} keypresses={keypresses} />
+          <KeyVisualization
+            key={k}
+            k={k}
+            index={4 + i}
+            keypresses={keypresses}
+          />
         ))}
       </div>
       <div className="flex flex-row place-content-center "></div>
@@ -63,7 +73,6 @@ const KeyVisualization: FC<{
 
   return (
     <div
-      key={k}
       className={
         `transition-all ease-linear
         m-5 p-5 

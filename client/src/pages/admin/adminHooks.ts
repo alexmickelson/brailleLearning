@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { sharedAssignmentKeys } from "../../hooks/assignmentHooks";
+import { assignmentKeys } from "../../hooks/assignmentHooks";
 import { UserProfile } from "../../models/userModel";
 import { getQueryClient } from "../../services/queryClient";
 import { axiosClient } from "../../utils/axiosClient";
@@ -17,7 +17,7 @@ export const useCreateAssignmentMutation = () =>
       await axiosClient.post(url, assignmentOptions);
     },
     {
-      onSuccess: () => queryClient.invalidateQueries(sharedAssignmentKeys.all),
+      onSuccess: () => queryClient.invalidateQueries(assignmentKeys.all),
     }
   );
 
@@ -47,7 +47,7 @@ export const useUpdateAssignmentMutation = (assignmentId: string) =>
       await axiosClient.put(url, body);
     },
     {
-      onSuccess: () => queryClient.invalidateQueries(sharedAssignmentKeys.all),
+      onSuccess: () => queryClient.invalidateQueries(assignmentKeys.all),
     }
   );
 
