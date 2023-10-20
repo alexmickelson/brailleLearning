@@ -2,7 +2,7 @@
   "[python]": {
     "editor.tabSize": 4,
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "ms-python.black-formatter"
+    "editor.defaultFormatter": "ms-python.python"
   },
   "python.terminal.activateEnvInCurrentTerminal": true,
   "python.venvPath": "/home/developer/virtualenv/bin/python",

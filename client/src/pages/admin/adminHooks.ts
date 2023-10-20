@@ -27,16 +27,22 @@ export const useUpdateAssignmentMutation = (assignmentId: string) =>
       name,
       text,
       showLivePreview,
+      showReferenceBraille,
+      referenceBraille,
     }: {
       name: string;
       text: string;
       showLivePreview: boolean;
+      showReferenceBraille: boolean;
+      referenceBraille?: string;
     }) => {
       const url = `/api/assignments/${assignmentId}`;
       const body = {
         name,
         text,
         showLivePreview,
+        showReferenceBraille,
+        referenceBraille
       };
       await axiosClient.put(url, body);
     },

@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { Assignment } from "../../../../models/assignmentModel";
 import {
   useTextInput,
@@ -9,6 +9,7 @@ import {
   CheckInputRow,
   useCheckInput,
 } from "../../../../sharedComponents/forms/CheckInputRow";
+import { BrailleKeyboard } from "../../../brailleKeyboard/BrailleKeyboard";
 
 export const ManageAssignment: FC<{
   assignment: Assignment;
@@ -18,6 +19,10 @@ export const ManageAssignment: FC<{
   const nameControl = useTextInput(assignment.name);
   const textControl = useTextInput(assignment.text);
   const livePreviewControl = useCheckInput(assignment.showLivePreview);
+  const showReferenceBrailleControl = useCheckInput(
+    assignment.showReferenceBraille
+  );
+  const [referenceBrailleInput, setReferenceBrailleInput] = useState("");
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
@@ -26,6 +31,8 @@ export const ManageAssignment: FC<{
         name: nameControl.value,
         text: textControl.value,
         showLivePreview: livePreviewControl.value,
+        showReferenceBraille: showReferenceBrailleControl.value,
+        referenceBraille: referenceBrailleInput,
       })
       .then(() => onSaveCallback());
   };
@@ -39,12 +46,23 @@ export const ManageAssignment: FC<{
 
         <hr />
         <h4 className="text-center">Assignment Options</h4>
-        <div className="flex justify-center">
+        <div className="flex flex-col justify-center align-center">
           <div>
             <CheckInputRow
               label="show live reference"
               control={livePreviewControl}
             />
+            <CheckInputRow
+              label="show reference braille"
+              control={showReferenceBrailleControl}
+            />
+          </div>
+          <div>
+            {showReferenceBrailleControl.value && (
+              <div>
+                <BrailleKeyboard startingBraille={assignment.referenceBraille} updateBrail={setReferenceBrailleInput} />
+              </div>
+            )}
           </div>
         </div>
         <hr />

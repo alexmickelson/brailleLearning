@@ -3,4 +3,6 @@ export interface Assignment {
   name: string;
   text: string;
   showLivePreview: boolean;
+  showReferenceBraille: boolean;
+  referenceBraille?: string;
 }

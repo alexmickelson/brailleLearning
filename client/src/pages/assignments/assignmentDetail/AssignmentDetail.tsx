@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 import { Spinner } from "../../../sharedComponents/Spinner";
-import { BrailKeyboard } from "../../brailleKeyboard/BrailKeyboard";
+import { BrailleKeyboard } from "../../brailleKeyboard/BrailleKeyboard";
 import { useSubmitAssignmentMutation } from "../assignmentHooks";
 import { Assignment } from "../../../models/assignmentModel";
 import { Grade } from "./Grade";
@@ -33,7 +33,7 @@ export const AssignmentDetail: FC<{ assignment: Assignment }> = ({
         </div>
         <div>{assignment.text}</div>
       </div>
-      <BrailKeyboard updateBrail={setBrailInput} />
+      <BrailleKeyboard updateBrail={setBrailInput} />
 
       <div className="flex justify-center">
         <button onClick={() => gradeSubmissionMutation.mutate(brailInput)}>

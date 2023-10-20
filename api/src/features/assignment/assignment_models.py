@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Optional
 from uuid import UUID
 from pydantic import BaseModel
 
@@ -13,5 +14,6 @@ class Assignment(BaseModel):
     name: str
     text: str
     show_reference_braille: bool
+    reference_braille: Optional[str]
     show_live_preview: bool
     type: AssignmentType

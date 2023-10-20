@@ -87,6 +87,9 @@ async def create_assignment(
 class AssignmentUpdate(BaseModel):
     name: str
     text: str
+    show_reference_braille: bool
+    show_live_preview: bool
+    reference_braille: Optional[str] = Field(default=None)
 
 
 @router.put("/{assignment_id}")
@@ -97,5 +100,10 @@ async def update_assignment(
     user=Depends(authorize_admin),
 ):
     await assignment_service.update(
-        assignment_id=assignment_id, name=body.name, text=body.text
+        assignment_id=assignment_id,
+        name=body.name,
+        text=body.text,
+        show_reference_braille=body.show_reference_braille,
+        show_live_preview=body.show_live_preview,
+        reference_braille=body.reference_braille,
     )

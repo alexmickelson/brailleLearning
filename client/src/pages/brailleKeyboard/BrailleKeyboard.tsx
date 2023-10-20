@@ -1,16 +1,18 @@
 import React, { FC, useEffect, useState } from "react";
 import { keypressesToBraille } from "../../services/brailleService";
-import { BrailInEnglish } from "./BrailInEnglish";
+import { BrailleInEnglish } from "./BrailleInEnglish";
 import { KeypressVisualization } from "./KeypressVisualization";
 
-export const BrailKeyboard: FC<{ updateBrail: (s: string) => void }> = ({
-  updateBrail,
-}) => {
+export const BrailleKeyboard: FC<{
+  startingBraille?: string;
+  updateBrail: (s: string) => void;
+  showText?: boolean;
+}> = ({ startingBraille, updateBrail, showText = false }) => {
   const [persistentKeysPressed, setPersistentKeysPressed] = useState<string[]>(
     []
   );
   const [currentKeysPressed, setCurrentKeysPressed] = useState<string[]>([]);
-  const [brailOutput, setBrailOutput] = useState("");
+  const [brailOutput, setBrailOutput] = useState(startingBraille ?? "");
 
   useEffect(() => {
     if (persistentKeysPressed.length !== 0 && currentKeysPressed.length === 0) {
@@ -23,7 +25,7 @@ export const BrailKeyboard: FC<{ updateBrail: (s: string) => void }> = ({
     updateBrail(brailOutput);
   }, [brailOutput, updateBrail]);
 
-  const validKeys = [ "s", "d", "f", "j", "k", "l"];
+  const validKeys = ["s", "d", "f", "j", "k", "l"];
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
     if (e.key === "Backspace") {
@@ -77,7 +79,7 @@ export const BrailKeyboard: FC<{ updateBrail: (s: string) => void }> = ({
           placeholder="Click here to type braille"
         />
       </div>
-      <BrailInEnglish brailleText={brailOutput} />
+      {showText && <BrailleInEnglish brailleText={brailOutput} />}
     </div>
   );
 };

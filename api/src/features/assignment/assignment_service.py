@@ -41,17 +41,31 @@ class AssignmentService:
         result = await self.run_sql(sql, params, output_class=Assignment)
         return result[0]
 
-    async def update(self, assignment_id: UUID, name: str, text: str):
+    async def update(
+        self,
+        assignment_id: UUID,
+        name: str,
+        text: str,
+        show_reference_braille: bool,
+        show_live_preview: bool,
+        reference_braille: Optional[str]
+    ):
         sql = """
             update Assignment
             set name = %(name)s,
-                text = %(text)s
+                text = %(text)s,
+                show_reference_braille = %(show_reference_braille)s,
+                show_live_preview = %(show_live_preview)s,
+                reference_braille = %(reference_braille)s
             where id = %(assignment_id)s
         """
         params = {
             "name": name,
             "text": text,
             "assignment_id": assignment_id,
+            "show_reference_braille": show_reference_braille,
+            "show_live_preview": show_live_preview,
+            "reference_braille": reference_braille,
         }
         await self.run_sql(sql, params)
 
