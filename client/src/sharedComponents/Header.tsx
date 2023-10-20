@@ -59,7 +59,7 @@ export const Header = () => {
           onClick={() => {
             auth.signOut();
             window.location.replace(
-              process.env.REACT_APP_AUTHORITY + "/oidc/logout"
+              import.meta.env.VITE_AUTHORITY + "/oidc/logout"
             );
           }}
           className="my-auto mx-3"

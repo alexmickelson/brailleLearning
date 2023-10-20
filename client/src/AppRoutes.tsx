@@ -1,6 +1,5 @@
 import { useAuth } from "oidc-react";
 import { Toaster } from "react-hot-toast";
-import { Route, Routes } from "react-router-dom";
 import { ErrorBoundary } from "./sharedComponents/ErrorBoundary";
 import { Header } from "./sharedComponents/Header";
 import { AdminPage } from "./pages/admin/AdminPage";
@@ -9,6 +8,7 @@ import { useIsAdmin } from "./services/userService";
 import { GradingPage } from "./pages/admin/grading/GradingPage";
 import { GradeAssignmentPage } from "./pages/admin/grading/GradeAssignmentPage";
 import { StudentAssignmentPage } from "./pages/studentAssignment/StudentAssignmentPage";
+import { Route, Routes } from "react-router-dom";
 
 export const AppRoutes = () => {
   const auth = useAuth();

@@ -1,66 +1,38 @@
 {
   "name": "client",
-  "version": "0.1.0",
   "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "vite --host --port 8080 --strictPort",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
   "dependencies": {
-    "@tanstack/react-query": "^5.0.0",
-    "@testing-library/jest-dom": "^6.1.4",
-    "@testing-library/react": "^14.0.0",
-    "@testing-library/user-event": "^14.5.1",
-    "@types/jest": "^29.5.6",
-    "@types/node": "^20.8.7",
-    "@types/react": "^18.2.30",
-    "@types/react-dom": "^18.2.14",
-    "@types/react-icons": "^3.0.0",
-    "axios": "^1.5.1",
-    "npm-check-updates": "^16.14.6",
-    "oidc-react": "^3.2.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@tanstack/react-query": "^5.0.0",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-react-swc": "^3.3.2",
+    "autoprefixer": "^10.4.16",
+    "axios": "^1.5.1",
+    "eslint": "^8.45.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "oidc-react": "^3.2.2",
+    "postcss": "^8.4.31",
     "react-hot-toast": "^2.4.1",
     "react-icons": "^4.11.0",
     "react-router-dom": "^6.17.0",
-    "react-scripts": "^5.0.1",
-    "typescript": "^5.2.2",
-    "web-vitals": "^3.5.0"
-  },
-  "scripts": {
-    "start": "PORT=8080 HOST=0.0.0.0 react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ],
-    "rules": {
-      "@typescript-eslint/no-unused-vars": [
-        "warn",
-        {
-          "argsIgnorePattern": "^_",
-          "varsIgnorePattern": "^_",
-          "caughtErrorsIgnorePattern": "^_"
-        }
-      ]
-    }
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "eslint": "^8.51.0",
-    "postcss-import": "^15.1.0",
-    "tailwindcss": "^3.3.3"
+    "tailwindcss": "^3.3.3",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5"
   }
 }

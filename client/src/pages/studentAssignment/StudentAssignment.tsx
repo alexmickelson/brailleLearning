@@ -17,7 +17,7 @@ export const StudentAssignment: FC<{ assignmentId: string }> = ({
 
   const assignmentQuery = useAssignmentDetailsQuery(assignmentId);
   const submissionMutation = useSubmitAssignmentMutation(assignmentId);
-  const autoGradeFeatureFlag = process.env.REACT_APP_AUTOGRADING === "true";
+  const autoGradeFeatureFlag = import.meta.env.VITE_AUTOGRADING === "true";
 
   if (assignmentQuery.isLoading) return <Spinner />;
   if (assignmentQuery.isError) return <div>Error loading assignment</div>;

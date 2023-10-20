@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
-const defaultTheme = require("tailwindcss/defaultTheme");
-const colors = require("tailwindcss/colors");
+import defaultTheme from "tailwindcss/defaultTheme";
+import colors from "tailwindcss/colors";
 
 const myColors = {
   ...colors,
@@ -33,15 +33,13 @@ const myColors = {
     900: '#1C1C1C'
   },
 };
-module.exports = {
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
-  theme: {
-    ...defaultTheme,
-    colors: myColors,
-  },
-  plugins: [],
-  darkMode: "class",
+export const content = ["./src/**/*.{js,jsx,ts,tsx}"];
+export const theme = {
+  ...defaultTheme,
+  colors: myColors,
 };
+export const plugins = [];
+export const darkMode = "class";
 
 // color ideas
 // #324b77 - neutral blue?

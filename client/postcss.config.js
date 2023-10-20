@@ -1,8 +1,5 @@
-module.exports = {
-  corePlugins: {
-  },
+export default {
   plugins: {
-    'postcss-import': {},
     tailwindcss: {},
     autoprefixer: {},
   },
