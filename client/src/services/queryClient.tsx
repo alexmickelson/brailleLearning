@@ -1,11 +1,13 @@
 import toast, { ErrorIcon } from "react-hot-toast";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryCache, QueryClient } from "@tanstack/react-query";
 
 const queryClient = new QueryClient({
+  queryCache: new QueryCache({
+    onError: addErrorAsToast,
+  }),
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
-      onError: addErrorAsToast,
       retry: 0,
     },
     mutations: {

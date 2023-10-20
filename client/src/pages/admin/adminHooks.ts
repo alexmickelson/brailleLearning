@@ -11,19 +11,18 @@ export const adminKeys = {
 };
 
 export const useCreateAssignmentMutation = () =>
-  useMutation(
-    async (assignmentOptions: { name: string; text: string }) => {
+  useMutation({
+    mutationFn: async (assignmentOptions: { name: string; text: string }) => {
       const url = `/api/assignments/new`;
       await axiosClient.post(url, assignmentOptions);
     },
-    {
-      onSuccess: () => queryClient.invalidateQueries(assignmentKeys.all),
-    }
-  );
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: assignmentKeys.all }),
+  });
 
 export const useUpdateAssignmentMutation = (assignmentId: string) =>
-  useMutation(
-    async ({
+  useMutation({
+    mutationFn: async ({
       name,
       text,
       showLivePreview,
@@ -42,41 +41,41 @@ export const useUpdateAssignmentMutation = (assignmentId: string) =>
         text,
         showLivePreview,
         showReferenceBraille,
-        referenceBraille
+        referenceBraille,
       };
       await axiosClient.put(url, body);
     },
-    {
-      onSuccess: () => queryClient.invalidateQueries(assignmentKeys.all),
-    }
-  );
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: assignmentKeys.all }),
+  });
 
 export const useAllUsersQuery = () =>
-  useQuery(adminKeys.allUsers, async (): Promise<UserProfile[]> => {
-    const url = "/api/admin/users/all";
-    const response = await axiosClient.get(url);
-    return response.data;
+  useQuery({
+    queryKey: adminKeys.allUsers,
+    queryFn: async (): Promise<UserProfile[]> => {
+      const url = "/api/admin/users/all";
+      const response = await axiosClient.get(url);
+      return response.data;
+    },
   });
 
 export const useUserProfileQuery = (userId: string) => {
   const allUsersQuery = useAllUsersQuery();
-  const userQuery = useQuery(
-    adminKeys.user(userId),
-    async () => {
+  const userQuery = useQuery({
+    queryKey: adminKeys.user(userId),
+    queryFn: async () => {
       const user = allUsersQuery.data?.find((u) => u.sub === userId);
       if (!user) throw Error(`Could not find user with sub: ${userId}`);
       return user;
     },
-    {
-      enabled: !!allUsersQuery.data,
-    }
-  );
+    enabled: !!allUsersQuery.data,
+  });
   return userQuery;
 };
 
 export const useMakeAdminMutation = () =>
-  useMutation(
-    async (userSub: string) => {
+  useMutation({
+    mutationFn: async (userSub: string) => {
       const url = `/api/admin/users/makeAdmin`;
       const body = {
         sub: userSub,
@@ -84,14 +83,13 @@ export const useMakeAdminMutation = () =>
 
       await axiosClient.put(url, body);
     },
-    {
-      onSuccess: () => queryClient.invalidateQueries(adminKeys.allUsers),
-    }
-  );
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: adminKeys.allUsers }),
+  });
 
 export const useRemoveAdminMutation = () =>
-  useMutation(
-    async (userSub: string) => {
+  useMutation({
+    mutationFn: async (userSub: string) => {
       const url = `/api/admin/users/removeAdmin`;
       const body = {
         sub: userSub,
@@ -99,7 +97,6 @@ export const useRemoveAdminMutation = () =>
 
       await axiosClient.put(url, body);
     },
-    {
-      onSuccess: () => queryClient.invalidateQueries(adminKeys.allUsers),
-    }
-  );
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: adminKeys.allUsers }),
+  });

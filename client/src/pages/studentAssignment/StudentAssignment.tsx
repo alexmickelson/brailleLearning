@@ -53,14 +53,14 @@ export const StudentAssignment: FC<{ assignmentId: string }> = ({
         <button
           onClick={submitAssignment}
           disabled={
-            submissionMutation.isLoading || submissionMutation.isSuccess
+            submissionMutation.isPending || submissionMutation.isSuccess
           }
         >
           Submit
         </button>
       </div>
       <div className="flex justify-center">
-        {submissionMutation.isLoading && <Spinner />}
+        {submissionMutation.isPending && <Spinner />}
       </div>
       {autoGradeFeatureFlag && <Grade assignmentId={assignmentQuery.data.id} />}
 

@@ -81,8 +81,8 @@ const NewAssignmentForm: FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
           />
         </div>
         <div className="flex justify-center m-3">
-          <button disabled={createMutation.isLoading}>Submit</button>
-          {createMutation.isLoading && <Spinner />}
+          <button disabled={createMutation.isPending}>Submit</button>
+          {createMutation.isPending && <Spinner />}
         </div>
       </form>
     </div>

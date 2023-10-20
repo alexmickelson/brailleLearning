@@ -14,13 +14,16 @@ export const useIsAdmin = () => {
 };
 
 export const useUserProfileQuery = (userSub: string | undefined) =>
-  useQuery(["is admin query", userSub], async (): Promise<UserProfile> => {
-    const url = `/api/user/profile`;
-    const response = await axios.get(url);
+  useQuery({
+    queryKey: ["is admin query", userSub],
+    queryFn: async (): Promise<UserProfile> => {
+      const url = `/api/user/profile`;
+      const response = await axios.get(url);
 
-    return {
-      name: response.data.name,
-      sub: response.data.sub,
-      isAdmin: response.data.is_admin,
-    };
+      return {
+        name: response.data.name,
+        sub: response.data.sub,
+        isAdmin: response.data.is_admin,
+      };
+    },
   });

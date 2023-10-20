@@ -53,7 +53,7 @@ export const GradingSubmissionDetail: FC<{ submission: Submission }> = ({
               }}
             >
               <TextInputRow label={"New Grade"} control={newGradeControl} />
-              <button disabled={overrideGradeMutation.isLoading}>
+              <button disabled={overrideGradeMutation.isPending}>
                 Save New Grade
               </button>
             </form>
@@ -61,7 +61,7 @@ export const GradingSubmissionDetail: FC<{ submission: Submission }> = ({
           {showGradeOverride && (
             <button onClick={() => setShowGradeOverride(false)}>Cancel</button>
           )}
-          {overrideGradeMutation.isLoading && <Spinner />}
+          {overrideGradeMutation.isPending && <Spinner />}
         </div>
       </div>
       <hr />

@@ -20,6 +20,7 @@
 
 
 - [ ] assignment total points
+- [ ] null grade if not graded yet
 
 
 Hear

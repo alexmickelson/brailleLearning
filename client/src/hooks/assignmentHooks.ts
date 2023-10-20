@@ -61,7 +61,7 @@ export const useSubmitAssignmentMutation = (assignmentId: string) =>
       return response.data;
     },
     onSuccess: () =>
-      queryClient.invalidateQueries(assignmentKeys.grade(assignmentId)),
+      queryClient.invalidateQueries({queryKey: assignmentKeys.grade(assignmentId)}),
   });
 
 export const useAssignmentSubmissionsQuery = (assignmentId: string) =>
