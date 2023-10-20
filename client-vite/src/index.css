@@ -1,0 +1,72 @@
+/* Typography */
+h1 {
+  @apply text-5xl font-extrabold tracking-tighter;
+}
+
+h2 {
+  @apply text-4xl font-extrabold tracking-tighter;
+}
+
+h3 {
+  @apply text-3xl font-extrabold;
+}
+
+h4 {
+  @apply text-2xl font-extrabold tracking-tight;
+}
+
+h5 {
+  @apply text-2xl font-extrabold tracking-tight;
+}
+
+input {
+  @apply w-full
+        px-3
+        py-1.5
+        text-base
+        font-normal
+        text-gray-700
+        bg-white bg-clip-padding
+        border border-solid border-gray-300
+        rounded
+        transition
+        ease-in-out
+        m-0
+        focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none;
+}
+
+button {
+  @apply bg-transparent 
+  font-semibold 
+  py-2 px-4 border 
+  hover:border-transparent 
+  rounded
+  
+  hover:text-gray-200
+  bg-theme-600
+  text-gray-200 
+  border-theme-700;
+}
+
+
+a.active {
+  @apply border-white 
+  border-b-2
+  transition-all;
+}
+
+hr {
+  @apply 
+    border-2 
+    border-slate-600 
+    dark:border-gray-100
+    m-3;
+}
+:root {
+  font-family: Verdana, sans-serif;
+}
+
+
+br {
+  text: #580000;
+}
