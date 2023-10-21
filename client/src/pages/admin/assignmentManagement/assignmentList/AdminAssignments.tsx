@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Spinner } from "../../../../sharedComponents/Spinner";
 import { AssignmentCard } from "./AssignmentCard";
-import { ManageAssignment } from "./ManageAssignment";
+import { ManageAssignment } from "../ManageAssignment";
 import { GoArrowLeft } from "react-icons/go";
 import { NewAssignment } from "../NewAssignment";
 import { useAllAssignmentsQuery } from "../../adminAssignmentHooks";

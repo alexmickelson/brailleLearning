@@ -1,4 +1,3 @@
-import { useState } from "react";
 
 export interface SelectInputControl<T> {
   value?: T;
@@ -18,38 +17,42 @@ interface Props<T> {
 export function SelectInputRow<T>({
   label,
   control,
-  labelColSize = "2",
-  inputClassName,
   tabIndex = -1,
 }: Props<T>) {
-  const [hasBeenTouched, _setHasBeenTouched] = useState(false);
+  const salt = Math.random();
 
-  const validationClasses =
-    hasBeenTouched && control.error
-      ? "is-invalid"
-      : hasBeenTouched
-      ? "is-valid"
-      : "";
+  const computedLabel = label.toLowerCase().replace(" ", "") + salt;
+  const labelClasses = `
+    mb-2 
+    text-sm 
+    font-medium 
+  `;
+  const inputClasses = `
+    rounded-lg
+    p-3
+    w-full
+    dark:bg-gray-700
+    dark:text-gray-50
 
-  const computedLabel = label.toLowerCase().replace(" ", "");
-  const labelClasses = `col-md-${labelColSize} text-end my-auto`;
+    dark:border
 
+    dark:border-gray-100
+    dark:active:border-gray-400
+    dark:focus:border-gray-400
+    outline-none
+  `;
   return (
-    <div className="form-group row my-3">
-      <div className={labelClasses + " col-4"}>
+    <div className="my-3 w-100">
+      <div className={labelClasses}>
         <label htmlFor={computedLabel} className="col-form-label">
           {label}:
         </label>
       </div>
-      <div
-        className={
-          inputClassName ? `my-auto ${inputClassName}` : "col-md col my-auto"
-        }
-      >
+      <div>
         <select
           name={computedLabel}
           id={computedLabel}
-          className={"form-select" + validationClasses}
+          className={inputClasses}
           value={control.displayValue}
           onChange={(e) => control.setValue(e.target.value)}
           tabIndex={tabIndex}
@@ -60,11 +63,6 @@ export function SelectInputRow<T>({
             </option>
           ))}
         </select>
-        {control.error && hasBeenTouched && (
-          <div className="invalid-feedback" id={`${computedLabel}Feedback`}>
-            {control.error}
-          </div>
-        )}
       </div>
     </div>
   );

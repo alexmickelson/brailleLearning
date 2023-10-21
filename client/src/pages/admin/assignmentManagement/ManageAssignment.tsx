@@ -1,19 +1,21 @@
 import { FC, useState } from "react";
-import { Assignment } from "../../../../models/assignmentModel";
-import { TextInputRow } from "../../../../sharedComponents/forms/TextInputRow";
-import { useTextInput } from "../../../../sharedComponents/forms/useTextInput";
-import { CheckInputRow } from "../../../../sharedComponents/forms/CheckInputRow";
-import { useCheckInput } from "../../../../sharedComponents/forms/useCheckInput";
-import { BrailleKeyboard } from "../../../brailleKeyboard/BrailleKeyboard";
+import { Assignment } from "../../../models/assignmentModel";
+import { TextInputRow } from "../../../sharedComponents/forms/TextInputRow";
+import { useTextInput } from "../../../sharedComponents/forms/useTextInput";
+import { CheckInputRow } from "../../../sharedComponents/forms/CheckInputRow";
+import { useCheckInput } from "../../../sharedComponents/forms/useCheckInput";
+import { BrailleKeyboard } from "../../brailleKeyboard/BrailleKeyboard";
 import DatePicker from "react-datepicker";
 import {
   useDeleteAssignmentMutation,
   useUpdateAssignmentMutation,
-} from "../../adminAssignmentHooks";
+} from "../adminAssignmentHooks";
 import { useNavigate } from "react-router-dom";
-import { Spinner } from "../../../../sharedComponents/Spinner";
-import { useNumberInput } from "../../../../sharedComponents/forms/useNumberInput";
-import { NumberInputRow } from "../../../../sharedComponents/forms/NumberInputRow";
+import { Spinner } from "../../../sharedComponents/Spinner";
+import { useNumberInput } from "../../../sharedComponents/forms/useNumberInput";
+import { NumberInputRow } from "../../../sharedComponents/forms/NumberInputRow";
+import { useSelectInput } from "../../../sharedComponents/forms/useSelectInput";
+import { SelectInputRow } from "../../../sharedComponents/forms/SelectInputRow";
 
 export const ManageAssignment: FC<{
   assignment: Assignment;
@@ -22,6 +24,11 @@ export const ManageAssignment: FC<{
   const navigate = useNavigate();
   const updateAssignmentMutation = useUpdateAssignmentMutation(assignment.id);
   const deleteAssignmentMutation = useDeleteAssignmentMutation(assignment.id);
+  const typeControl = useSelectInput({
+    options: ["Text to Braille", "Braille to Text"],
+    getKey: (i) => i,
+    required: true,
+  });
   const nameControl = useTextInput(assignment.name);
   const textControl = useTextInput(assignment.text);
   const pointsControl = useNumberInput(assignment.points);
@@ -59,6 +66,7 @@ export const ManageAssignment: FC<{
       <h3 className="text-center">Update Assignment</h3>
       <form onSubmit={submitHandler}>
         <TextInputRow label="Assignment Name" control={nameControl} />
+        <SelectInputRow label="Assignment Type" control={typeControl} />
         <TextInputRow label="Text" control={textControl} isTextArea={true} />
 
         <hr />

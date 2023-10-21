@@ -1,8 +1,6 @@
 import { FC, useState } from "react";
 import { toast } from "react-hot-toast";
-import {
-  TextInputRow,
-} from "../../../sharedComponents/forms/TextInputRow";
+import { TextInputRow } from "../../../sharedComponents/forms/TextInputRow";
 import { useTextInput } from "../../../sharedComponents/forms/useTextInput";
 import { Spinner } from "../../../sharedComponents/Spinner";
 import { useCreateAssignmentMutation } from "../adminAssignmentHooks";
@@ -35,12 +33,6 @@ const NewAssignmentForm: FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
     max: 30,
     required: true,
   });
-  const translateTextControl = useTextInput("", {
-    min: 3,
-    max: 1000,
-    required: true,
-  });
-
   return (
     <div
       className="
@@ -60,25 +52,21 @@ const NewAssignmentForm: FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          if (nameControl.error || translateTextControl.error) {
+          if (nameControl.error) {
             toast.error("Cannot create assignment, form is invalid");
             return;
           }
           createMutation
             .mutateAsync({
               name: nameControl.value,
-              text: translateTextControl.value,
             })
             .then(onSubmit);
         }}
       >
-        <div className="grid grid-cols-2 gap-4">
-          <TextInputRow label="Name" control={nameControl} />
-          <TextInputRow
-            label="Text to translate"
-            control={translateTextControl}
-            isTextArea={true}
-          />
+        <div className="grid grid-cols-3">
+          <div className="col-start-2">
+            <TextInputRow label="Name" control={nameControl} />
+          </div>
         </div>
         <div className="flex justify-center m-3">
           <button disabled={createMutation.isPending}>Submit</button>

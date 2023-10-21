@@ -32,6 +32,10 @@ export const BrailleKeyboard: FC<{
       setBrailOutput((b) => b.slice(0, -1));
       return;
     }
+    if (e.key === "Enter") {
+      setBrailOutput((b) => b + "\n");
+      return;
+    }
     if (e.key === " ") {
       setBrailOutput((b) => b + " ");
       return;

@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-var-requires */
 /** @type {import('tailwindcss').Config} */
 
 import defaultTheme from "tailwindcss/defaultTheme";
@@ -38,8 +40,14 @@ export const theme = {
   ...defaultTheme,
   colors: myColors,
 };
-export const plugins = [];
+
+export const plugins = [
+  require("@tailwindcss/forms")({
+    strategy: 'base', // only generate global styles
+  })
+];
 export const darkMode = "class";
 
 // color ideas
 // #324b77 - neutral blue?
+

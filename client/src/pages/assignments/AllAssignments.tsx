@@ -1,9 +1,10 @@
 import { Spinner } from "../../sharedComponents/Spinner";
 import { useAvailableAssignmentsQuery } from "../../hooks/assignmentHooks";
 import { useNavigate } from "react-router-dom";
+import { printDate } from "../../utils/datePrinter";
 
 export const AllAssignments = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const assignmentsQuery = useAvailableAssignmentsQuery();
 
   if (assignmentsQuery.isLoading) return <Spinner />;
@@ -38,7 +39,8 @@ export const AllAssignments = () => {
             dark:hover:bg-gray-800
             "
           >
-            {a.name}
+            <div>{a.name}</div>
+            <div className="text-sm italic">Due: {a.closedDate && printDate(a.closedDate)}</div>
           </div>
         ))}
       </div>

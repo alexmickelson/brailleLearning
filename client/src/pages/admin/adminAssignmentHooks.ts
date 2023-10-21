@@ -11,7 +11,7 @@ export const adminAssignmentKeys = {
 
 export const useCreateAssignmentMutation = () =>
   useMutation({
-    mutationFn: async (assignmentOptions: { name: string; text: string }) => {
+    mutationFn: async (assignmentOptions: { name: string; }) => {
       const url = `/api/admin/assignments/new`;
       await axiosClient.post(url, assignmentOptions);
     },

@@ -37,11 +37,11 @@ async def delete_all_grades(
 
 class AssignmentCreation(BaseModel):
     name: str
-    text: str
     points: int = Field(default=0)
-    show_reference_braille: Optional[bool] = Field(default=False)
-    show_live_preview: Optional[bool] = Field(default=False)
-    type: Optional[AssignmentType] = Field(default=AssignmentType.STRING_TO_BRAILLE)
+    text: str = Field(default="")
+    show_reference_braille: bool = Field(default=False)
+    show_live_preview: bool = Field(default=False)
+    type: AssignmentType = Field(default=AssignmentType.STRING_TO_BRAILLE)
     available_date: Optional[datetime] = Field(default=None)
     closed_date: Optional[datetime] = Field(default=None)
 

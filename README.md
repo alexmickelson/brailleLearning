@@ -11,10 +11,10 @@
   - [ ] braille to print assignmets
   - [ ] print to braille assignments
 - [ ] admin / teacher
-  - [ ] grade assignments (opportunity for teacher to override)
-  - [ ] maybe multiple correct answers
-  - [ ] just the due datetime
-  - [ ] track time to complete
+  - [x] grade assignments (opportunity for teacher to override)
+  - [ ] auto grade with multiple correct answers
+  - [x] just the due datetime
+  - [x] track time to complete
   - [ ] assignment prerequisites
   - [x] assignment open date
 
