@@ -18,6 +18,8 @@ create table Assignment (
   show_reference_braille boolean,
   show_live_preview boolean,
   reference_braille TEXT,
+  available_date timestamp with time zone,
+  closed_date timestamp with time zone,
   type TEXT
 );
 

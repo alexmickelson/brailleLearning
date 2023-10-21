@@ -3,6 +3,7 @@ import { assignmentKeys } from "../../hooks/assignmentHooks";
 import { UserProfile } from "../../models/userModel";
 import { getQueryClient } from "../../services/queryClient";
 import { axiosClient } from "../../utils/axiosClient";
+import { Assignment } from "../../models/assignmentModel";
 
 const queryClient = getQueryClient();
 export const adminKeys = {
@@ -13,7 +14,7 @@ export const adminKeys = {
 export const useCreateAssignmentMutation = () =>
   useMutation({
     mutationFn: async (assignmentOptions: { name: string; text: string }) => {
-      const url = `/api/assignments/new`;
+      const url = `/api/admin/assignments/new`;
       await axiosClient.post(url, assignmentOptions);
     },
     onSuccess: () =>
@@ -22,26 +23,12 @@ export const useCreateAssignmentMutation = () =>
 
 export const useUpdateAssignmentMutation = (assignmentId: string) =>
   useMutation({
-    mutationFn: async ({
-      name,
-      text,
-      showLivePreview,
-      showReferenceBraille,
-      referenceBraille,
-    }: {
-      name: string;
-      text: string;
-      showLivePreview: boolean;
-      showReferenceBraille: boolean;
-      referenceBraille?: string;
-    }) => {
-      const url = `/api/assignments/${assignmentId}`;
+    mutationFn: async (assignment: Assignment) => {
+      const url = `/api/admin/assignments/${assignmentId}`;
       const body = {
-        name,
-        text,
-        showLivePreview,
-        showReferenceBraille,
-        referenceBraille,
+        ...assignment,
+        availableDate: assignment.availableDate?.toISOString(),
+        closedDate: assignment.closedDate?.toISOString(),
       };
       await axiosClient.put(url, body);
     },

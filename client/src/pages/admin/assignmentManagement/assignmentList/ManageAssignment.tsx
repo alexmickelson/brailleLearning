@@ -10,6 +10,7 @@ import {
   useCheckInput,
 } from "../../../../sharedComponents/forms/CheckInputRow";
 import { BrailleKeyboard } from "../../../brailleKeyboard/BrailleKeyboard";
+import DatePicker from "react-datepicker";
 
 export const ManageAssignment: FC<{
   assignment: Assignment;
@@ -23,16 +24,25 @@ export const ManageAssignment: FC<{
     assignment.showReferenceBraille
   );
   const [referenceBrailleInput, setReferenceBrailleInput] = useState("");
+  const [availableDate, setAvailableDate] = useState<Date | undefined>(
+    assignment.availableDate
+  );
+  const [closedDate, setClosedDate] = useState<Date | undefined>(
+    assignment.closedDate
+  );
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     updateAssignmentMutation
       .mutateAsync({
+        ...assignment,
         name: nameControl.value,
         text: textControl.value,
         showLivePreview: livePreviewControl.value,
         showReferenceBraille: showReferenceBrailleControl.value,
         referenceBraille: referenceBrailleInput,
+        availableDate: availableDate,
+        closedDate: closedDate,
       })
       .then(() => onSaveCallback());
   };
@@ -60,11 +70,36 @@ export const ManageAssignment: FC<{
           <div>
             {showReferenceBrailleControl.value && (
               <div>
-                <BrailleKeyboard startingBraille={assignment.referenceBraille} updateBrail={setReferenceBrailleInput} />
+                <BrailleKeyboard
+                  startingBraille={assignment.referenceBraille}
+                  updateBrail={setReferenceBrailleInput}
+                />
               </div>
             )}
           </div>
         </div>
+
+        <div className="w-100 mt-3">
+          <label>Available Date</label>
+          <DatePicker
+            showIcon
+            selected={availableDate}
+            onChange={(date) => setAvailableDate(date ? date : undefined)}
+            showTimeSelect
+            dateFormat="Pp"
+          />
+        </div>
+        <div className="w-100 mt-3">
+          <label>Closed Date</label>
+          <DatePicker
+            showIcon
+            selected={closedDate}
+            onChange={(date) => setClosedDate(date ? date : undefined)}
+            showTimeSelect
+            dateFormat="Pp"
+          />
+        </div>
+
         <hr />
 
         <div className="flex justify-center">

@@ -1,3 +1,4 @@
+from datetime import datetime
 from enum import Enum
 from typing import Optional
 from uuid import UUID
@@ -16,4 +17,6 @@ class Assignment(BaseModel):
     show_reference_braille: bool
     reference_braille: Optional[str]
     show_live_preview: bool
+    available_date: Optional[datetime]
+    closed_date: Optional[datetime]
     type: AssignmentType

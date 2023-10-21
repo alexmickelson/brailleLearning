@@ -1,4 +1,5 @@
 import React from 'react'
+import "react-datepicker/dist/react-datepicker.css";
 import "./imports.css";
 import "./index.css";
 import ReactDOM from 'react-dom/client'

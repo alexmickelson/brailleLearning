@@ -5,4 +5,6 @@ export interface Assignment {
   showLivePreview: boolean;
   showReferenceBraille: boolean;
   referenceBraille?: string;
+  availableDate?: Date;
+  closedDate?: Date;
 }

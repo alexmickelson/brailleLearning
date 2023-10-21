@@ -72,7 +72,7 @@ export const TextInputRow: FC<Props> = ({
   `;
 
   return (
-    <div>
+    <div className="mt-3">
       {displayLabel && (
         <div className={labelClasses}>
           <label htmlFor={computedLabel} className="col-form-label">

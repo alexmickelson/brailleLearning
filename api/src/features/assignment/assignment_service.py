@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional, Type
 from uuid import UUID
 from fastapi import Depends
@@ -15,19 +16,39 @@ class AssignmentService:
         text: str,
         show_reference_braille: Optional[bool],
         show_live_preview: Optional[bool],
+        available_date: Optional[datetime],
+        closed_date: Optional[datetime],
         type: Optional[AssignmentType],
     ):
         sql = """
             INSERT INTO Assignment
-                (name, text, show_reference_braille, show_live_preview, type)
+                (
+                    name, 
+                    text, 
+                    show_reference_braille, 
+                    show_live_preview,
+                    available_date,
+                    closed_date,
+                    type
+                )
             values
-                (%(name)s, %(text)s, %(show_reference_braille)s, %(show_live_preview)s, %(type)s)
+                (
+                    %(name)s, 
+                    %(text)s, 
+                    %(show_reference_braille)s, 
+                    %(show_live_preview)s, 
+                    %(available_date)s,
+                    %(closed_date)s,
+                    %(type)s
+                )
             returning
                 id,
                 name,
                 text,
                 show_reference_braille,
                 show_live_preview,
+                available_date,
+                closed_date,
                 type
         """
         params = {
@@ -35,6 +56,8 @@ class AssignmentService:
             "text": text,
             "show_reference_braille": show_reference_braille,
             "show_live_preview": show_live_preview,
+            "available_date": available_date,
+            "closed_date": closed_date,
             "type": type,
         }
 
@@ -48,7 +71,9 @@ class AssignmentService:
         text: str,
         show_reference_braille: bool,
         show_live_preview: bool,
-        reference_braille: Optional[str]
+        reference_braille: Optional[str],
+        available_date: Optional[datetime],
+        closed_date: Optional[datetime],
     ):
         sql = """
             update Assignment
@@ -56,7 +81,9 @@ class AssignmentService:
                 text = %(text)s,
                 show_reference_braille = %(show_reference_braille)s,
                 show_live_preview = %(show_live_preview)s,
-                reference_braille = %(reference_braille)s
+                reference_braille = %(reference_braille)s,
+                available_date = %(available_date)s,
+                closed_date = %(closed_date)s
             where id = %(assignment_id)s
         """
         params = {
@@ -66,6 +93,8 @@ class AssignmentService:
             "show_reference_braille": show_reference_braille,
             "show_live_preview": show_live_preview,
             "reference_braille": reference_braille,
+            "available_date": available_date,
+            "closed_date": closed_date,
         }
         await self.run_sql(sql, params)
 

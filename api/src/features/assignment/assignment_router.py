@@ -1,15 +1,12 @@
+from datetime import datetime
 from typing import Dict, List, Optional
 from uuid import UUID
-from fastapi import APIRouter, Request, Depends
-from pydantic import BaseModel, Field
+from fastapi import APIRouter, Depends
 from src.features.assignment.assignment_models import Assignment, AssignmentType
 from src.features.assignment.assignment_service import AssignmentService
 from src.features.submissions.submissions_service import SubmissionsService
 from src.models.user import UserProfile
-from src.services import braille_service
-from src.services.oauth_service import authenticate_user, authorize_admin
-
-from pydantic import BaseModel
+from src.services.oauth_service import authenticate_user
 
 router = APIRouter(
     prefix="/assignments",
@@ -32,18 +29,6 @@ async def get_all_assignments(assignment_service: AssignmentService = Depends())
     return await assignment_service.get_all_assignments()
 
 
-@router.get("/grades/{assignment_id}")
-async def get_assignment_grade(
-    assignment_id: UUID,
-    profile: UserProfile = Depends(authenticate_user),
-    submissions_service: SubmissionsService = Depends(),
-):
-    grade = await submissions_service.get_grade_for_assignment(
-        assignment_id, profile.sub
-    )
-    return {"grade": grade}
-
-
 @router.get("/submissions/{assignment_id}")
 async def get_student_assignment_submissions(
     assignment_id: UUID,
@@ -54,68 +39,3 @@ async def get_student_assignment_submissions(
         assignment_id=assignment_id, student_sub=profile.sub
     )
     return submissions
-
-
-@router.delete("/grades/all")
-async def delete_all_grades(
-    submissions_service: SubmissionsService = Depends(),
-):
-    await submissions_service.delete_all_grades()
-
-
-class AssignmentCreation(BaseModel):
-    name: str
-    text: str
-    show_reference_braille: Optional[bool] = Field(default=False)
-    show_live_preview: Optional[bool] = Field(default=False)
-    type: Optional[AssignmentType] = Field(default=AssignmentType.STRING_TO_BRAILLE)
-
-
-@router.post("/new")
-async def create_assignment(
-    body: AssignmentCreation,
-    assignment_service: AssignmentService = Depends(),
-    user: UserProfile = Depends(authorize_admin),
-):
-    show_live_preview = (
-        body.show_live_preview if body.show_live_preview is not None else False
-    )
-    type = body.type if body.type is not None else AssignmentType.STRING_TO_BRAILLE
-    show_reference_braille = (
-        body.show_reference_braille
-        if body.show_reference_braille is not None
-        else False
-    )
-    new_assignment = await assignment_service.create_assignment(
-        name=body.name,
-        text=body.text,
-        show_reference_braille=show_reference_braille,
-        show_live_preview=show_live_preview,
-        type=type,
-    )
-    return new_assignment
-
-
-class AssignmentUpdate(BaseModel):
-    name: str
-    text: str
-    show_reference_braille: bool
-    show_live_preview: bool
-    reference_braille: Optional[str] = Field(default=None)
-
-
-@router.put("/{assignment_id}")
-async def update_assignment(
-    assignment_id: UUID,
-    body: AssignmentUpdate,
-    assignment_service: AssignmentService = Depends(),
-    user=Depends(authorize_admin),
-):
-    await assignment_service.update(
-        assignment_id=assignment_id,
-        name=body.name,
-        text=body.text,
-        show_reference_braille=body.show_reference_braille,
-        show_live_preview=body.show_live_preview,
-        reference_braille=body.reference_braille,
-    )
