@@ -18,13 +18,26 @@ export const StudentAssignment: FC<{ assignmentId: string }> = ({
   const assignmentQuery = useAssignmentDetailsQuery(assignmentId);
   const submissionMutation = useSubmitAssignmentMutation(assignmentId);
   const autoGradeFeatureFlag = import.meta.env.VITE_AUTOGRADING === "true";
+  const [loadTime, setLoadTime] = useState(new Date());
 
   if (assignmentQuery.isLoading) return <Spinner />;
   if (assignmentQuery.isError) return <div>Error loading assignment</div>;
   if (!assignmentQuery.data) return <div>Error, no assignment data found</div>;
 
-  const submitAssignment = () =>
-    submissionMutation.mutateAsync(brailInput).then(() => navigate("/"));
+  const submitAssignment = () => {
+    const currentTime = new Date();
+    const difference = currentTime.getTime() - loadTime.getTime();
+    const differenceInSeconds = difference / 1000;
+    submissionMutation
+      .mutateAsync({
+        braille: brailInput,
+        secondsToComplete: differenceInSeconds,
+      })
+      .then(() => {
+        setLoadTime(new Date());
+        navigate("/");
+      });
+  };
 
   return (
     <div className="m-3">
@@ -42,10 +55,10 @@ export const StudentAssignment: FC<{ assignmentId: string }> = ({
           dark:border-gray-800
         "
       >
+        <div className="text-sm">Translate the Following Text:</div>
         <div>
-          <strong>Translate the Following Text:</strong>
+          <strong>{assignmentQuery.data.text}</strong>
         </div>
-        <div>{assignmentQuery.data.text}</div>
       </div>
       <BrailleKeyboard updateBrail={setBrailInput} />
 

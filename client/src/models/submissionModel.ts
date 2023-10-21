@@ -3,6 +3,7 @@ export interface Submission {
   assignmentId: string;
   userId: string;
   grade: number;
+  secondsToComplete: number;
   submittedText?: string;
   submittedDate: Date;
 }

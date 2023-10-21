@@ -1,13 +1,12 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { Submission } from "../../../models/submissionModel";
-import { TextInputRow } from "../../../sharedComponents/forms/TextInputRow";
-import { useTextInput } from "../../../sharedComponents/forms/useTextInput";
 import { Spinner } from "../../../sharedComponents/Spinner";
 import { printDate } from "../../../utils/datePrinter";
 import { useUserProfileQuery } from "../adminHooks";
 import { useOverrideGradeMutation } from "./GradingHooks";
 import { useNumberInput } from "../../../sharedComponents/forms/useNumberInput";
 import { NumberInputRow } from "../../../sharedComponents/forms/NumberInputRow";
+import { printTime } from "../../../utils/timePrinter";
 
 export const GradingSubmissionDetail: FC<{ submission: Submission }> = ({
   submission,
@@ -31,16 +30,15 @@ export const GradingSubmissionDetail: FC<{ submission: Submission }> = ({
   };
   return (
     <>
-      <div className="mx-5 px-3 flex flex-row justify-between">
+      <div className="mx-5 px-3 grid grid-cols-4 gap-3 justify-between">
         <div className="my-auto">
           <div>{userProfileQuery.data.name}</div>
           <div className="italic text-sm">
             {printDate(submission.submittedDate)}
           </div>
+          <div>{printTime(submission.secondsToComplete)}</div>
         </div>
-        <div className="my-auto">
-          <div>{submission.submittedText}</div>
-        </div>
+        <div className="col-span-2 my-auto whitespace-break-spaces break-words">{submission.submittedText}</div>
         <div className="justify-self-end my-auto">
           {overrideGradeMutation.isPending && <Spinner />}
           <form

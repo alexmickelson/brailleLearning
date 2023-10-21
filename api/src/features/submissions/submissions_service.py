@@ -1,5 +1,5 @@
 from pprint import pprint
-from typing import Dict
+from typing import Dict, Optional
 from uuid import UUID
 from fastapi import Depends
 from pydantic import BaseModel
@@ -19,6 +19,7 @@ class SubmissionsService:
             from Submissions
             where assignment_id = %(assignment_id)s 
                 and user_id = %(user_id)s
+            order by submitted_date
         """
         params = {"assignment_id": assignment_id, "user_id": user_id}
         results = await self.run_sql(sql, params, output_class=Submission)
@@ -30,19 +31,37 @@ class SubmissionsService:
         return results[0].grade
 
     async def submit_assignment(
-        self, user_id: str, assignment_id: UUID, braille_text: str, grade: float
+        self,
+        user_id: str,
+        assignment_id: UUID,
+        braille_text: str,
+        grade: Optional[float],
+        seconds_to_complete: float,
     ):
         sql = """
             INSERT INTO Submissions
-                (user_id, assignment_id, grade, submitted_text)
+                (
+                    user_id, 
+                    assignment_id, 
+                    grade, 
+                    submitted_text, 
+                    seconds_to_complete
+                )
             values
-                (%(user_id)s, %(assignment_id)s, %(grade)s, %(braille_text)s)
+                (
+                    %(user_id)s, 
+                    %(assignment_id)s, 
+                    %(grade)s, 
+                    %(braille_text)s,
+                    %(seconds_to_complete)s
+                )
         """
         params = {
             "assignment_id": assignment_id,
             "grade": grade,
             "user_id": user_id,
             "braille_text": braille_text,
+            "seconds_to_complete": seconds_to_complete,
         }
         await self.run_sql(sql, params)
 
@@ -58,6 +77,7 @@ class SubmissionsService:
                 *
             from Submissions
             where assignment_id = %(assignment_id)s
+            order by submitted_date
         """
         params = {"assignment_id": assignment_id}
         results = await self.run_sql(sql, params, output_class=Submission)
@@ -73,6 +93,7 @@ class SubmissionsService:
             from Submissions
             where assignment_id = %(assignment_id)s
                 and user_id = %(student_sub)s
+            order by submitted_date
         """
         params = {"assignment_id": assignment_id, "student_sub": student_sub}
         results = await self.run_sql(sql, params, output_class=Submission)

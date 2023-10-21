@@ -10,7 +10,8 @@ class Submission(BaseModel):
     id: UUID
     assignment_id: UUID
     user_id: str
-    grade: float
+    grade: Optional[float]
+    seconds_to_complete: float
     submitted_text: Optional[str]
     submitted_date: datetime
     # answers: list[str]

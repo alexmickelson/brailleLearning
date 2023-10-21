@@ -131,6 +131,7 @@ class AssignmentService:
         sql = """
             select *
             from Assignment
+            order by closed_date asc
         """
         return await self.run_sql(sql, {}, output_class=Assignment)
 
@@ -140,5 +141,6 @@ class AssignmentService:
             from Assignment
             where now() < closed_date
                 and now() > available_date
+            order by closed_date asc
         """
         return await self.run_sql(sql, {}, output_class=Assignment)

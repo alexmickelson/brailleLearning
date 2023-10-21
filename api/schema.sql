@@ -25,12 +25,13 @@ create table Assignment (
 );
 
 create table Submissions (
-  id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  assignment_id     UUID NOT NULL REFERENCES Assignment (id),
-  user_id           TEXT NOT NULL,
-  grade             FLOAT,
-  submitted_text    TEXT,
-  submitted_date    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  assignment_id       UUID NOT NULL REFERENCES Assignment (id),
+  user_id             TEXT NOT NULL,
+  grade               FLOAT,
+  seconds_to_complete FLOAT NOT NULL,
+  submitted_text      TEXT,
+  submitted_date      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 

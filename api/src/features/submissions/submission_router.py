@@ -27,6 +27,7 @@ async def get_assignment_submissions(
 
 class AssignmentSubmission(BaseModel):
     braille: str
+    seconds_to_complete: float
 
 
 @router.post("/{assignment_id}")
@@ -37,21 +38,25 @@ async def submit_assignment(
     submissions_service: SubmissionsService = Depends(),
     assignment_service: AssignmentService = Depends(),
 ):
-    translated_brail_submission = braille_service.braille_to_text(body.braille)
+    # translated_brail_submission = braille_service.braille_to_text(body.braille)
+    # grade = 100.0 if translated_brail_submission == assignment.text else 0.0
     assignment = await assignment_service.get_assignment(assignment_id)
 
-    grade = 100.0 if translated_brail_submission == assignment.text else 0.0
     await submissions_service.submit_assignment(
-        profile.sub, assignment_id, body.braille, grade
+        user_id=profile.sub,
+        assignment_id=assignment_id,
+        braille_text=body.braille,
+        seconds_to_complete=body.seconds_to_complete,
+        grade=None,
     )
 
-    if translated_brail_submission == assignment.text:
-        return {"correctly_translated": True}
-    else:
-        return {
-            "correctly_translated": False,
-            "actual_translation": translated_brail_submission,
-        }
+    # if translated_brail_submission == assignment.text:
+    #     return {"correctly_translated": True}
+    # else:
+    #     return {
+    #         "correctly_translated": False,
+    #         "actual_translation": translated_brail_submission,
+    #     }
 
 
 class GradeOverrideBody(BaseModel):
