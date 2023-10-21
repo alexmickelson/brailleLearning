@@ -42,9 +42,7 @@ export const theme = {
 };
 
 export const plugins = [
-  require("@tailwindcss/forms")({
-    strategy: 'base', // only generate global styles
-  })
+  require("@tailwindcss/forms")
 ];
 export const darkMode = "class";
 

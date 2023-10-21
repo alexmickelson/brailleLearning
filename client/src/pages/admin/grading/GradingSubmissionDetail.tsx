@@ -4,8 +4,8 @@ import { Spinner } from "../../../sharedComponents/Spinner";
 import { printDate } from "../../../utils/datePrinter";
 import { useUserProfileQuery } from "../adminHooks";
 import { useOverrideGradeMutation } from "./GradingHooks";
-import { useNumberInput } from "../../../sharedComponents/forms/useNumberInput";
-import { NumberInputRow } from "../../../sharedComponents/forms/NumberInputRow";
+import { useNumberInput } from "../../../sharedComponents/forms/number/useNumberInput";
+import { NumberInputRow } from "../../../sharedComponents/forms/number/NumberInputRow";
 import { printTime } from "../../../utils/timePrinter";
 
 export const GradingSubmissionDetail: FC<{ submission: Submission }> = ({

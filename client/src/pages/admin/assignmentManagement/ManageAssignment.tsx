@@ -1,9 +1,9 @@
 import { FC, useState } from "react";
 import { Assignment } from "../../../models/assignmentModel";
-import { TextInputRow } from "../../../sharedComponents/forms/TextInputRow";
-import { useTextInput } from "../../../sharedComponents/forms/useTextInput";
-import { CheckInputRow } from "../../../sharedComponents/forms/CheckInputRow";
-import { useCheckInput } from "../../../sharedComponents/forms/useCheckInput";
+import { TextInputRow } from "../../../sharedComponents/forms/text/TextInputRow";
+import { useTextInput } from "../../../sharedComponents/forms/text/useTextInput";
+import { CheckInputRow } from "../../../sharedComponents/forms/check/CheckInputRow";
+import { useCheckInput } from "../../../sharedComponents/forms/check/useCheckInput";
 import { BrailleKeyboard } from "../../brailleKeyboard/BrailleKeyboard";
 import DatePicker from "react-datepicker";
 import {
@@ -12,10 +12,10 @@ import {
 } from "../adminAssignmentHooks";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "../../../sharedComponents/Spinner";
-import { useNumberInput } from "../../../sharedComponents/forms/useNumberInput";
-import { NumberInputRow } from "../../../sharedComponents/forms/NumberInputRow";
-import { useSelectInput } from "../../../sharedComponents/forms/useSelectInput";
-import { SelectInputRow } from "../../../sharedComponents/forms/SelectInputRow";
+import { useNumberInput } from "../../../sharedComponents/forms/number/useNumberInput";
+import { NumberInputRow } from "../../../sharedComponents/forms/number/NumberInputRow";
+import { useRadioInput } from "../../../sharedComponents/forms/select/useRadioInput";
+import { RadioInputRow } from "../../../sharedComponents/forms/select/RadioInputRow";
 
 export const ManageAssignment: FC<{
   assignment: Assignment;
@@ -24,7 +24,7 @@ export const ManageAssignment: FC<{
   const navigate = useNavigate();
   const updateAssignmentMutation = useUpdateAssignmentMutation(assignment.id);
   const deleteAssignmentMutation = useDeleteAssignmentMutation(assignment.id);
-  const typeControl = useSelectInput({
+  const typeControl = useRadioInput({
     options: ["Text to Braille", "Braille to Text"],
     getKey: (i) => i,
     required: true,
@@ -66,7 +66,7 @@ export const ManageAssignment: FC<{
       <h3 className="text-center">Update Assignment</h3>
       <form onSubmit={submitHandler}>
         <TextInputRow label="Assignment Name" control={nameControl} />
-        <SelectInputRow label="Assignment Type" control={typeControl} />
+        <RadioInputRow label="Assignment Type" control={typeControl} />
         <TextInputRow label="Text" control={textControl} isTextArea={true} />
 
         <hr />

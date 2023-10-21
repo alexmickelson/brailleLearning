@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import { toast } from "react-hot-toast";
-import { TextInputRow } from "../../../sharedComponents/forms/TextInputRow";
-import { useTextInput } from "../../../sharedComponents/forms/useTextInput";
+import { TextInputRow } from "../../../sharedComponents/forms/text/TextInputRow";
+import { useTextInput } from "../../../sharedComponents/forms/text/useTextInput";
 import { Spinner } from "../../../sharedComponents/Spinner";
 import { useCreateAssignmentMutation } from "../adminAssignmentHooks";
 

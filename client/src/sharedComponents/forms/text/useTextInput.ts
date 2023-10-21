@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Rules, validate } from "./formValidation";
-import { TextInputControl } from "./text/TextInputRow";
+import { Rules, validate } from "../formValidation";
+import { TextInputControl } from "./TextInputRow";
 
 
 export const useTextInput = (
