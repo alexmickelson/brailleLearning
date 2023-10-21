@@ -1,40 +1,13 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { assignmentKeys } from "../../hooks/assignmentHooks";
 import { UserProfile } from "../../models/userModel";
 import { getQueryClient } from "../../services/queryClient";
 import { axiosClient } from "../../utils/axiosClient";
-import { Assignment } from "../../models/assignmentModel";
 
 const queryClient = getQueryClient();
 export const adminKeys = {
   allUsers: ["all users"] as const,
   user: (userId: string) => ["all users", userId] as const,
 };
-
-export const useCreateAssignmentMutation = () =>
-  useMutation({
-    mutationFn: async (assignmentOptions: { name: string; text: string }) => {
-      const url = `/api/admin/assignments/new`;
-      await axiosClient.post(url, assignmentOptions);
-    },
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: assignmentKeys.all }),
-  });
-
-export const useUpdateAssignmentMutation = (assignmentId: string) =>
-  useMutation({
-    mutationFn: async (assignment: Assignment) => {
-      const url = `/api/admin/assignments/${assignmentId}`;
-      const body = {
-        ...assignment,
-        availableDate: assignment.availableDate?.toISOString(),
-        closedDate: assignment.closedDate?.toISOString(),
-      };
-      await axiosClient.put(url, body);
-    },
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: assignmentKeys.all }),
-  });
 
 export const useAllUsersQuery = () =>
   useQuery({

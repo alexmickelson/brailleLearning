@@ -16,7 +16,7 @@
   - [ ] just the due datetime
   - [ ] track time to complete
   - [ ] assignment prerequisites
-  - [ ] assignment open date
+  - [x] assignment open date
 
 
 - [ ] assignment total points

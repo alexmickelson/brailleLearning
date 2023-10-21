@@ -38,6 +38,7 @@ async def delete_all_grades(
 class AssignmentCreation(BaseModel):
     name: str
     text: str
+    points: int = Field(default=0)
     show_reference_braille: Optional[bool] = Field(default=False)
     show_live_preview: Optional[bool] = Field(default=False)
     type: Optional[AssignmentType] = Field(default=AssignmentType.STRING_TO_BRAILLE)
@@ -63,6 +64,7 @@ async def create_assignment(
     new_assignment = await assignment_service.create_assignment(
         name=body.name,
         text=body.text,
+        points=body.points,
         show_reference_braille=show_reference_braille,
         show_live_preview=show_live_preview,
         available_date=body.available_date,
@@ -70,6 +72,14 @@ async def create_assignment(
         type=type,
     )
     return new_assignment
+
+
+@router.delete("/{assignment_id}")
+async def delete_assignment(
+    assignment_id: UUID,
+    assignment_service: AssignmentService = Depends(),
+):
+    await assignment_service.delete(assignment_id)
 
 
 class AssignmentUpdate(BaseModel):
@@ -80,6 +90,7 @@ class AssignmentUpdate(BaseModel):
     reference_braille: Optional[str] = Field(default=None)
     available_date: Optional[datetime]
     closed_date: Optional[datetime]
+    points: int
 
 
 @router.put("/{assignment_id}")
@@ -89,7 +100,6 @@ async def update_assignment(
     assignment_service: AssignmentService = Depends(),
     user=Depends(authorize_admin),
 ):
-    print(body.available_date)
     await assignment_service.update(
         assignment_id=assignment_id,
         name=body.name,
@@ -99,4 +109,12 @@ async def update_assignment(
         reference_braille=body.reference_braille,
         available_date=body.available_date,
         closed_date=body.closed_date,
+        points=body.points,
     )
+
+
+@router.get("/all")
+async def get_all_assignments(
+    assignment_service: AssignmentService = Depends(),
+):
+    return await assignment_service.get_all_assignments()

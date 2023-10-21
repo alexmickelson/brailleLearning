@@ -4,6 +4,8 @@ from fastapi import Depends
 from src.models.user import User, UserProfile
 from src.services.db_service import RunSql
 
+
+enable_cache = False
 users_cache: LRUCache = LRUCache(maxsize=100)
 
 
@@ -56,9 +58,10 @@ class UserService:
         users_cache.clear()
 
     async def get_profile(self, sub: str, name: str) -> UserProfile:
-        result = users_cache.get(sub)
-        if result is not None:
-            return result
+        if enable_cache:
+            result = users_cache.get(sub)
+            if result is not None:
+                return result
         sql = """
             select 
                 sub,

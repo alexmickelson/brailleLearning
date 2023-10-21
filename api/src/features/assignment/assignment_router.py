@@ -25,8 +25,11 @@ async def get_assignment_by_id(
 
 
 @router.get("/all")
-async def get_all_assignments(assignment_service: AssignmentService = Depends()):
-    return await assignment_service.get_all_assignments()
+async def get_all_assignments(
+    assignment_service: AssignmentService = Depends(),
+    _profile: UserProfile = Depends(authenticate_user),
+):
+    return await assignment_service.get_available_assignments()
 
 
 @router.get("/submissions/{assignment_id}")

@@ -15,6 +15,7 @@ create table Assignment (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL,
   text TEXT NOT NULL,
+  points INTEGER NOT NULL,
   show_reference_braille boolean,
   show_live_preview boolean,
   reference_braille TEXT,

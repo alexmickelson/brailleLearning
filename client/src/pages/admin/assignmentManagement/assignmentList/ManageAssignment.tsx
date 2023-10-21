@@ -1,24 +1,30 @@
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import { Assignment } from "../../../../models/assignmentModel";
-import {
-  useTextInput,
-  TextInputRow,
-} from "../../../../sharedComponents/forms/TextInputRow";
-import { useUpdateAssignmentMutation } from "../../adminHooks";
-import {
-  CheckInputRow,
-  useCheckInput,
-} from "../../../../sharedComponents/forms/CheckInputRow";
+import { TextInputRow } from "../../../../sharedComponents/forms/TextInputRow";
+import { useTextInput } from "../../../../sharedComponents/forms/useTextInput";
+import { CheckInputRow } from "../../../../sharedComponents/forms/CheckInputRow";
+import { useCheckInput } from "../../../../sharedComponents/forms/useCheckInput";
 import { BrailleKeyboard } from "../../../brailleKeyboard/BrailleKeyboard";
 import DatePicker from "react-datepicker";
+import {
+  useDeleteAssignmentMutation,
+  useUpdateAssignmentMutation,
+} from "../../adminAssignmentHooks";
+import { useNavigate } from "react-router-dom";
+import { Spinner } from "../../../../sharedComponents/Spinner";
+import { useNumberInput } from "../../../../sharedComponents/forms/useNumberInput";
+import { NumberInputRow } from "../../../../sharedComponents/forms/NumberInputRow";
 
 export const ManageAssignment: FC<{
   assignment: Assignment;
   onSaveCallback: () => void;
 }> = ({ assignment, onSaveCallback }) => {
+  const navigate = useNavigate();
   const updateAssignmentMutation = useUpdateAssignmentMutation(assignment.id);
+  const deleteAssignmentMutation = useDeleteAssignmentMutation(assignment.id);
   const nameControl = useTextInput(assignment.name);
   const textControl = useTextInput(assignment.text);
+  const pointsControl = useNumberInput(assignment.points);
   const livePreviewControl = useCheckInput(assignment.showLivePreview);
   const showReferenceBrailleControl = useCheckInput(
     assignment.showReferenceBraille
@@ -43,6 +49,7 @@ export const ManageAssignment: FC<{
         referenceBraille: referenceBrailleInput,
         availableDate: availableDate,
         closedDate: closedDate,
+        points: pointsControl.value,
       })
       .then(() => onSaveCallback());
   };
@@ -66,6 +73,7 @@ export const ManageAssignment: FC<{
               label="show reference braille"
               control={showReferenceBrailleControl}
             />
+            <NumberInputRow label={"Points"} control={pointsControl} />
           </div>
           <div>
             {showReferenceBrailleControl.value && (
@@ -103,7 +111,32 @@ export const ManageAssignment: FC<{
         <hr />
 
         <div className="flex justify-center">
-          <button className="m-3">Save</button>
+          <button
+            className="m-3"
+            type="button"
+            disabled={
+              deleteAssignmentMutation.isPending ||
+              updateAssignmentMutation.isPending
+            }
+            onClick={() =>
+              deleteAssignmentMutation
+                .mutateAsync()
+                .then(() => navigate("/admin"))
+            }
+          >
+            Delete
+          </button>
+          <button
+            className="m-3"
+            disabled={
+              deleteAssignmentMutation.isPending ||
+              updateAssignmentMutation.isPending
+            }
+          >
+            Save
+          </button>
+          {deleteAssignmentMutation.isPending && <Spinner />}
+          {updateAssignmentMutation.isPending && <Spinner />}
         </div>
       </form>
     </div>

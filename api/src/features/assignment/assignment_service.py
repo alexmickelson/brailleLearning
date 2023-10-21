@@ -14,6 +14,7 @@ class AssignmentService:
         self,
         name: str,
         text: str,
+        points: int,
         show_reference_braille: Optional[bool],
         show_live_preview: Optional[bool],
         available_date: Optional[datetime],
@@ -25,6 +26,7 @@ class AssignmentService:
                 (
                     name, 
                     text, 
+                    points,
                     show_reference_braille, 
                     show_live_preview,
                     available_date,
@@ -35,6 +37,7 @@ class AssignmentService:
                 (
                     %(name)s, 
                     %(text)s, 
+                    %(points)s,
                     %(show_reference_braille)s, 
                     %(show_live_preview)s, 
                     %(available_date)s,
@@ -45,8 +48,10 @@ class AssignmentService:
                 id,
                 name,
                 text,
+                points,
                 show_reference_braille,
                 show_live_preview,
+                reference_braille,
                 available_date,
                 closed_date,
                 type
@@ -54,6 +59,7 @@ class AssignmentService:
         params = {
             "name": name,
             "text": text,
+            "points": points,
             "show_reference_braille": show_reference_braille,
             "show_live_preview": show_live_preview,
             "available_date": available_date,
@@ -69,6 +75,7 @@ class AssignmentService:
         assignment_id: UUID,
         name: str,
         text: str,
+        points: int,
         show_reference_braille: bool,
         show_live_preview: bool,
         reference_braille: Optional[str],
@@ -83,7 +90,8 @@ class AssignmentService:
                 show_live_preview = %(show_live_preview)s,
                 reference_braille = %(reference_braille)s,
                 available_date = %(available_date)s,
-                closed_date = %(closed_date)s
+                closed_date = %(closed_date)s,
+                points = %(points)s
             where id = %(assignment_id)s
         """
         params = {
@@ -95,12 +103,18 @@ class AssignmentService:
             "reference_braille": reference_braille,
             "available_date": available_date,
             "closed_date": closed_date,
+            "points": points,
         }
         await self.run_sql(sql, params)
 
     async def delete_all_assignments(self):
         sql = "TRUNCATE Assignment"
         await self.run_sql(sql, {})
+
+    async def delete(self, assignment_id: UUID):
+        sql = "delete from assignment where id = %(assignment_id)s"
+        params = {"assignment_id": assignment_id}
+        await self.run_sql(sql, params)
 
     async def get_assignment(self, id: UUID):
         sql = """
@@ -117,5 +131,14 @@ class AssignmentService:
         sql = """
             select *
             from Assignment
+        """
+        return await self.run_sql(sql, {}, output_class=Assignment)
+
+    async def get_available_assignments(self):
+        sql = """
+            select *
+            from Assignment
+            where now() < closed_date
+                and now() > available_date
         """
         return await self.run_sql(sql, {}, output_class=Assignment)

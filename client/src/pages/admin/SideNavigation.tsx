@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { FaUserGraduate } from "react-icons/fa";
 import { MdAssignment } from "react-icons/md";
 

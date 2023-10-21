@@ -1,19 +1,9 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 
 export interface CheckInputControl {
   value: boolean;
   setValue: (i: boolean) => void;
 }
-
-export const useCheckInput = (initialValue: boolean): CheckInputControl => {
-  const [value, setValue] = useState<boolean>(initialValue);
-  // const [error, setError] = useState<boolean>(false);
-  // useEffect(() => {
-  //   setError(validate(value, rules));
-  // }, [value, setError, rules]);
-  // const hasRules = !!rules;
-  return { value, setValue };
-};
 
 interface Props {
   label: string;

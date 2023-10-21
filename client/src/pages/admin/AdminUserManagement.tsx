@@ -1,4 +1,3 @@
-import React from "react";
 import { Spinner } from "../../sharedComponents/Spinner";
 import {
   useAllUsersQuery,
@@ -19,9 +18,11 @@ export const AdminUserManagement = () => {
       <h3>AdminUserManagement</h3>
       <table className="table-auto w-full">
         <thead className="text-left">
-          <th>Name</th>
-          <th>Is Admin</th>
-          <th>SUB</th>
+          <tr>
+            <th>Name</th>
+            <th>Is Admin</th>
+            <th>SUB</th>
+          </tr>
         </thead>
         <tbody>
           {usersQuery.data.map((u) => (

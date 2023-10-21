@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { keypressesToBraille } from "../../services/brailleService";
 import { BrailleInEnglish } from "./BrailleInEnglish";
 import { KeypressVisualization } from "./KeypressVisualization";

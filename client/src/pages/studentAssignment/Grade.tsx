@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { Spinner } from "../../sharedComponents/Spinner";
 import { useGetGradeQuery } from "../../hooks/assignmentHooks";
 

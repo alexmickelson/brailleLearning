@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Spinner } from "../../../../sharedComponents/Spinner";
 import { AssignmentCard } from "./AssignmentCard";
 import { ManageAssignment } from "./ManageAssignment";
 import { GoArrowLeft } from "react-icons/go";
 import { NewAssignment } from "../NewAssignment";
-import { useAllAssignmentsQuery } from "../../../../hooks/assignmentHooks";
+import { useAllAssignmentsQuery } from "../../adminAssignmentHooks";
 
 export const AdminAssignments = () => {
   const assignmentsQuery = useAllAssignmentsQuery();

@@ -14,6 +14,7 @@ class Assignment(BaseModel):
     id: UUID
     name: str
     text: str
+    points: int
     show_reference_braille: bool
     reference_braille: Optional[str]
     show_live_preview: bool

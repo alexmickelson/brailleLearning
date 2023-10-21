@@ -1,13 +1,13 @@
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import { Submission } from "../../../models/submissionModel";
-import {
-  TextInputRow,
-  useTextInput,
-} from "../../../sharedComponents/forms/TextInputRow";
+import { TextInputRow } from "../../../sharedComponents/forms/TextInputRow";
+import { useTextInput } from "../../../sharedComponents/forms/useTextInput";
 import { Spinner } from "../../../sharedComponents/Spinner";
 import { printDate } from "../../../utils/datePrinter";
 import { useUserProfileQuery } from "../adminHooks";
 import { useOverrideGradeMutation } from "./GradingHooks";
+import { useNumberInput } from "../../../sharedComponents/forms/useNumberInput";
+import { NumberInputRow } from "../../../sharedComponents/forms/NumberInputRow";
 
 export const GradingSubmissionDetail: FC<{ submission: Submission }> = ({
   submission,
@@ -17,51 +17,43 @@ export const GradingSubmissionDetail: FC<{ submission: Submission }> = ({
     submission.id,
     submission.assignmentId
   );
-  const [showGradeOverride, setShowGradeOverride] = useState(false);
-  const newGradeControl = useTextInput("");
+  const newGradeControl = useNumberInput(submission.grade);
 
   if (userProfileQuery.isLoading) return <Spinner />;
   if (userProfileQuery.isError) return <div>Error loading user profile</div>;
   if (!userProfileQuery.data) return <div>No user profile data</div>;
 
+  const saveNewGrade = () => {
+    if (newGradeControl.value) {
+      const newGradeFloat = newGradeControl.value;
+      overrideGradeMutation.mutateAsync(newGradeFloat);
+    }
+  };
   return (
     <>
-      <div className="mx-5 px-3 grid grid-cols-2">
-        <div>
-          <div>
-            {userProfileQuery.data.name} - {printDate(submission.submittedDate)}
+      <div className="mx-5 px-3 flex flex-row justify-between">
+        <div className="my-auto">
+          <div>{userProfileQuery.data.name}</div>
+          <div className="italic text-sm">
+            {printDate(submission.submittedDate)}
           </div>
-          <div>Submission: {submission.submittedText}</div>
         </div>
-        <div className="justify-self-end">
-          <div>Grade: {submission.grade}</div>
-          {!showGradeOverride && (
-            <button onClick={() => setShowGradeOverride(true)}>
-              Override Grade
-            </button>
-          )}
-          {showGradeOverride && (
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (newGradeControl.value) {
-                  const newGradeFloat = parseFloat(newGradeControl.value);
-                  overrideGradeMutation
-                    .mutateAsync(newGradeFloat)
-                    .then(() => setShowGradeOverride(false));
-                }
-              }}
-            >
-              <TextInputRow label={"New Grade"} control={newGradeControl} />
-              <button disabled={overrideGradeMutation.isPending}>
-                Save New Grade
-              </button>
-            </form>
-          )}
-          {showGradeOverride && (
-            <button onClick={() => setShowGradeOverride(false)}>Cancel</button>
-          )}
+        <div className="my-auto">
+          <div>{submission.submittedText}</div>
+        </div>
+        <div className="justify-self-end my-auto">
           {overrideGradeMutation.isPending && <Spinner />}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              saveNewGrade();
+            }}
+            onBlur={() => {
+              saveNewGrade();
+            }}
+          >
+            <NumberInputRow label={"Grade"} control={newGradeControl} />
+          </form>
         </div>
       </div>
       <hr />

@@ -7,7 +7,7 @@ import { Submission } from "../models/submissionModel";
 const queryClient = getQueryClient();
 
 export const assignmentKeys = {
-  all: ["allassignmentskey"] as const,
+  available: ["available assignments"] as const,
   assignmentDetail: (assignmentId: string) =>
     ["assignmentDetail", assignmentId] as const,
 
@@ -20,9 +20,9 @@ export const assignmentKeys = {
   ],
 };
 
-export const useAllAssignmentsQuery = () =>
+export const useAvailableAssignmentsQuery = () =>
   useQuery({
-    queryKey: assignmentKeys.all,
+    queryKey: assignmentKeys.available,
     queryFn: async (): Promise<Assignment[]> => {
       const url = `/api/assignments/all`;
       const response = await axiosClient.get(url);

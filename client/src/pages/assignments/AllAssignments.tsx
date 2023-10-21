@@ -1,10 +1,10 @@
 import { Spinner } from "../../sharedComponents/Spinner";
-import { useAllAssignmentsQuery } from "../../hooks/assignmentHooks";
+import { useAvailableAssignmentsQuery } from "../../hooks/assignmentHooks";
 import { useNavigate } from "react-router-dom";
 
 export const AllAssignments = () => {
   const navigate = useNavigate()
-  const assignmentsQuery = useAllAssignmentsQuery();
+  const assignmentsQuery = useAvailableAssignmentsQuery();
 
   if (assignmentsQuery.isLoading) return <Spinner />;
   if (assignmentsQuery.isError) return <div>Error loading all assignments</div>;
