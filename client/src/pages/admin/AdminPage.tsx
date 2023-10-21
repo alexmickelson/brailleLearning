@@ -2,7 +2,7 @@ import { useIsAdmin } from "../../services/userService";
 import { adminViewOptions, SideNavigation } from "./SideNavigation";
 import { useState } from "react";
 import { AdminUserManagement } from "./AdminUserManagement";
-import { AdminAssignments } from "./assignmentManagement/assignmentList/AdminAssignments";
+import { AdminAssignments } from "./assignment/assignmentList/AdminAssignments";
 
 export const AdminPage = () => {
   const isAdmin = useIsAdmin();

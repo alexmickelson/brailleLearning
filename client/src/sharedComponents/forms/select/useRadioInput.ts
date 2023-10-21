@@ -1,5 +1,4 @@
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
 
 export interface RadioInputControl<T> {
   value?: T;
@@ -10,13 +9,17 @@ export interface RadioInputControl<T> {
 }
 
 export function useRadioInput<T>({
-  initialValue = undefined, options, getKey, required, setValueCallback,
+  initialValue = undefined,
+  options,
+  getKey,
+  required,
+  onChange,
 }: {
   initialValue?: T;
   options: T[];
   getKey: (i: T) => string;
   required?: boolean;
-  setValueCallback?: (i?: T) => void;
+  onChange?: (value?: T) => void;
 }): RadioInputControl<T> {
   const [value, setValue] = useState<T | undefined>(initialValue);
 
@@ -24,14 +27,10 @@ export function useRadioInput<T>({
     if (incomingKey) {
       const selected = options.find((o) => getKey(o) === incomingKey);
       setValue(selected);
-      if (setValueCallback) {
-        setValueCallback(selected);
-      }
+      onChange && onChange(selected);
     } else {
       setValue(undefined);
-      if (setValueCallback) {
-        setValueCallback(undefined);
-      }
+      onChange && onChange(undefined);
     }
   };
 
@@ -45,6 +44,6 @@ export function useRadioInput<T>({
     displayValue,
     setValue: setValueByKey,
     options: displayOptions,
-    getKey
+    getKey,
   };
 }

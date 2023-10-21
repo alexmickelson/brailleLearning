@@ -7,7 +7,7 @@ from pydantic import BaseModel
 
 class AssignmentType(str, Enum):
     BRAILLE_TO_PRINT = "braille_to_print"
-    STRING_TO_BRAILLE = "string_to_braille"
+    PRINT_TO_BRAILLE = "print_to_braille"
 
 
 class Assignment(BaseModel):

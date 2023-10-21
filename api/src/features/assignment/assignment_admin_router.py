@@ -41,7 +41,7 @@ class AssignmentCreation(BaseModel):
     text: str = Field(default="")
     show_reference_braille: bool = Field(default=False)
     show_live_preview: bool = Field(default=False)
-    type: AssignmentType = Field(default=AssignmentType.STRING_TO_BRAILLE)
+    type: AssignmentType = Field(default=AssignmentType.PRINT_TO_BRAILLE)
     available_date: Optional[datetime] = Field(default=None)
     closed_date: Optional[datetime] = Field(default=None)
 
@@ -55,7 +55,7 @@ async def create_assignment(
     show_live_preview = (
         body.show_live_preview if body.show_live_preview is not None else False
     )
-    type = body.type if body.type is not None else AssignmentType.STRING_TO_BRAILLE
+    type = body.type if body.type is not None else AssignmentType.PRINT_TO_BRAILLE
     show_reference_braille = (
         body.show_reference_braille
         if body.show_reference_braille is not None
@@ -88,9 +88,10 @@ class AssignmentUpdate(BaseModel):
     show_reference_braille: bool
     show_live_preview: bool
     reference_braille: Optional[str] = Field(default=None)
-    available_date: Optional[datetime]
-    closed_date: Optional[datetime]
+    available_date: Optional[datetime] = Field(default=None)
+    closed_date: Optional[datetime] = Field(default=None)
     points: int
+    type: AssignmentType
 
 
 @router.put("/{assignment_id}")
@@ -110,6 +111,7 @@ async def update_assignment(
         available_date=body.available_date,
         closed_date=body.closed_date,
         points=body.points,
+        type=body.type
     )
 
 

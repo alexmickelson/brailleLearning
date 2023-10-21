@@ -20,21 +20,23 @@ export function RadioInputRow<T>({ label, control, tabIndex = -1 }: Props<T>) {
   const inputClasses = `
     form-radio
   `;
+
   return (
     <div className="my-3 w-100">
       <div className="mb-2">{label}:</div>
       {control.options.map((option) => (
-        <div className="ml-2">
+        <div key={option} className="ml-2">
           <label className={labelClasses}>
             <input
               type="radio"
               name={computedName}
               className={inputClasses}
-              value={control.displayValue}
+              value={option}
               onChange={(e) => control.setValue(e.target.value)}
+              checked={control.displayValue === option}
               tabIndex={tabIndex}
             />
-            <span className="ml-2"> {option}</span>
+            <span className="ml-2">{option}</span>
           </label>
         </div>
       ))}

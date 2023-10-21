@@ -1,5 +1,5 @@
-import { FC, useState } from "react";
-import { Assignment } from "../../../models/assignmentModel";
+import { FC, useCallback, useState } from "react";
+import { Assignment, AssignmentType } from "../../../models/assignmentModel";
 import { TextInputRow } from "../../../sharedComponents/forms/text/TextInputRow";
 import { useTextInput } from "../../../sharedComponents/forms/text/useTextInput";
 import { CheckInputRow } from "../../../sharedComponents/forms/check/CheckInputRow";
@@ -24,13 +24,21 @@ export const ManageAssignment: FC<{
   const navigate = useNavigate();
   const updateAssignmentMutation = useUpdateAssignmentMutation(assignment.id);
   const deleteAssignmentMutation = useDeleteAssignmentMutation(assignment.id);
-  const typeControl = useRadioInput({
-    options: ["Text to Braille", "Braille to Text"],
-    getKey: (i) => i,
-    required: true,
-  });
   const nameControl = useTextInput(assignment.name);
   const textControl = useTextInput(assignment.text);
+
+  const typeToText = (i: AssignmentType) =>
+    i === AssignmentType.PRINT_TO_BRAILLE
+      ? "Print to Braille"
+      : "Braille to Print";
+
+  const typeControl = useRadioInput({
+    initialValue: assignment.type,
+    options: [AssignmentType.PRINT_TO_BRAILLE, AssignmentType.BRAILLE_TO_PRINT],
+    getKey: typeToText,
+    required: true,
+    onChange: () => textControl.setValue(""),
+  });
   const pointsControl = useNumberInput(assignment.points);
   const livePreviewControl = useCheckInput(assignment.showLivePreview);
   const showReferenceBrailleControl = useCheckInput(
@@ -57,17 +65,28 @@ export const ManageAssignment: FC<{
         availableDate: availableDate,
         closedDate: closedDate,
         points: pointsControl.value,
+        type: typeControl.value ?? AssignmentType.PRINT_TO_BRAILLE,
       })
       .then(() => onSaveCallback());
   };
 
+  console.log(assignment);
   return (
     <div className="m-auto">
       <h3 className="text-center">Update Assignment</h3>
       <form onSubmit={submitHandler}>
         <TextInputRow label="Assignment Name" control={nameControl} />
         <RadioInputRow label="Assignment Type" control={typeControl} />
-        <TextInputRow label="Text" control={textControl} isTextArea={true} />
+        {typeControl.value === AssignmentType.PRINT_TO_BRAILLE && (
+          <TextInputRow label="Text" control={textControl} isTextArea={true} />
+        )}
+
+        {typeControl.value === AssignmentType.BRAILLE_TO_PRINT && (
+          <BrailleKeyboard
+            startingBraille={textControl.value}
+            updateBrail={(b) => textControl.setValue(b)}
+          />
+        )}
 
         <hr />
         <h4 className="text-center">Assignment Options</h4>

@@ -35,7 +35,7 @@ def create_assignment(
         "text": translate_text,
         "show_reference_braille": False,
         "show_print_feed": False,
-        "type": AssignmentType.STRING_TO_BRAILLE,
+        "type": AssignmentType.PRINT_TO_BRAILLE,
     }
     url = "/api/assignments/new"
 

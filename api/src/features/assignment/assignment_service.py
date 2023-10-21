@@ -78,6 +78,7 @@ class AssignmentService:
         points: int,
         show_reference_braille: bool,
         show_live_preview: bool,
+        type: AssignmentType,
         reference_braille: Optional[str],
         available_date: Optional[datetime],
         closed_date: Optional[datetime],
@@ -91,7 +92,8 @@ class AssignmentService:
                 reference_braille = %(reference_braille)s,
                 available_date = %(available_date)s,
                 closed_date = %(closed_date)s,
-                points = %(points)s
+                points = %(points)s,
+                type = %(type)s
             where id = %(assignment_id)s
         """
         params = {
@@ -104,6 +106,7 @@ class AssignmentService:
             "available_date": available_date,
             "closed_date": closed_date,
             "points": points,
+            "type": type,
         }
         await self.run_sql(sql, params)
 
