@@ -1,11 +1,11 @@
 import { Spinner } from "../../sharedComponents/Spinner";
-import { useAvailableAssignmentsQuery } from "../../hooks/assignmentHooks";
+import { useAvailableUncompletedAssignmentsQuery } from "../../hooks/assignmentHooks";
 import { useNavigate } from "react-router-dom";
 import { printDate } from "../../utils/datePrinter";
 
 export const AllAssignments = () => {
   const navigate = useNavigate();
-  const assignmentsQuery = useAvailableAssignmentsQuery();
+  const assignmentsQuery = useAvailableUncompletedAssignmentsQuery();
 
   if (assignmentsQuery.isLoading) return <Spinner />;
   if (assignmentsQuery.isError) return <div>Error loading all assignments</div>;

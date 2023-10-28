@@ -90,30 +90,32 @@ export const ManageAssignment: FC<{
 
         <hr />
         <h4 className="text-center">Assignment Options</h4>
-        <div className="flex flex-col justify-center align-center">
-          <div>
-            <CheckInputRow
-              label="show live reference"
-              control={livePreviewControl}
-            />
-            <CheckInputRow
-              label="show reference braille"
-              control={showReferenceBrailleControl}
-            />
-            <NumberInputRow label={"Points"} control={pointsControl} />
-          </div>
-          <div>
-            {showReferenceBrailleControl.value && (
-              <div>
-                <BrailleKeyboard
-                  startingBraille={assignment.referenceBraille}
-                  updateBrail={setReferenceBrailleInput}
-                />
-              </div>
-            )}
-          </div>
-        </div>
 
+        {typeControl.value === AssignmentType.PRINT_TO_BRAILLE && (
+          <div className="flex flex-col justify-center align-center">
+            <div>
+              <CheckInputRow
+                label="show live reference"
+                control={livePreviewControl}
+              />
+              <CheckInputRow
+                label="show reference braille"
+                control={showReferenceBrailleControl}
+              />
+            </div>
+            <div>
+              {showReferenceBrailleControl.value && (
+                <div>
+                  <BrailleKeyboard
+                    startingBraille={assignment.referenceBraille}
+                    updateBrail={setReferenceBrailleInput}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+        <NumberInputRow label={"Points"} control={pointsControl} />
         <div className="w-100 mt-3">
           <label>Available Date</label>
           <DatePicker

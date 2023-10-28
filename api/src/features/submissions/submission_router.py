@@ -26,7 +26,7 @@ async def get_assignment_submissions(
 
 
 class AssignmentSubmission(BaseModel):
-    braille: str
+    submission_string: str
     seconds_to_complete: float
 
 
@@ -45,7 +45,7 @@ async def submit_assignment(
     await submissions_service.submit_assignment(
         user_id=profile.sub,
         assignment_id=assignment_id,
-        braille_text=body.braille,
+        submission_string=body.submission_string,
         seconds_to_complete=body.seconds_to_complete,
         grade=None,
     )

@@ -24,12 +24,12 @@ async def get_assignment_by_id(
     return assignment
 
 
-@router.get("/all")
-async def get_all_assignments(
+@router.get("/uncompleted")
+async def get_uncompleted_assignments(
     assignment_service: AssignmentService = Depends(),
-    _profile: UserProfile = Depends(authenticate_user),
+    profile: UserProfile = Depends(authenticate_user),
 ):
-    return await assignment_service.get_available_assignments()
+    return await assignment_service.get_uncompleted_assignments(profile.sub)
 
 
 @router.get("/submissions/{assignment_id}")

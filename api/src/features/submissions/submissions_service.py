@@ -16,7 +16,7 @@ class SubmissionsService:
         sql = """
             select 
                 *
-            from Submissions
+            from Submission
             where assignment_id = %(assignment_id)s 
                 and user_id = %(user_id)s
             order by submitted_date
@@ -34,12 +34,12 @@ class SubmissionsService:
         self,
         user_id: str,
         assignment_id: UUID,
-        braille_text: str,
+        submission_string: str,
         grade: Optional[float],
         seconds_to_complete: float,
     ):
         sql = """
-            INSERT INTO Submissions
+            INSERT INTO Submission
                 (
                     user_id, 
                     assignment_id, 
@@ -52,7 +52,7 @@ class SubmissionsService:
                     %(user_id)s, 
                     %(assignment_id)s, 
                     %(grade)s, 
-                    %(braille_text)s,
+                    %(submission_string)s,
                     %(seconds_to_complete)s
                 )
         """
@@ -60,14 +60,14 @@ class SubmissionsService:
             "assignment_id": assignment_id,
             "grade": grade,
             "user_id": user_id,
-            "braille_text": braille_text,
+            "submission_string": submission_string,
             "seconds_to_complete": seconds_to_complete,
         }
         await self.run_sql(sql, params)
 
     async def delete_all_grades(self):
         sql = """
-            truncate Submissions
+            truncate Submission
         """
         await self.run_sql(sql, {})
 
@@ -75,7 +75,7 @@ class SubmissionsService:
         sql = """
             select 
                 *
-            from Submissions
+            from Submission
             where assignment_id = %(assignment_id)s
             order by submitted_date
         """
@@ -90,7 +90,7 @@ class SubmissionsService:
         sql = """
             select 
                 *
-            from Submissions
+            from Submission
             where assignment_id = %(assignment_id)s
                 and user_id = %(student_sub)s
             order by submitted_date
@@ -102,7 +102,7 @@ class SubmissionsService:
 
     async def override_grade(self, submission_id: UUID, grade: float):
         sql = """
-            update Submissions
+            update Submission
             set grade = %(grade)s
             where id = %(submission_id)s
         """

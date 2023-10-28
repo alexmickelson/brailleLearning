@@ -1,7 +1,7 @@
 # brailleLearning
 
 
-# notes
+## notes
 
 - [x] number the letter indicators (f 1, d 2, s 3, j 4, k 5, l 6)
 - [x] dont include a and ;
@@ -20,7 +20,20 @@
 
 
 - [ ] assignment total points
-- [ ] null grade if not graded yet
+- [x] null grade if not graded yet
+- [ ] show assignment as complete on homepage if there are submissions
+
+
+
+## style requirements
+
+- [ ] everything mildly rounded
+  - [ ] date label
+  - [ ] student assignment list
+  - [ ] admin navigation
+
+- [ ] light mode color scheme
+- [ ] datetime labels need to all be the same size and indentation
 
 
 Hear

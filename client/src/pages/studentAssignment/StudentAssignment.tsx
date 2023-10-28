@@ -8,12 +8,16 @@ import {
 } from "../../hooks/assignmentHooks";
 import { useNavigate } from "react-router-dom";
 import { SubmissionList } from "./SubmissionList";
+import { AssignmentType } from "../../models/assignmentModel";
+import { useTextInput } from "../../sharedComponents/forms/text/useTextInput";
+import { TextInputRow } from "../../sharedComponents/forms/text/TextInputRow";
 
 export const StudentAssignment: FC<{ assignmentId: string }> = ({
   assignmentId,
 }) => {
   const navigate = useNavigate();
   const [brailInput, setBrailInput] = useState("");
+  const textControl = useTextInput("");
 
   const assignmentQuery = useAssignmentDetailsQuery(assignmentId);
   const submissionMutation = useSubmitAssignmentMutation(assignmentId);
@@ -28,15 +32,29 @@ export const StudentAssignment: FC<{ assignmentId: string }> = ({
     const currentTime = new Date();
     const difference = currentTime.getTime() - loadTime.getTime();
     const differenceInSeconds = difference / 1000;
-    submissionMutation
-      .mutateAsync({
-        braille: brailInput,
-        secondsToComplete: differenceInSeconds,
-      })
-      .then(() => {
-        setLoadTime(new Date());
-        navigate("/");
-      });
+
+    if (assignmentQuery.data.type === AssignmentType.PRINT_TO_BRAILLE) {
+      submissionMutation
+        .mutateAsync({
+          submissionString: brailInput,
+          secondsToComplete: differenceInSeconds,
+        })
+        .then(() => {
+          setLoadTime(new Date());
+          navigate("/");
+        });
+    }
+    if (assignmentQuery.data.type === AssignmentType.BRAILLE_TO_PRINT) {
+      submissionMutation
+        .mutateAsync({
+          submissionString: textControl.value,
+          secondsToComplete: differenceInSeconds,
+        })
+        .then(() => {
+          setLoadTime(new Date());
+          navigate("/");
+        });
+    }
   };
 
   return (
@@ -60,7 +78,19 @@ export const StudentAssignment: FC<{ assignmentId: string }> = ({
           <strong>{assignmentQuery.data.text}</strong>
         </div>
       </div>
-      <BrailleKeyboard updateBrail={setBrailInput} />
+
+      {assignmentQuery.data.type === AssignmentType.PRINT_TO_BRAILLE && (
+        <BrailleKeyboard updateBrail={setBrailInput} />
+      )}
+      {assignmentQuery.data.type === AssignmentType.BRAILLE_TO_PRINT && (
+        <>
+          <TextInputRow
+            label="Text Translation"
+            control={textControl}
+            isTextArea={true}
+          />
+        </>
+      )}
 
       <div className="flex justify-center">
         <button

@@ -138,12 +138,14 @@ class AssignmentService:
         """
         return await self.run_sql(sql, {}, output_class=Assignment)
 
-    async def get_available_assignments(self):
+    async def get_uncompleted_assignments(self, username: str):
         sql = """
-            select *
-            from Assignment
-            where now() < closed_date
-                and now() > available_date
-            order by closed_date asc
+            select a.*
+            from Assignment a
+            left outer join submission s on s.assignment_id = a.id
+            where now() < a.closed_date
+                and now() > a.available_date
+                and s.id is null
+            order by a.closed_date asc
         """
         return await self.run_sql(sql, {}, output_class=Assignment)

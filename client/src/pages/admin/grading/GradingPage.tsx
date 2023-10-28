@@ -1,10 +1,10 @@
 
 import { useNavigate } from "react-router-dom";
-import { useAvailableAssignmentsQuery } from "../../../hooks/assignmentHooks";
+import { useAvailableUncompletedAssignmentsQuery } from "../../../hooks/assignmentHooks";
 import { Spinner } from "../../../sharedComponents/Spinner";
 
 export const GradingPage = () => {
-  const assignmentsQuery = useAvailableAssignmentsQuery();
+  const assignmentsQuery = useAvailableUncompletedAssignmentsQuery();
   const navigate = useNavigate();
   if (assignmentsQuery.isLoading) return <Spinner />;
   if (assignmentsQuery.isError) return <div>Error loading all assignments</div>;

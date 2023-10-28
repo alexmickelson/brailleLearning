@@ -20,11 +20,11 @@ export const assignmentKeys = {
   ],
 };
 
-export const useAvailableAssignmentsQuery = () =>
+export const useAvailableUncompletedAssignmentsQuery = () =>
   useQuery({
     queryKey: assignmentKeys.available,
     queryFn: async (): Promise<Assignment[]> => {
-      const url = `/api/assignments/all`;
+      const url = `/api/assignments/uncompleted`;
       const response = await axiosClient.get(url);
       return response.data;
     },
@@ -53,7 +53,7 @@ export const useGetGradeQuery = (assignmentId: string) =>
 export const useSubmitAssignmentMutation = (assignmentId: string) =>
   useMutation({
     mutationFn: async (params: {
-      braille: string;
+      submissionString: string;
       secondsToComplete: number;
     }) => {
       const url = `/api/submissions/${assignmentId}`;

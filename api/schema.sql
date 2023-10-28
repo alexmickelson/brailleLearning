@@ -24,7 +24,7 @@ create table Assignment (
   type TEXT
 );
 
-create table Submissions (
+create table Submission (
   id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   assignment_id       UUID NOT NULL REFERENCES Assignment (id),
   user_id             TEXT NOT NULL,
