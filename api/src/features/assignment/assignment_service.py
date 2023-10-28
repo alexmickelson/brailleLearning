@@ -145,7 +145,23 @@ class AssignmentService:
             left outer join submission s on s.assignment_id = a.id
             where now() < a.closed_date
                 and now() > a.available_date
+                and s.user_id = %(username)s
                 and s.id is null
             order by a.closed_date asc
         """
-        return await self.run_sql(sql, {}, output_class=Assignment)
+        params = {'username': username}
+        return await self.run_sql(sql, params, output_class=Assignment)
+
+    async def get_completed_assignments(self, username: str):
+        sql = """
+            select distinct a.*
+            from Assignment a
+            left outer join submission s on s.assignment_id = a.id
+            where now() < a.closed_date
+                and now() > a.available_date
+                and s.user_id = %(username)s
+                and s.id is not null
+            order by a.closed_date asc
+        """
+        params = {'username': username}
+        return await self.run_sql(sql, params, output_class=Assignment)

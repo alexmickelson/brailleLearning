@@ -25,7 +25,17 @@ export const AppRoutes = () => {
           dark:text-gray-50
         "
       >
-        <Toaster />
+        <Toaster
+          toastOptions={{
+            className: `
+              dark:bg-gray-900 
+              dark:text-gray-50 
+              dark:border-gray-800
+              
+              border-2 
+            `,
+          }}
+        />
         <Header />
 
         <ErrorBoundary>

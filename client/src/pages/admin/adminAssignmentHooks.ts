@@ -16,7 +16,7 @@ export const useCreateAssignmentMutation = () =>
       await axiosClient.post(url, assignmentOptions);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: assignmentKeys.available });
+      queryClient.invalidateQueries({ queryKey: assignmentKeys.unCompleted });
       queryClient.invalidateQueries({
         queryKey: adminAssignmentKeys.allAssignments,
       });
@@ -29,7 +29,7 @@ export const useCreateAssignmentMutation = () =>
         await axiosClient.delete(url);
       },
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: assignmentKeys.available });
+        queryClient.invalidateQueries({ queryKey: assignmentKeys.unCompleted });
         queryClient.invalidateQueries({
           queryKey: adminAssignmentKeys.allAssignments,
         });
@@ -51,7 +51,7 @@ export const useCreateAssignmentMutation = () =>
         await axiosClient.put(url, body);
       },
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: assignmentKeys.available });
+        queryClient.invalidateQueries({ queryKey: assignmentKeys.unCompleted });
         queryClient.invalidateQueries({
           queryKey: adminAssignmentKeys.allAssignments,
         });

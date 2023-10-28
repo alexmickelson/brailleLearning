@@ -3,7 +3,7 @@ import { QueryCache, QueryClient } from "@tanstack/react-query";
 
 const queryClient = new QueryClient({
   queryCache: new QueryCache({
-    onError: addErrorAsToast,
+    onError: (e) => createErrorToast(getMessageFromError(e)),
   }),
   defaultOptions: {
     queries: {
@@ -11,7 +11,7 @@ const queryClient = new QueryClient({
       retry: 0,
     },
     mutations: {
-      onError: addErrorAsToast,
+      onError: (e) => createErrorToast(getMessageFromError(e)),
       retry: 0,
     },
   },
@@ -23,7 +23,7 @@ export const getQueryClient = () => {
 
 function createErrorToast(message: string) {
   toast(
-    (t: any) => (
+    (t) => (
       <div className="flex">
         <div className="my-auto">
           <ErrorIcon />
@@ -43,18 +43,22 @@ function createErrorToast(message: string) {
   );
 }
 
-function addErrorAsToast(error: any) {
-  console.log(error);
-  const responseDetail = error.response?.data.detail;
-  const message = responseDetail
-    ? responseDetail
-      ? typeof responseDetail === "string" || responseDetail instanceof String
-        ? responseDetail.toString()
-        : JSON.stringify(responseDetail)
-      : `Error With Request`
-    : typeof error === "string"
-    ? error
-    : JSON.stringify(error);
-
-  createErrorToast(message);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getMessageFromError(error: any) {
+  if (error.response?.data.detail) {
+    const responseDetail = error.response?.data.detail;
+    const detailIsString =
+      typeof responseDetail === "string" || responseDetail instanceof String;
+    return detailIsString
+      ? responseDetail.toString()
+      : JSON.stringify(responseDetail);
+  } else if (typeof error === "string") {
+    return error;
+  } else if (error.name === "AxiosError") {
+    console.log(error);
+    return error.response.data;
+  } else {
+    console.log("could not detect type of error", error);
+    return JSON.stringify(error);
+  }
 }

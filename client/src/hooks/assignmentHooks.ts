@@ -7,7 +7,8 @@ import { Submission } from "../models/submissionModel";
 const queryClient = getQueryClient();
 
 export const assignmentKeys = {
-  available: ["available assignments"] as const,
+  unCompleted: ["not completed assignments"] as const,
+  completed: ["completed assignments"] as const,
   assignmentDetail: (assignmentId: string) =>
     ["assignmentDetail", assignmentId] as const,
 
@@ -22,9 +23,18 @@ export const assignmentKeys = {
 
 export const useAvailableUncompletedAssignmentsQuery = () =>
   useQuery({
-    queryKey: assignmentKeys.available,
+    queryKey: assignmentKeys.unCompleted,
     queryFn: async (): Promise<Assignment[]> => {
       const url = `/api/assignments/uncompleted`;
+      const response = await axiosClient.get(url);
+      return response.data;
+    },
+  });
+export const useAvailableCompletedAssignmentsQuery = () =>
+  useQuery({
+    queryKey: assignmentKeys.completed,
+    queryFn: async (): Promise<Assignment[]> => {
+      const url = `/api/assignments/completed`;
       const response = await axiosClient.get(url);
       return response.data;
     },
