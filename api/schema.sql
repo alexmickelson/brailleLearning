@@ -2,6 +2,7 @@
 
 
 drop table if exists Submission;
+drop table if exists AssignmentPrerequisite;
 drop table if exists Assignment;
 drop table if exists UserAccount;
 
@@ -22,6 +23,11 @@ create table Assignment (
   available_date timestamp with time zone,
   closed_date timestamp with time zone,
   type TEXT
+);
+
+create table AssignmentPrerequisite (
+  assignment_id       UUID NOT NULL REFERENCES Assignment (id),
+  prereq_assignment_id       UUID NOT NULL REFERENCES Assignment (id)
 );
 
 create table Submission (

@@ -72,20 +72,22 @@ export const StudentAssignment: FC<{ assignmentId: string }> = ({
           <hr />
           <div
             className="
-        text-center
-        rounded-lg
-        m-5
-        p-2
-        bg-slate-200
-        border-slate-300
+              text-center
+              rounded-lg
+              m-5
+              p-2
+              bg-slate-200
+              border-slate-300
 
-          dark:bg-gray-700
-          dark:border-gray-800
-          "
+              dark:bg-gray-700
+              dark:border-gray-800
+            "
           >
             <div className="text-sm">Translate the Following Text:</div>
-            <div>
-              <strong>{assignmentQuery.data.text}</strong>
+            <div className="flex justify-center mt-2">
+              <pre className="font-mono text-start">
+                <strong>{assignmentQuery.data.text}</strong>
+              </pre>
             </div>
           </div>
 

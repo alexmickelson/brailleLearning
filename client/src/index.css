@@ -43,9 +43,9 @@ button {
   rounded
   
   hover:text-gray-200
-  bg-theme-600
+  bg-theme-700
   text-gray-200 
-  border-theme-700;
+  border-theme-800;
 }
 
 a.active {

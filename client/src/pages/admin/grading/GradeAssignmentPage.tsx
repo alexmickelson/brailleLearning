@@ -45,7 +45,11 @@ const WrappedGradeAssignmentPage: FC<{ assignmentId: string }> = ({
         </div>
         <hr />
         {submissionsQuery.data.map((s) => (
-          <GradingSubmissionDetail key={s.id} submission={s} />
+          <GradingSubmissionDetail
+            key={s.id}
+            submission={s}
+            assignment={assignmentDetailsQuery.data}
+          />
         ))}
       </div>
     </div>

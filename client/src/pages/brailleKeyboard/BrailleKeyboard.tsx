@@ -69,6 +69,7 @@ export const BrailleKeyboard: FC<{
           className="
             w-full 
             rounded-lg 
+            font-mono
             p-5
             
             bg-slate-100          
