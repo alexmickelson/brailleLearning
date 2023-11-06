@@ -9,6 +9,7 @@ const queryClient = getQueryClient();
 export const assignmentKeys = {
   unCompleted: ["assignments", "not completed assignments"] as const,
   completed: ["assignments", "completed assignments"] as const,
+  past: ["assignments", "past assignments"] as const,
   assignmentDetail: (assignmentId: string) =>
     ["assignments", "assignmentDetail", assignmentId] as const,
 
@@ -35,6 +36,15 @@ export const useAvailableCompletedAssignmentsQuery = () =>
     queryKey: assignmentKeys.completed,
     queryFn: async (): Promise<Assignment[]> => {
       const url = `/api/assignments/completed`;
+      const response = await axiosClient.get(url);
+      return response.data;
+    },
+  });
+export const usePastAssignmentsQuery = () =>
+  useQuery({
+    queryKey: assignmentKeys.past,
+    queryFn: async (): Promise<Assignment[]> => {
+      const url = `/api/assignments/past`;
       const response = await axiosClient.get(url);
       return response.data;
     },

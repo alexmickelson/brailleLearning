@@ -2,6 +2,7 @@ import { Spinner } from "../../sharedComponents/Spinner";
 import {
   useAvailableCompletedAssignmentsQuery,
   useAvailableUncompletedAssignmentsQuery,
+  usePastAssignmentsQuery,
 } from "../../hooks/assignmentHooks";
 import { useNavigate } from "react-router-dom";
 import { printDate } from "../../utils/datePrinter";
@@ -9,7 +10,8 @@ import { printDate } from "../../utils/datePrinter";
 export const AllAssignments = () => {
   const navigate = useNavigate();
   const uncomletedAssignmentsQuery = useAvailableUncompletedAssignmentsQuery();
-  const comletedAssignmentsQuery = useAvailableCompletedAssignmentsQuery();
+  const completedAssignmentsQuery = useAvailableCompletedAssignmentsQuery();
+  const pastAssignmentsQuery = usePastAssignmentsQuery();
 
   if (uncomletedAssignmentsQuery.isLoading) return <Spinner />;
   if (uncomletedAssignmentsQuery.isError)
@@ -17,11 +19,17 @@ export const AllAssignments = () => {
   if (!uncomletedAssignmentsQuery.data)
     return <div>No uncompleted assignment data</div>;
 
-  if (comletedAssignmentsQuery.isLoading) return <Spinner />;
-  if (comletedAssignmentsQuery.isError)
+  if (completedAssignmentsQuery.isLoading) return <Spinner />;
+  if (completedAssignmentsQuery.isError)
     return <div>Error loading completed assignments</div>;
-  if (!comletedAssignmentsQuery.data)
+  if (!completedAssignmentsQuery.data)
     return <div>No completed assignment data</div>;
+
+  if (pastAssignmentsQuery.isLoading) return <Spinner />;
+  if (pastAssignmentsQuery.isError)
+    return <div>Error loading past assignments</div>;
+  if (!pastAssignmentsQuery.data)
+    return <div>No past assignment data</div>;
 
   const assignmentClasses = `
     my-3
@@ -66,9 +74,27 @@ export const AllAssignments = () => {
       <br />
       <br />
       <br />
-      <h5>Finished Assignments: </h5>
+      <h5>Finished Assignments (can be retaken): </h5>
       <div className="flex">
-        {comletedAssignmentsQuery.data.map((a) => (
+        {completedAssignmentsQuery.data.map((a) => (
+          <div
+            key={a.id.toString()}
+            onClick={() => navigate("/assignment/" + a.id)}
+            className={assignmentClasses}
+          >
+            <div>{a.name}</div>
+            <div className="text-sm italic">
+              Due: {a.closedDate && printDate(a.closedDate)}
+            </div>
+          </div>
+        ))}
+      </div>
+      <br />
+      <br />
+      <br />
+      <h5>Past Assignments (past due date): </h5>
+      <div className="flex">
+        {pastAssignmentsQuery.data.map((a) => (
           <div
             key={a.id.toString()}
             onClick={() => navigate("/assignment/" + a.id)}

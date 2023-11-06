@@ -25,6 +25,9 @@ export const SubmissionList: FC<{ assignmentId: string }> = ({
     return <div>Error, no data for assignment details</div>;
 
   if (submissionsQuery.data.length === 0) return <div></div>;
+
+  const dateColClasses = "col-span-2 text-end  me-3";
+  const rowClasses = "grid grid-cols-8 my-2";
   
   return (
     <div className="p-5">
@@ -32,18 +35,18 @@ export const SubmissionList: FC<{ assignmentId: string }> = ({
         {submissionsQuery.data.length} Submissions
       </h5>
 
-      <div className="grid grid-cols-4 font-bold border-b-4 mb-2">
-        <div>Date</div>
-        <div>Grade</div>
+      <div className={rowClasses + " font-bold border-b-4 mb-2"}>
+        <div className={dateColClasses}>Date</div>
+        <div className="text-center">Grade</div>
         <div>Submitted Braille</div>
       </div>
 
       {submissionsQuery.data.map((submission) => (
-        <div key={submission.id} className="grid grid-cols-8 my-2">
-          <div className="col-span-2">
+        <div key={submission.id} className={rowClasses}>
+          <div className="col-span-2 text-end  me-3">
             {printDate(submission.submittedDate)}
           </div>
-          <div className="">
+          <div className="text-center">
             {submission.grade || "-"} / {assignmentQuery.data.points}
           </div>
           <div className="col-span-5 whitespace-break-spaces break-words">

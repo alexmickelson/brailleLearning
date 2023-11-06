@@ -57,65 +57,73 @@ export const StudentAssignment: FC<{ assignmentId: string }> = ({
     }
   };
 
+  const allowSubmission = assignmentQuery.data.closedDate
+    ? assignmentQuery.data.closedDate > new Date()
+    : true;
+
   return (
     <div className="m-3">
       <h1 className="text-center">{assignmentQuery.data.name}</h1>
-      <div
-        className="
-          text-center
-          rounded-lg
-          m-5
-          p-2
-          bg-slate-200
-          border-slate-300
+
+      <SubmissionList assignmentId={assignmentId} />
+
+      {allowSubmission && (
+        <>
+          <hr />
+          <div
+            className="
+        text-center
+        rounded-lg
+        m-5
+        p-2
+        bg-slate-200
+        border-slate-300
 
           dark:bg-gray-700
           dark:border-gray-800
-        "
-      >
-        <div className="text-sm">Translate the Following Text:</div>
-        <div>
-          <strong>{assignmentQuery.data.text}</strong>
-        </div>
-      </div>
+          "
+          >
+            <div className="text-sm">Translate the Following Text:</div>
+            <div>
+              <strong>{assignmentQuery.data.text}</strong>
+            </div>
+          </div>
 
-      {assignmentQuery.data.type === AssignmentType.PRINT_TO_BRAILLE && (
-        <BrailleKeyboard updateBrail={setBrailInput} />
-      )}
-      {assignmentQuery.data.type === AssignmentType.BRAILLE_TO_PRINT && (
-        <>
-          <TextInputRow
-            label="Text Translation"
-            control={textControl}
-            isTextArea={true}
-          />
+          {assignmentQuery.data.type === AssignmentType.PRINT_TO_BRAILLE && (
+            <BrailleKeyboard updateBrail={setBrailInput} />
+          )}
+          {assignmentQuery.data.type === AssignmentType.BRAILLE_TO_PRINT && (
+            <>
+              <TextInputRow
+                label="Text Translation"
+                control={textControl}
+                isTextArea={true}
+              />
+            </>
+          )}
+
+          <div className="flex justify-center">
+            <button
+              onClick={submitAssignment}
+              disabled={
+                submissionMutation.isPending || submissionMutation.isSuccess
+              }
+            >
+              Submit
+            </button>
+          </div>
+
+          {assignmentQuery.data.showReferenceBraille && (
+            <>
+              <div>Reference: {assignmentQuery.data.referenceBraille}</div>
+            </>
+          )}
         </>
       )}
-
-      <div className="flex justify-center">
-        <button
-          onClick={submitAssignment}
-          disabled={
-            submissionMutation.isPending || submissionMutation.isSuccess
-          }
-        >
-          Submit
-        </button>
-      </div>
-
-      {assignmentQuery.data.showReferenceBraille && (
-        <>
-          <div>Reference: {assignmentQuery.data.referenceBraille}</div>
-        </>
-      )}
-
       <div className="flex justify-center">
         {submissionMutation.isPending && <Spinner />}
       </div>
       {autoGradeFeatureFlag && <Grade assignmentId={assignmentQuery.data.id} />}
-
-      <hr />
-      <SubmissionList assignmentId={assignmentId} />
     </div>
   );
 };

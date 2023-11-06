@@ -164,3 +164,12 @@ class AssignmentService:
         """
         params = {'username': username}
         return await self.run_sql(sql, params, output_class=Assignment)
+
+    async def get_past_assignments(self):
+        sql = """
+            select distinct a.*
+            from Assignment a
+            where now() > a.closed_date
+            order by a.closed_date asc
+        """
+        return await self.run_sql(sql, {}, output_class=Assignment)
