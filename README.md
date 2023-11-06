@@ -29,7 +29,8 @@ meeting questions:
 - [x] assignment total points
 - [x] null grade if not graded yet
 - [ ] show assignment as complete on homepage if there are submissions
-
+- [ ] get new account experience to throw no errors
+  - [ ] add a home page that explains wtf this is
 
 
 ## style requirements
