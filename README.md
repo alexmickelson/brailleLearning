@@ -31,7 +31,13 @@ meeting questions:
 - [ ] show assignment as complete on homepage if there are submissions
 - [ ] get new account experience to throw no errors
   - [ ] add a home page that explains wtf this is
+- [ ] grading submission - assignment takes the whole screen, prevous and next buttons
+- [ ] only grade the most recent submission
 
+multi-stage assignments:
+- [ ] braille a word "character", show an new word
+- [ ] show all the words, retry them before submitting
+- [ ] probably not mixing and matching braille to print and print to braille
 
 ## style requirements
 
@@ -44,6 +50,9 @@ meeting questions:
 - [ ] datetime labels need to all be the same size and indentation
 - [ ] light mode datepicker
 - [ ] focus input borders based on color scheme
+- [ ] reference braille on student assignment view looks bad
+- [ ] text to type on assignment detail needs to be bigger
+- [ ] style braille number keys to be bolder (numbers first, letters second)
 
 
 Hear

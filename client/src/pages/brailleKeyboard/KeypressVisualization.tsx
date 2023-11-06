@@ -80,8 +80,8 @@ const KeyVisualization: FC<{
         text-center ` + colorStyle
       }
     >
-      <div>{k}</div>
-      <div className={numberStyle}>{index && index}</div>
+      <div>{index && index}</div>
+      <div className={numberStyle}>{k}</div>
     </div>
   );
 };
