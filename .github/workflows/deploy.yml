@@ -10,11 +10,6 @@ env:
   REACT_APP_HOST: ${{ vars.REACT_APP_HOST }}
   POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
 jobs:
-  build:
-    runs-on: home-server
-    steps:
-      - name: checkout repo
-        uses: actions/checkout@v2
   deploy:
     runs-on: prod-server
     needs: [ build ]
