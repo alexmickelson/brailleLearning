@@ -54,6 +54,8 @@ function getMessageFromError(error: any) {
       : JSON.stringify(responseDetail);
   } else if (typeof error === "string") {
     return error;
+  } else if (typeof error.message === "string") {
+    return error.message;
   } else if (error.name === "AxiosError") {
     console.log(error);
     return error.response.data;

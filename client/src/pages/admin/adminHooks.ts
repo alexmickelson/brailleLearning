@@ -6,7 +6,7 @@ import { axiosClient } from "../../utils/axiosClient";
 const queryClient = getQueryClient();
 export const adminKeys = {
   allUsers: ["all users"] as const,
-  user: (userId: string) => ["all users", userId] as const,
+  user: (userSub: string) => ["all users", userSub] as const,
 };
 
 export const useAllUsersQuery = () =>
@@ -19,13 +19,13 @@ export const useAllUsersQuery = () =>
     },
   });
 
-export const useUserProfileQuery = (userId: string) => {
+export const useUserProfileQuery = (userSub: string) => {
   const allUsersQuery = useAllUsersQuery();
   const userQuery = useQuery({
-    queryKey: adminKeys.user(userId),
+    queryKey: adminKeys.user(userSub),
     queryFn: async () => {
-      const user = allUsersQuery.data?.find((u) => u.sub === userId);
-      if (!user) throw Error(`Could not find user with sub: ${userId}`);
+      const user = allUsersQuery.data?.find((u) => u.sub === userSub);
+      if (!user) throw Error(`Could not find user with sub: ${userSub}`);
       return user;
     },
     enabled: !!allUsersQuery.data,

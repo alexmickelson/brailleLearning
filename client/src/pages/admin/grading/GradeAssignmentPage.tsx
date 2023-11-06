@@ -2,7 +2,7 @@ import { FC } from "react";
 import { useParams } from "react-router-dom";
 import { useAssignmentDetailsQuery } from "../../../hooks/assignmentHooks";
 import { Spinner } from "../../../sharedComponents/Spinner";
-import { useOverrideGradeMutation, useSubmissionsQuery } from "./GradingHooks";
+import { useSubmissionsQuery } from "./GradingHooks";
 import { GradingSubmissionDetail } from "./GradingSubmissionDetail";
 
 export const GradeAssignmentPage = () => {
@@ -36,8 +36,14 @@ const WrappedGradeAssignmentPage: FC<{ assignmentId: string }> = ({
         <h5>Assignment Text:</h5>
         <div>{assignmentDetailsQuery.data.text}</div>
       </div>
-      <hr />
       <div>
+        <div className="mx-5 px-3 grid grid-cols-6 gap-3 justify-between">
+          <div>Submission Details</div>
+          <div className="col-span-3 ">Submitted Text</div>
+          <div>Grader</div>
+          <div>grade </div>
+        </div>
+        <hr />
         {submissionsQuery.data.map((s) => (
           <GradingSubmissionDetail key={s.id} submission={s} />
         ))}

@@ -1,12 +1,13 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { assignmentKeys } from "../../hooks/assignmentHooks";
 import { getQueryClient } from "../../services/queryClient";
 import { axiosClient } from "../../utils/axiosClient";
 import { Assignment } from "../../models/assignmentModel";
 
 const queryClient = getQueryClient();
 export const adminAssignmentKeys = {
-  allAssignments: ["all assignments"] as const,
+  allAssignments: ["assignments", "admin all assignments"] as const,
+  assignmentDetail: (assignmentId: string) =>
+    ["assignments", "admin assignment Detail", assignmentId] as const,
 };
 
 export const useCreateAssignmentMutation = () =>
@@ -16,56 +17,53 @@ export const useCreateAssignmentMutation = () =>
       await axiosClient.post(url, assignmentOptions);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: assignmentKeys.unCompleted });
-      queryClient.invalidateQueries({
-        queryKey: adminAssignmentKeys.allAssignments,
-      });
+      queryClient.invalidateQueries({ queryKey: ["assignments"] });
     },
   });
-  export const useDeleteAssignmentMutation = (assignmentId: string) =>
-    useMutation({
-      mutationFn: async () => {
-        const url = `/api/admin/assignments/${assignmentId}`;
-        await axiosClient.delete(url);
-      },
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: assignmentKeys.unCompleted });
-        queryClient.invalidateQueries({
-          queryKey: adminAssignmentKeys.allAssignments,
-        });
-        queryClient.invalidateQueries({
-          queryKey: assignmentKeys.assignmentDetail(assignmentId),
-        });
-      },
-    });
 
-  export const useUpdateAssignmentMutation = (assignmentId: string) =>
-    useMutation({
-      mutationFn: async (assignment: Assignment) => {
-        const url = `/api/admin/assignments/${assignmentId}`;
-        const body = {
-          ...assignment,
-          availableDate: assignment.availableDate?.toISOString(),
-          closedDate: assignment.closedDate?.toISOString(),
-        };
-        await axiosClient.put(url, body);
-      },
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: assignmentKeys.unCompleted });
-        queryClient.invalidateQueries({
-          queryKey: adminAssignmentKeys.allAssignments,
-        });
-        queryClient.invalidateQueries({
-          queryKey: assignmentKeys.assignmentDetail(assignmentId),
-        });
-      },
-    });
+export const useDeleteAssignmentMutation = (assignmentId: string) =>
+  useMutation({
+    mutationFn: async () => {
+      const url = `/api/admin/assignments/${assignmentId}`;
+      await axiosClient.delete(url);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["assignments"] });
+    },
+  });
 
-export const useAllAssignmentsQuery = () =>
+export const useUpdateAssignmentMutation = (assignmentId: string) =>
+  useMutation({
+    mutationFn: async (assignment: Assignment) => {
+      const url = `/api/admin/assignments/${assignmentId}`;
+      const body = {
+        ...assignment,
+        availableDate: assignment.availableDate?.toISOString(),
+        closedDate: assignment.closedDate?.toISOString(),
+      };
+      await axiosClient.put(url, body);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["assignments"] });
+    },
+  });
+
+export const useAdminAllAssignmentsQuery = () =>
   useQuery({
     queryKey: adminAssignmentKeys.allAssignments,
     queryFn: async (): Promise<Assignment[]> => {
       const url = `/api/admin/assignments/all`;
+      const response = await axiosClient.get(url);
+      return response.data;
+    },
+  });
+
+
+export const useAdminAssignmentDetailsQuery = (assignmentId: string) =>
+  useQuery({
+    queryKey: adminAssignmentKeys.assignmentDetail(assignmentId),
+    queryFn: async (): Promise<Assignment> => {
+      const url = `/api/assignments/details/${assignmentId}`;
       const response = await axiosClient.get(url);
       return response.data;
     },

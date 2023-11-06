@@ -1,23 +1,24 @@
-
 import { useNavigate } from "react-router-dom";
-import { useAvailableUncompletedAssignmentsQuery } from "../../../hooks/assignmentHooks";
 import { Spinner } from "../../../sharedComponents/Spinner";
+import { useAdminAllAssignmentsQuery } from "../adminAssignmentHooks";
 
 export const GradingPage = () => {
-  const assignmentsQuery = useAvailableUncompletedAssignmentsQuery();
+  const assignmentsQuery = useAdminAllAssignmentsQuery();
   const navigate = useNavigate();
   if (assignmentsQuery.isLoading) return <Spinner />;
   if (assignmentsQuery.isError) return <div>Error loading all assignments</div>;
   if (!assignmentsQuery.data)
     return <div>No assignment data (this should never display)</div>;
+
   return (
     <div>
+      <br />
       <h1 className="text-center">Grading</h1>
       <table className=" w-full text-left border-collapse">
         <thead className="border-b">
           <tr>
-            <th className="p-5">Name</th>
-            <th className="p-5">Text</th>
+            <th className="p-5">Assignment Name</th>
+            <th className="p-5">Assignment Text</th>
           </tr>
         </thead>
         <tbody className="">

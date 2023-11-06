@@ -11,7 +11,7 @@ import { printTime } from "../../../utils/timePrinter";
 export const GradingSubmissionDetail: FC<{ submission: Submission }> = ({
   submission,
 }) => {
-  const userProfileQuery = useUserProfileQuery(submission.userId);
+  const userProfileQuery = useUserProfileQuery(submission.userSub);
   const overrideGradeMutation = useOverrideGradeMutation(
     submission.id,
     submission.assignmentId
@@ -30,7 +30,7 @@ export const GradingSubmissionDetail: FC<{ submission: Submission }> = ({
   };
   return (
     <>
-      <div className="mx-5 px-3 grid grid-cols-4 gap-3 justify-between">
+      <div className="mx-5 px-3 grid grid-cols-6 gap-3 justify-between">
         <div className="my-auto">
           <div>{userProfileQuery.data.name}</div>
           <div className="italic text-sm">
@@ -38,7 +38,12 @@ export const GradingSubmissionDetail: FC<{ submission: Submission }> = ({
           </div>
           <div>{printTime(submission.secondsToComplete)}</div>
         </div>
-        <div className="col-span-2 my-auto whitespace-break-spaces break-words">{submission.submittedText}</div>
+        <div className="col-span-3 my-auto whitespace-break-spaces break-words">
+          {submission.submittedText}
+        </div>
+        <div className="my-auto">
+          {submission.gradedByUserName}
+        </div>
         <div className="justify-self-end my-auto">
           {overrideGradeMutation.isPending && <Spinner />}
           <form
@@ -50,7 +55,7 @@ export const GradingSubmissionDetail: FC<{ submission: Submission }> = ({
               saveNewGrade();
             }}
           >
-            <NumberInputRow label={"Grade"} control={newGradeControl} />
+            <NumberInputRow control={newGradeControl} />
           </form>
         </div>
       </div>

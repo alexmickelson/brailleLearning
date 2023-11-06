@@ -7,16 +7,16 @@ import { Submission } from "../models/submissionModel";
 const queryClient = getQueryClient();
 
 export const assignmentKeys = {
-  unCompleted: ["not completed assignments"] as const,
-  completed: ["completed assignments"] as const,
+  unCompleted: ["assignments", "not completed assignments"] as const,
+  completed: ["assignments", "completed assignments"] as const,
   assignmentDetail: (assignmentId: string) =>
-    ["assignmentDetail", assignmentId] as const,
+    ["assignments", "assignmentDetail", assignmentId] as const,
 
   grade: (assignmentId: string) =>
-    ["assignmentgradekey", assignmentId] as const,
+    ["assignments", "assignmentgradekey", assignmentId] as const,
 
   assignmentSubmissions: (assignmentId: string) => [
-    "assignmentSubmissions",
+    "assignments", "assignmentSubmissions",
     assignmentId,
   ],
 };

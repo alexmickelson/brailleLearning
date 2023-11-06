@@ -40,24 +40,15 @@ async def submit_assignment(
 ):
     # translated_brail_submission = braille_service.braille_to_text(body.braille)
     # grade = 100.0 if translated_brail_submission == assignment.text else 0.0
-    assignment = await assignment_service.get_assignment(assignment_id)
+    assignment = await assignment_service.get_assignment(assignment_id) # validation
 
     await submissions_service.submit_assignment(
-        user_id=profile.sub,
+        user_sub=profile.sub,
         assignment_id=assignment_id,
         submission_string=body.submission_string,
         seconds_to_complete=body.seconds_to_complete,
         grade=None,
     )
-
-    # if translated_brail_submission == assignment.text:
-    #     return {"correctly_translated": True}
-    # else:
-    #     return {
-    #         "correctly_translated": False,
-    #         "actual_translation": translated_brail_submission,
-    #     }
-
 
 class GradeOverrideBody(BaseModel):
     grade: float
@@ -70,4 +61,6 @@ async def admin_override_grade(
     user: UserProfile = Depends(authorize_admin),
     submissions_service: SubmissionsService = Depends(),
 ):
-    await submissions_service.override_grade(submission_id, body.grade)
+    await submissions_service.override_grade(
+        submission_id=submission_id, grade=body.grade, grader_sub=user.sub
+    )

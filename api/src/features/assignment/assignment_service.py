@@ -142,10 +142,9 @@ class AssignmentService:
         sql = """
             select a.*
             from Assignment a
-            left outer join submission s on s.assignment_id = a.id
+            left outer join submission s on s.assignment_id = a.id and s.user_sub = %(username)s
             where now() < a.closed_date
                 and now() > a.available_date
-                and s.user_id = %(username)s
                 and s.id is null
             order by a.closed_date asc
         """
@@ -159,7 +158,7 @@ class AssignmentService:
             left outer join submission s on s.assignment_id = a.id
             where now() < a.closed_date
                 and now() > a.available_date
-                and s.user_id = %(username)s
+                and s.user_sub = %(username)s
                 and s.id is not null
             order by a.closed_date asc
         """

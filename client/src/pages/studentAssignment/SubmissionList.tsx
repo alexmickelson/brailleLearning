@@ -24,6 +24,8 @@ export const SubmissionList: FC<{ assignmentId: string }> = ({
   if (!assignmentQuery.data)
     return <div>Error, no data for assignment details</div>;
 
+  if (submissionsQuery.data.length === 0) return <div></div>;
+  
   return (
     <div className="p-5">
       <h5 className="text-center">
@@ -42,9 +44,11 @@ export const SubmissionList: FC<{ assignmentId: string }> = ({
             {printDate(submission.submittedDate)}
           </div>
           <div className="">
-            {submission.grade || '-'} / {assignmentQuery.data.points}
+            {submission.grade || "-"} / {assignmentQuery.data.points}
           </div>
-          <div className="col-span-5 whitespace-break-spaces break-words">{submission.submittedText}</div>
+          <div className="col-span-5 whitespace-break-spaces break-words">
+            {submission.submittedText}
+          </div>
         </div>
       ))}
     </div>

@@ -1,9 +1,10 @@
 export interface Submission {
   id: string;
   assignmentId: string;
-  userId: string;
+  userSub: string;
   grade: number;
   secondsToComplete: number;
   submittedText?: string;
   submittedDate: Date;
+  gradedByUserName?: string;
 }

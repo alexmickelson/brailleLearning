@@ -4,10 +4,10 @@ import { AssignmentCard } from "./AssignmentCard";
 import { ManageAssignment } from "../ManageAssignment";
 import { GoArrowLeft } from "react-icons/go";
 import { NewAssignment } from "../NewAssignment";
-import { useAllAssignmentsQuery } from "../../adminAssignmentHooks";
+import { useAdminAllAssignmentsQuery } from "../../adminAssignmentHooks";
 
 export const AdminAssignments = () => {
-  const assignmentsQuery = useAllAssignmentsQuery();
+  const assignmentsQuery = useAdminAllAssignmentsQuery();
   const [selectedAssignmentId, setSelectedAssignmentId] = useState<string>();
 
   if (assignmentsQuery.isLoading) return <Spinner />;

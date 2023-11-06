@@ -120,3 +120,12 @@ async def get_all_assignments(
     assignment_service: AssignmentService = Depends(),
 ):
     return await assignment_service.get_all_assignments()
+
+
+@router.get("/details/{assignment_id}")
+async def get_assignment_details(
+    assignment_id: UUID,
+    assignment_service: AssignmentService = Depends(),
+):
+    assignment = await assignment_service.get_assignment(assignment_id)
+    return assignment

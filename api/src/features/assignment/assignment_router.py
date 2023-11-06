@@ -20,6 +20,7 @@ async def get_assignment_by_id(
     assignment_id: UUID,
     assignment_service: AssignmentService = Depends(),
 ):
+    # todo: make sure authorized
     assignment = await assignment_service.get_assignment(assignment_id)
     return assignment
 

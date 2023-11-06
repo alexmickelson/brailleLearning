@@ -2,7 +2,7 @@ import { FC } from "react";
 import { NumberInputControl } from "./useNumberInput";
 
 interface Props {
-  label: string;
+  label?: string;
   control: NumberInputControl;
   displayLabel?: boolean;
   autoFocus?: boolean;
@@ -16,7 +16,7 @@ export const NumberInputRow: FC<Props> = ({
 }) => {
   const salt = Math.random();
 
-  const computedLabel = label.toLowerCase().replace(" ", "") + salt;
+  const computedLabel = label?.toLowerCase().replace(" ", "") ?? "blanklabel" + salt;
   const labelClasses = `
     mb-2 
     text-sm 
@@ -38,7 +38,7 @@ export const NumberInputRow: FC<Props> = ({
 
   return (
     <div className="mt-3">
-      {displayLabel && (
+      {displayLabel && label && (
         <div className={labelClasses}>
           <label htmlFor={computedLabel} className="col-form-label">
             {label}:
