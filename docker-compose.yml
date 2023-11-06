@@ -18,9 +18,9 @@ services:
     build: 
       context: client/
       args:
-        - REACT_APP_CLIENT_ID=${REACT_APP_CLIENT_ID}
-        - REACT_APP_AUTHORITY=${REACT_APP_AUTHORITY}
-        - REACT_APP_HOST=${REACT_APP_HOST}
+        - VITE_CLIENT_ID=${VITE_CLIENT_ID}
+        - VITE_AUTHORITY=${VITE_AUTHORITY}
+        - VITE_HOST=${VITE_HOST}
     image: server.alexmickelson.guru:5000/braille_client
     container_name: braille_client
     restart: always

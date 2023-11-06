@@ -4,6 +4,9 @@ meeting questions:
 1. can you read the space typed in the braille?
 2. late work, allow submissions past due date?
   - if not, what happens if you do not complete a prereq  
+3. do we need to have a published flag on assignments? the alternative is to just put them in the future
+  - should start and end dates be required?
+4. how paranoid are we about archiving? if we reset for a semester do we need to keep old submissions?
 
 ## notes
 
