@@ -67,16 +67,16 @@ export const brailleToText = (braille: string): string => {
 };
 
 const splitOutNextBrailleCharacter = (braille: string) => {
-  const brailleThreeCharacters = Object.keys(textLookup).filter(
-    (k) => k.length === 3
-  );
+  // const brailleThreeCharacters = Object.keys(textLookup).filter(
+  //   (k) => k.length === 3
+  // );
   
   const brailleTwoCharacters = Object.keys(textLookup).filter(
     (k) => k.length === 2
   );
-  const brailleOneCharacters = Object.keys(textLookup).filter(
-    (k) => k.length === 1
-  );
+  // const brailleOneCharacters = Object.keys(textLookup).filter(
+  //   (k) => k.length === 1
+  // );
 
   const isTwoCharacterBraille =
     braille.length > 1 &&
