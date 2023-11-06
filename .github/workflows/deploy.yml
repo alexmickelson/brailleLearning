@@ -12,7 +12,6 @@ env:
 jobs:
   deploy:
     runs-on: prod-server
-    needs: [ build ]
     steps:
       - name: checkout repo
         uses: actions/checkout@v2
