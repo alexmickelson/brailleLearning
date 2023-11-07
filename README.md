@@ -18,7 +18,7 @@ meeting questions:
   - [x] braille to print assignmets
   - [x] print to braille assignments
 - [ ] admin / teacher
-  - [x] grade assignments (opportunity for teacher to override)
+  - [x] grade assignments ( opportunity for teacher to override )
   - [ ] auto grade with multiple correct answers
   - [x] just the due datetime
   - [x] track time to complete
@@ -33,6 +33,9 @@ meeting questions:
   - [ ] add a home page that explains wtf this is
 - [ ] grading submission - assignment takes the whole screen, prevous and next buttons
 - [ ] only grade the most recent submission
+- [ ] duplicate spaces in braille to make them more obvious
+- [ ] show assignments that will be available once prerequs met "Course Assignments"
+
 
 multi-stage assignments:
 - [ ] braille a word "character", show an new word
@@ -52,7 +55,7 @@ multi-stage assignments:
 - [ ] focus input borders based on color scheme
 - [ ] reference braille on student assignment view looks bad
 - [ ] text to type on assignment detail needs to be bigger
-- [ ] style braille number keys to be bolder (numbers first, letters second)
+- [ ] style braille number keys to be bolder rather than the letters (numbers first, letters second)
 
 
 Hear
@@ -70,3 +73,10 @@ not: wea - th - er
 - grade 1 is just letters, grade 2 is where non alphabetic characters happen
 
 https://iceb.org/Rules%20of%20Unified%20English%20Braille%202013.pdf
+
+
+nov 27th: features done
+
+dec 11th: ship the code
+
+sem start jan: 8
