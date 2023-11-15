@@ -1,7 +1,8 @@
 from datetime import datetime
-from typing import Optional, Type
+from typing import List, Optional, Type
 from uuid import UUID
 from fastapi import Depends
+from pydantic import BaseModel
 from src.features.assignment.assignment_models import Assignment, AssignmentType
 from src.services.db_service import RunSql
 
@@ -121,41 +122,49 @@ class AssignmentService:
 
     async def get_assignment(self, id: UUID):
         sql = """
-            select *
-            from Assignment
+            select 
+                a.*, prereq_assignment_id
+            from Assignment a
+                inner join AssignmentPrerequisite as on a.id = as.assignment_id
             where id = %(id)s
         """
         params = {"id": id}
-        assignments = await self.run_sql(sql, params, output_class=Assignment)
+        assignments = await self.run_sql(sql, params, output_class=AssignmentDBO)
         # print("assignments", assignments)
         return assignments[0]
 
     async def get_all_assignments(self):
         sql = """
-            select *
-            from Assignment
+            select
+                a.*, prereq_assignment_id
+            from Assignment a
+                inner join AssignmentPrerequisite as on a.id = as.assignment_id
             order by closed_date asc
         """
-        return await self.run_sql(sql, {}, output_class=Assignment)
+        return await self.run_sql(sql, {}, output_class=AssignmentDBO)
 
     async def get_uncompleted_assignments(self, username: str):
         sql = """
-            select a.*
+            select
+                a.*, prereq_assignment_id
             from Assignment a
-            left outer join submission s on s.assignment_id = a.id and s.user_sub = %(username)s
+                inner join AssignmentPrerequisite as on a.id = as.assignment_id
+                left outer join submission s on s.assignment_id = a.id and s.user_sub = %(username)s
             where now() < a.closed_date
                 and now() > a.available_date
                 and s.id is null
             order by a.closed_date asc
         """
         params = {'username': username}
-        return await self.run_sql(sql, params, output_class=Assignment)
+        return await self.run_sql(sql, params, output_class=AssignmentDBO)
 
     async def get_completed_assignments(self, username: str):
         sql = """
-            select distinct a.*
+            select distinct
+                a.*, prereq_assignment_id
             from Assignment a
-            left outer join submission s on s.assignment_id = a.id
+                inner join AssignmentPrerequisite as on a.id = as.assignment_id
+                left outer join submission s on s.assignment_id = a.id
             where now() < a.closed_date
                 and now() > a.available_date
                 and s.user_sub = %(username)s
@@ -163,13 +172,49 @@ class AssignmentService:
             order by a.closed_date asc
         """
         params = {'username': username}
-        return await self.run_sql(sql, params, output_class=Assignment)
+        return await self.run_sql(sql, params, output_class=AssignmentDBO)
 
     async def get_past_assignments(self):
         sql = """
-            select distinct a.*
+            select distinct
+                a.*, prereq_assignment_id
             from Assignment a
+                inner join AssignmentPrerequisite as on a.id = as.assignment_id
             where now() > a.closed_date
             order by a.closed_date asc
         """
-        return await self.run_sql(sql, {}, output_class=Assignment)
+        return await self.run_sql(sql, {}, output_class=AssignmentDBO)
+    
+    def parse_assignments_from_dbo(self, assignment_dbos: List[AssignmentDBO]):
+        assignment_list = []
+        for dbo in assignment_dbos:
+            assignment = Assignment(
+                id=dbo.id,
+                name=dbo.name,
+                text=dbo.text,
+                points=dbo.points,
+                show_reference_braille=dbo.show_reference_braille,
+                reference_braille=dbo.reference_braille,
+                show_live_preview=dbo.show_live_preview,
+                available_date=dbo.available_date,
+                closed_date=dbo.closed_date,
+                type=dbo.type,
+                prereq_assignment_ids=[dbo.prereq_assignment_id] if dbo.prereq_assignment_id else []
+            )
+            assignment_list.append(assignment)
+        return assignment_list
+
+
+class AssignmentDBO(BaseModel):
+    id: UUID
+    name: str
+    text: str
+    points: int
+    show_reference_braille: bool
+    reference_braille: Optional[str]
+    show_live_preview: bool
+    available_date: Optional[datetime]
+    closed_date: Optional[datetime]
+    type: AssignmentType
+
+    prereq_assignment_id: Optional[UUID]

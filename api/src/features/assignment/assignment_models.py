@@ -1,6 +1,6 @@
 from datetime import datetime
 from enum import Enum
-from typing import Optional
+from typing import List, Optional
 from uuid import UUID
 from pydantic import BaseModel
 
@@ -21,3 +21,5 @@ class Assignment(BaseModel):
     available_date: Optional[datetime]
     closed_date: Optional[datetime]
     type: AssignmentType
+
+    prereq_assignment_ids: List[UUID]

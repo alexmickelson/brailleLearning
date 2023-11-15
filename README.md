@@ -30,14 +30,14 @@ meeting questions:
 - [x] null grade if not graded yet
 - [ ] show assignment as complete on homepage if there are submissions as a student
 
-- [ ] duplicate spaces in braille to make them more obvious
 - [ ] show assignments that will be available once prerequs met "Course Assignments"
 - [ ] get new account experience to throw no errors
   - [ ] add a home page that explains wtf this is
+- [ ] duplicate spaces in braille to make them more obvious
 
 grading:
-- [ ] grading submission - assignment takes the whole screen, prevous and next buttons
-- [ ] only grade the most recent submission
+- [x] grading submission - assignment takes the whole screen, prevous and next buttons
+- [x] only grade the most recent submission
 
 multi-stage assignments:
 - [ ] braille a word "character", show an new word
