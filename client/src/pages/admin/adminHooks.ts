@@ -24,9 +24,12 @@ export const useUserProfileQuery = (userSub: string) => {
   const userQuery = useQuery({
     queryKey: adminKeys.user(userSub),
     queryFn: async () => {
-      const user = allUsersQuery.data?.find((u) => u.sub === userSub);
-      if (!user) throw Error(`Could not find user with sub: ${userSub}`);
-      return user;
+      const users = allUsersQuery.data?.find((u) => u.sub === userSub);
+      if (!users) {
+        console.log(allUsersQuery.data);
+        throw Error(`Could not find user with sub: ${userSub}`);
+      }
+      return users;
     },
     enabled: !!allUsersQuery.data,
   });

@@ -1,29 +1,22 @@
 import { FC } from "react";
-import { Submission } from "../../../models/submissionModel";
-import { Spinner } from "../../../sharedComponents/Spinner";
-import { printDate } from "../../../utils/datePrinter";
-import { useUserProfileQuery } from "../adminHooks";
 import { useOverrideGradeMutation } from "./GradingHooks";
-import { useNumberInput } from "../../../sharedComponents/forms/number/useNumberInput";
-import { NumberInputRow } from "../../../sharedComponents/forms/number/NumberInputRow";
-import { printTime } from "../../../utils/timePrinter";
+import { Submission } from "../../../models/submissionModel";
 import { Assignment } from "../../../models/assignmentModel";
+import { NumberInputRow } from "../../../sharedComponents/forms/number/NumberInputRow";
+import { Spinner } from "../../../sharedComponents/Spinner";
+import { useNumberInput } from "../../../sharedComponents/forms/number/useNumberInput";
+import { printDate } from "../../../utils/datePrinter";
+import { printTime } from "../../../utils/timePrinter";
 
-export const GradingSubmissionDetail: FC<{ submission: Submission, assignment: Assignment }> = ({
-  submission,
-  assignment,
-}) => {
-  const userProfileQuery = useUserProfileQuery(submission.userSub);
+export const SubmissionGradingDetail: FC<{
+  submission: Submission;
+  assignment: Assignment;
+}> = ({ submission, assignment }) => {
   const overrideGradeMutation = useOverrideGradeMutation(
     submission.id,
     submission.assignmentId
   );
   const newGradeControl = useNumberInput(submission.grade);
-
-  if (userProfileQuery.isLoading) return <Spinner />;
-  if (userProfileQuery.isError) return <div>Error loading user profile</div>;
-  if (!userProfileQuery.data) return <div>No user profile data</div>;
-
   const saveNewGrade = () => {
     if (newGradeControl.value) {
       const newGradeFloat = newGradeControl.value;
@@ -34,7 +27,7 @@ export const GradingSubmissionDetail: FC<{ submission: Submission, assignment: A
     <>
       <div className="mx-5 px-3 grid grid-cols-6 gap-3 justify-between">
         <div className="my-auto">
-          <div>{userProfileQuery.data.name}</div>
+
           <div className="italic text-sm">
             {printDate(submission.submittedDate)}
           </div>
@@ -57,11 +50,12 @@ export const GradingSubmissionDetail: FC<{ submission: Submission, assignment: A
             className="flex"
           >
             <NumberInputRow control={newGradeControl} />
-            <div className="my-auto ms-2 pt-2 text-2xl">/{assignment.points}</div>
+            <div className="my-auto ms-2 pt-2 text-2xl">
+              /{assignment.points}
+            </div>
           </form>
         </div>
       </div>
-      <hr />
     </>
   );
 };

@@ -15,14 +15,21 @@ router = APIRouter(
 )
 
 
-@router.get("/{assignment_id}/all")
+@router.get("/admin/{assignment_id}/all")
 async def get_assignment_submissions(
     assignment_id: UUID,
     submissions_service: SubmissionsService = Depends(),
 ):
-    return await submissions_service.get_all_students_submissions_for_assignment(
-        assignment_id
+    submissions_list = (
+        await submissions_service.get_all_students_submissions_for_assignment(
+            assignment_id
+        )
     )
+    submissions_by_student = [
+        {"sub": student, "submissions":  [sub for sub in submissions_list if sub.user_sub == student]}
+        for student in set(sub.user_sub for sub in submissions_list)
+    ]
+    return submissions_by_student
 
 
 class AssignmentSubmission(BaseModel):
@@ -40,7 +47,7 @@ async def submit_assignment(
 ):
     # translated_brail_submission = braille_service.braille_to_text(body.braille)
     # grade = 100.0 if translated_brail_submission == assignment.text else 0.0
-    assignment = await assignment_service.get_assignment(assignment_id) # validation
+    assignment = await assignment_service.get_assignment(assignment_id)  # validation
 
     await submissions_service.submit_assignment(
         user_sub=profile.sub,
@@ -49,6 +56,7 @@ async def submit_assignment(
         seconds_to_complete=body.seconds_to_complete,
         grade=None,
     )
+
 
 class GradeOverrideBody(BaseModel):
     grade: float

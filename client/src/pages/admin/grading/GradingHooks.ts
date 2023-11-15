@@ -10,12 +10,17 @@ export const gradingKeys = {
     ["all submissions key", assignmentId] as const,
 };
 
-export const useSubmissionsQuery = (assignmentId: string) =>
+export interface StudentAndSubmissions {
+  sub: string;
+  submissions: Submission[];
+}
+
+export const useAdminSubmissionsQuery = (assignmentId: string) =>
   useQuery({
     queryKey: gradingKeys.submissions(assignmentId),
     queryFn: async () => {
-      const url = `/api/submissions/${assignmentId}/all`;
-      const response = await axiosClient.get<Submission[]>(url);
+      const url = `/api/submissions/admin/${assignmentId}/all`;
+      const response = await axiosClient.get<StudentAndSubmissions[]>(url);
       return response.data;
     },
   });
@@ -31,5 +36,7 @@ export const useOverrideGradeMutation = (
       await axios.put(url, body);
     },
     onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: gradingKeys.submissions(assignmentId)}),
+      queryClient.invalidateQueries({
+        queryKey: gradingKeys.submissions(assignmentId),
+      }),
   });

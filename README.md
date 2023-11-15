@@ -28,14 +28,16 @@ meeting questions:
 
 - [x] assignment total points
 - [x] null grade if not graded yet
-- [ ] show assignment as complete on homepage if there are submissions
-- [ ] get new account experience to throw no errors
-  - [ ] add a home page that explains wtf this is
-- [ ] grading submission - assignment takes the whole screen, prevous and next buttons
-- [ ] only grade the most recent submission
+- [ ] show assignment as complete on homepage if there are submissions as a student
+
 - [ ] duplicate spaces in braille to make them more obvious
 - [ ] show assignments that will be available once prerequs met "Course Assignments"
+- [ ] get new account experience to throw no errors
+  - [ ] add a home page that explains wtf this is
 
+grading:
+- [ ] grading submission - assignment takes the whole screen, prevous and next buttons
+- [ ] only grade the most recent submission
 
 multi-stage assignments:
 - [ ] braille a word "character", show an new word
@@ -71,7 +73,7 @@ not: wea - th - er
 - some shortform words can be used as parts of words
   - can be followed by "'s"
 - grade 1 is just letters, grade 2 is where non alphabetic characters happen
-
+``
 https://iceb.org/Rules%20of%20Unified%20English%20Braille%202013.pdf
 
 
