@@ -6,7 +6,7 @@ import {
   StudentAndSubmissions,
   useAdminSubmissionsQuery,
 } from "./GradingHooks";
-import { GradingSubmissionDetail } from "./GradingStudentSubmissionDetail";
+import { GradingStudentSubmissions } from "./GradingStudentSubmissions";
 
 export const GradeAssignmentPage = () => {
   const { assignmentId } = useParams();
@@ -17,16 +17,16 @@ export const GradeAssignmentPage = () => {
 const WrappedGradeAssignmentPage: FC<{ assignmentId: string }> = ({
   assignmentId,
 }) => {
-  const [selectedStudentSub, setSelectedStudentSub] =
+  const [selectedStudent, setSelectedStudent] =
     useState<StudentAndSubmissions>();
   const assignmentDetailsQuery = useAssignmentDetailsQuery(assignmentId);
   const submissionsQuery = useAdminSubmissionsQuery(assignmentId);
 
   useEffect(() => {
-    if (!selectedStudentSub && submissionsQuery.data?.length) {
-      setSelectedStudentSub(submissionsQuery.data[0]);
+    if (!selectedStudent && submissionsQuery.data?.length) {
+      setSelectedStudent(submissionsQuery.data[0]);
     }
-  }, [selectedStudentSub, submissionsQuery.data]);
+  }, [selectedStudent, submissionsQuery.data]);
 
   if (assignmentDetailsQuery.isLoading) return <Spinner />;
   if (assignmentDetailsQuery.isError)
@@ -40,19 +40,19 @@ const WrappedGradeAssignmentPage: FC<{ assignmentId: string }> = ({
 
   const handleNext = () => {
     const currentIndex = submissionsQuery.data.findIndex(
-      (s) => s.sub === selectedStudentSub?.sub
+      (s) => s.sub === selectedStudent?.sub
     );
     if (currentIndex === submissionsQuery.data.length) return;
 
-    setSelectedStudentSub(submissionsQuery.data[currentIndex + 1]);
+    setSelectedStudent(submissionsQuery.data[currentIndex + 1]);
   };
   const handlePrevious = () => {
     const currentIndex = submissionsQuery.data.findIndex(
-      (s) => s.sub === selectedStudentSub?.sub
+      (s) => s.sub === selectedStudent?.sub
     );
     if (currentIndex === 0) return;
 
-    setSelectedStudentSub(submissionsQuery.data[currentIndex - 1]);
+    setSelectedStudent(submissionsQuery.data[currentIndex - 1]);
   };
 
   return (
@@ -71,11 +71,12 @@ const WrappedGradeAssignmentPage: FC<{ assignmentId: string }> = ({
           Next
         </button>
       </div>
-      {selectedStudentSub && (
-        <GradingSubmissionDetail
-          submissions={selectedStudentSub.submissions}
+      {selectedStudent && (
+        <GradingStudentSubmissions
+          key={selectedStudent.sub}
+          submissions={selectedStudent.submissions}
           assignment={assignmentDetailsQuery.data}
-          studentSub={selectedStudentSub.sub}
+          studentSub={selectedStudent.sub}
         />
       )}
     </div>

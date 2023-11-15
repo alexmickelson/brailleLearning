@@ -5,7 +5,6 @@ import { Assignment } from "../../../models/assignmentModel";
 import { NumberInputRow } from "../../../sharedComponents/forms/number/NumberInputRow";
 import { Spinner } from "../../../sharedComponents/Spinner";
 import { useNumberInput } from "../../../sharedComponents/forms/number/useNumberInput";
-import { printDate } from "../../../utils/datePrinter";
 import { printTime } from "../../../utils/timePrinter";
 
 export const SubmissionGradingDetail: FC<{
@@ -25,18 +24,12 @@ export const SubmissionGradingDetail: FC<{
   };
   return (
     <>
-      <div className="mx-5 px-3 grid grid-cols-6 gap-3 justify-between">
-        <div className="my-auto">
-
-          <div className="italic text-sm">
-            {printDate(submission.submittedDate)}
-          </div>
-          <div>{printTime(submission.secondsToComplete)}</div>
-        </div>
+      <div className="mx-5 px-3 flex flex-row justify-between">
+        <div>Time to Complete: {printTime(submission.secondsToComplete)}</div>
         <div className="col-span-3 my-auto whitespace-break-spaces break-words">
           {submission.submittedText}
         </div>
-        <div className="my-auto">{submission.gradedByUserName}</div>
+        
         <div className="justify-self-end my-auto">
           {overrideGradeMutation.isPending && <Spinner />}
           <form
@@ -54,6 +47,7 @@ export const SubmissionGradingDetail: FC<{
               /{assignment.points}
             </div>
           </form>
+          <div className="my-auto">Graded by: {submission.gradedByUserName}</div>
         </div>
       </div>
     </>
