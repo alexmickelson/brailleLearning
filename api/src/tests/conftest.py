@@ -37,7 +37,7 @@ def create_assignment(
         "show_print_feed": False,
         "type": AssignmentType.PRINT_TO_BRAILLE,
     }
-    url = "/api/assignments/new"
+    url = "/api/admin/assignments/new"
 
     user = UserProfile(sub="", name="", is_admin=True)
     with admin_client(user):
