@@ -1,4 +1,5 @@
 import logging
+from pprint import pprint
 from fastapi import FastAPI, APIRouter, HTTPException, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
@@ -19,7 +20,7 @@ logger = logging.getLogger(__name__)
 async def validation_exception_handler(
     request: Request, exception: RequestValidationError
 ):
-    logger.error(f"Validation Error with: {request.url} {exception}")
+    logger.error(f"Validation Error with: {request.method} {request.url} {exception}")
     content = jsonable_encoder({"detail": exception.errors(), "body": exception.body})
     return JSONResponse(status_code=422, content=content)
 

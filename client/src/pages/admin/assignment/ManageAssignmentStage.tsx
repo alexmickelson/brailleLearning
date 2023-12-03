@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import {
   Assignment,
   AssignmentStage,
@@ -19,7 +19,7 @@ export const ManageAssignmentStage: FC<{
   stage: AssignmentStage;
   updateStage: (s: AssignmentStage) => void;
   removeStage: () => void;
-}> = ({ assignment, stage , removeStage}) => {
+}> = ({ stage, removeStage, updateStage }) => {
   const textControl = useTextInput(stage.text);
 
   const typeToText = (i: AssignmentType) =>
@@ -28,7 +28,7 @@ export const ManageAssignmentStage: FC<{
       : "Braille to Print";
 
   const typeControl = useRadioInput({
-    initialValue: assignment.type,
+    initialValue: stage.type,
     options: [AssignmentType.PRINT_TO_BRAILLE, AssignmentType.BRAILLE_TO_PRINT],
     getKey: typeToText,
     required: true,
@@ -39,8 +39,33 @@ export const ManageAssignmentStage: FC<{
   const showReferenceBrailleControl = useCheckInput(stage.showReferenceBraille);
   const [referenceBrailleInput, setReferenceBrailleInput] = useState("");
 
+  useEffect(() => {
+    const newStage: AssignmentStage = {
+      id: stage.id,
+      assignmentId: stage.assignmentId,
+      text: textControl.value,
+      points: pointsControl.value,
+      showLivePreview: livePreviewControl.value,
+      showReferenceBraille: showReferenceBrailleControl.value,
+      referenceBraille: referenceBrailleInput,
+      type: typeControl.value ?? AssignmentType.PRINT_TO_BRAILLE,
+    };
+    updateStage(newStage);
+  }, [
+    livePreviewControl.value,
+    pointsControl.value,
+    referenceBrailleInput,
+    showReferenceBrailleControl.value,
+    stage.id,
+    stage.assignmentId,
+    textControl.value,
+    updateStage,
+    typeControl.value,
+  ]);
+
   return (
-    <div className="
+    <div
+      className="
         p-5 
         m-3
         rounded-lg

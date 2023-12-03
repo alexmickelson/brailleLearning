@@ -5,6 +5,7 @@ RUN apt update \
     nodejs \
     npm \
     git \
+    cargo \
   && npm install -g n \
   && n 18 \
   && apt-get clean

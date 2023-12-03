@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getQueryClient } from "../../services/queryClient";
 import { axiosClient } from "../../utils/axiosClient";
-import { Assignment } from "../../models/assignmentModel";
+import { Assignment, AssignmentStage } from "../../models/assignmentModel";
 
 const queryClient = getQueryClient();
 export const adminAssignmentKeys = {
@@ -50,9 +50,10 @@ export const useUpdateAssignmentMutation = (assignmentId: string) =>
 
 export const useAddStageMutation = (assignmentId: string) => 
 useMutation({
-  mutationFn: async () => {
+  mutationFn: async (): Promise<AssignmentStage> => {
     const url = `/api/admin/assignments/${assignmentId}/stage`;
-    await axiosClient.post(url);
+    const response = await axiosClient.post(url);
+    return response.data
   },
   onSuccess: () => {
     queryClient.invalidateQueries({ queryKey: ["assignments"] });

@@ -49,7 +49,7 @@ class AssignmentService:
         result = await self.run_sql(sql, params, output_class=Assignment)
         return result[0]
 
-    async def create_stage(self, assignment_id: UUID):
+    async def create_stage(self, assignment_id: UUID, stage_index: int):
         sql = """
             insert into AssignmentStage
                 (
@@ -58,7 +58,8 @@ class AssignmentService:
                     points,
                     type,
                     show_live_preview,
-                    show_reference_braille
+                    show_reference_braille,
+                    index,
                 )
             values
                 (
@@ -67,8 +68,18 @@ class AssignmentService:
                     %(points)s,
                     %(type)s,
                     %(show_live_preview)s,
-                    %(show_reference_braille)s
+                    %(show_reference_braille)s,
+                    %(index)s
                 )
+            returning 
+                id,
+                text,
+                points,
+                show_reference_braille,
+                reference_braille,
+                show_live_preview,
+                type,
+                index
         """
         params = {
             "assignment_id": assignment_id,
@@ -77,8 +88,10 @@ class AssignmentService:
             "type": AssignmentType.BRAILLE_TO_PRINT,
             "show_live_preview": False,
             "show_reference_braille": False,
+            "index": stage_index,
         }
-        await self.run_sql(sql, params)
+        result = await self.run_sql(sql, params, output_class=AssignmentStage)
+        return result[0]
 
     async def update_assignment(
         self,
@@ -118,7 +131,8 @@ class AssignmentService:
                 show_reference_braille = %(show_reference_braille)s,
                 reference_braille = %(reference_braille)s,
                 show_live_preview = %(show_live_preview)s,
-                type = %(type)s
+                type = %(type)s,
+                index = %(index)s
             where id = %(id)s
         """
         params = {
@@ -129,6 +143,7 @@ class AssignmentService:
             "show_live_preview": stage.show_live_preview,
             "type": stage.type,
             "id": stage.id,
+            "index": stage.index,
         }
         await self.run_sql(sql, params)
 
@@ -155,7 +170,8 @@ class AssignmentService:
                             'show_reference_braille', astg.show_reference_braille,
                             'show_live_preview', astg.show_live_preview,
                             'reference_braille', astg.reference_braille,
-                            'type', astg.type
+                            'type', astg.type,
+                            'index', astg.index
                         )
                     )
                     FILTER (WHERE astg.assignment_id IS NOT NULL), '[]'
@@ -189,7 +205,8 @@ class AssignmentService:
                             'show_reference_braille', astg.show_reference_braille,
                             'show_live_preview', astg.show_live_preview,
                             'reference_braille', astg.reference_braille,
-                            'type', astg.type
+                            'type', astg.type,
+                            'index', astg.index
                         )
                     )
                     FILTER (WHERE astg.assignment_id IS NOT NULL), '[]'
@@ -220,7 +237,8 @@ class AssignmentService:
                             'show_reference_braille', astg.show_reference_braille,
                             'show_live_preview', astg.show_live_preview,
                             'reference_braille', astg.reference_braille,
-                            'type', astg.type
+                            'type', astg.type,
+                            'index', astg.index
                         )
                     )
                     FILTER (WHERE astg.assignment_id IS NOT NULL), '[]'
@@ -256,7 +274,8 @@ class AssignmentService:
                             'show_reference_braille', astg.show_reference_braille,
                             'show_live_preview', astg.show_live_preview,
                             'reference_braille', astg.reference_braille,
-                            'type', astg.type
+                            'type', astg.type,
+                            'index', astg.index
                         )
                     )
                     FILTER (WHERE astg.assignment_id IS NOT NULL), '[]'
@@ -293,7 +312,8 @@ class AssignmentService:
                             'show_reference_braille', astg.show_reference_braille,
                             'show_live_preview', astg.show_live_preview,
                             'reference_braille', astg.reference_braille,
-                            'type', astg.type
+                            'type', astg.type,
+                            'index', astg.index
                         )
                     )
                     FILTER (WHERE astg.assignment_id IS NOT NULL), '[]'

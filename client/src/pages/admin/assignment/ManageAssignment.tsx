@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useCallback, useState } from "react";
 import {
   Assignment,
   AssignmentStage,
@@ -33,6 +33,7 @@ export const ManageAssignment: FC<{
     assignment.closedDate
   );
 
+  console.log(assignment.stages)
   const [inProgressStages, setInProgressStages] = useState(assignment.stages);
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
@@ -48,11 +49,11 @@ export const ManageAssignment: FC<{
       .then(() => onSaveCallback());
   };
 
-  const updateStage = (s: AssignmentStage) => {
+  const updateStage = useCallback((s: AssignmentStage) => {
     setInProgressStages((oldStages) =>
       oldStages.map((oldStage) => (oldStage.id === s.id ? s : oldStage))
     );
-  };
+  }, []);
   return (
     <div className="m-auto">
       <h3 className="text-center">Update Assignment</h3>
@@ -61,6 +62,7 @@ export const ManageAssignment: FC<{
 
         {inProgressStages.map((stage) => (
           <ManageAssignmentStage
+            key={stage.id}
             assignment={assignment}
             stage={stage}
             updateStage={updateStage}
@@ -72,7 +74,11 @@ export const ManageAssignment: FC<{
           />
         ))}
         <button
-          onClick={() => addStageMutation.mutateAsync()}
+          onClick={() =>
+            addStageMutation
+              .mutateAsync()
+              .then((d) => setInProgressStages((list) => [...list, d]))
+          }
           disabled={addStageMutation.isPending}
           type="button"
         >

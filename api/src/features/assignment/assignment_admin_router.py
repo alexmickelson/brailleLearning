@@ -1,4 +1,5 @@
 from datetime import datetime
+from pprint import pprint
 from typing import Dict, List, Optional
 from uuid import UUID
 from fastapi import APIRouter, Request, Depends
@@ -74,7 +75,8 @@ async def create_assignment_stage(
     assignment_service: AssignmentService = Depends(),
     user: UserProfile = Depends(authorize_admin),
 ):
-    await assignment_service.create_stage(assignment_id)
+    new_stage = await assignment_service.create_stage(assignment_id, 0)
+    return new_stage
 
 
 @router.delete("/{assignment_id}")
@@ -107,6 +109,7 @@ async def update_assignment(
     )
     previous_assignment = await assignment_service.get_assignment(assignment_id)
 
+    pprint(body.stages)
     stage_ids = [s.id for s in body.stages]
     # remove old stages
     for previous_stage  in previous_assignment.stages:

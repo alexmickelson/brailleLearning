@@ -3,7 +3,6 @@ export interface Assignment {
   name: string;
   availableDate?: Date;
   closedDate?: Date;
-  type: AssignmentType;
   prereqAssignmentIds: string[];
   stages: AssignmentStage[];
 }
@@ -16,6 +15,7 @@ export interface AssignmentStage {
   showLivePreview: boolean;
   showReferenceBraille: boolean;
   referenceBraille?: string;
+  type: AssignmentType;
 }
 
 export enum AssignmentType {

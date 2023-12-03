@@ -43,9 +43,9 @@ export const SubmissionGradingDetail: FC<{
             className="flex"
           >
             <NumberInputRow control={newGradeControl} />
-            <div className="my-auto ms-2 pt-2 text-2xl">
+            {/* <div className="my-auto ms-2 pt-2 text-2xl">
               /{assignment.points}
-            </div>
+            </div> */}
           </form>
           <div className="my-auto">Graded by: {submission.gradedByUserName}</div>
         </div>

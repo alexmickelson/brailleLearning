@@ -19,6 +19,7 @@ class AssignmentStage(BaseModel):
     reference_braille: Optional[str]
     show_live_preview: bool
     type: AssignmentType
+    index: int
 
 class Assignment(BaseModel):
     def __init__(self, **data):
