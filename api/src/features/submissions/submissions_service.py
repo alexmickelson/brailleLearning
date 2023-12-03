@@ -131,4 +131,5 @@ class SubmissionsService:
             where id = %(submission_id)s
         """
         params = {"grade": grade, "submission_id": submission_id, "grader_sub": grader_sub}
-        await self.run_sql(sql, params)
+        result = await self.run_sql(sql, params)
+        pprint(result)

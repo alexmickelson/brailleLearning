@@ -34,6 +34,8 @@ class RunSql:
                 ) if output_class else conn.cursor() as cur:
                     res = await cur.execute(sql, params)  # type: ignore
                     await conn.commit()
+                    if(cur.rowcount == 0):
+                        print("sql query affected 0 rows")
                     return await cur.fetchall() if res.description else []
         except Exception as e:
             print(sql)
