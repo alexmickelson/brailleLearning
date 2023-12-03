@@ -72,3 +72,14 @@ async def admin_override_grade(
     await submissions_service.override_grade(
         submission_id=submission_id, grade=body.grade, grader_sub=user.sub
     )
+
+@router.get("/{assignment_id}")
+async def get_student_assignment_submissions(
+    assignment_id: UUID,
+    profile: UserProfile = Depends(authenticate_user),
+    submissions_service: SubmissionsService = Depends(),
+):
+    submissions = await submissions_service.get_assignment_submissions_for_student(
+        assignment_id=assignment_id, student_sub=profile.sub
+    )
+    return submissions

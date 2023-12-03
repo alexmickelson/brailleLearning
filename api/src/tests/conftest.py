@@ -1,4 +1,5 @@
 from contextlib import contextmanager
+import datetime
 from dotenv import load_dotenv
 
 from src.models.user import UserProfile
@@ -30,12 +31,15 @@ def create_assignment(
     name: str = "Default Assignment",
     translate_text: str = "translate this other thing",
 ):
+    
+    today = datetime.datetime.now()
+    yesterday = today - datetime.timedelta(days=1)
+    tomorrow = today + datetime.timedelta(days=1)
     body = {
         "name": name,
         "text": translate_text,
-        "show_reference_braille": False,
-        "show_print_feed": False,
-        "type": AssignmentType.PRINT_TO_BRAILLE,
+        "available_date": yesterday.isoformat(),
+        "closed_date": tomorrow.isoformat(),
     }
     url = "/api/admin/assignments/new"
 

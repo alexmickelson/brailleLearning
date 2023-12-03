@@ -39,6 +39,7 @@ async def get_completed_assignments(
     profile: UserProfile = Depends(authenticate_user),
 ):
     return await assignment_service.get_completed_assignments(profile.sub)
+
 @router.get("/past")
 async def get_past_assignments(
     assignment_service: AssignmentService = Depends(),
@@ -46,14 +47,3 @@ async def get_past_assignments(
 ):
     return await assignment_service.get_past_assignments()
 
-
-@router.get("/submissions/{assignment_id}")
-async def get_student_assignment_submissions(
-    assignment_id: UUID,
-    profile: UserProfile = Depends(authenticate_user),
-    submissions_service: SubmissionsService = Depends(),
-):
-    submissions = await submissions_service.get_assignment_submissions_for_student(
-        assignment_id=assignment_id, student_sub=profile.sub
-    )
-    return submissions
