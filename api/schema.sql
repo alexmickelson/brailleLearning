@@ -2,32 +2,38 @@
 
 
 drop table if exists Submission;
+drop table if exists AssignmentStage;
 drop table if exists AssignmentPrerequisite;
 drop table if exists Assignment;
-drop table if exists UserAccount;
+-- drop table if exists UserAccount;
 
-create table UserAccount (
-  sub  TEXT PRIMARY KEY,
-  name TEXT NOT NULL,
-  is_admin boolean DEFAULT FALSE
-);
+-- create table UserAccount (
+--   sub  TEXT PRIMARY KEY,
+--   name TEXT NOT NULL,
+--   is_admin boolean DEFAULT FALSE
+-- );
 
 create table Assignment (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL,
-  text TEXT NOT NULL,
-  points INTEGER NOT NULL,
-  show_reference_braille boolean,
-  show_live_preview boolean,
-  reference_braille TEXT,
   available_date timestamp with time zone,
-  closed_date timestamp with time zone,
-  type TEXT
+  closed_date timestamp with time zone
 );
 
 create table AssignmentPrerequisite (
   assignment_id       UUID NOT NULL REFERENCES Assignment (id),
   prereq_assignment_id       UUID NOT NULL REFERENCES Assignment (id)
+);
+
+create table AssignmentStage (
+  id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  assignment_id       UUID NOT NULL REFERENCES Assignment (id),
+  text TEXT NOT NULL,
+  points INTEGER NOT NULL,
+  show_reference_braille boolean,
+  show_live_preview boolean,
+  reference_braille TEXT,
+  type TEXT not null
 );
 
 create table Submission (

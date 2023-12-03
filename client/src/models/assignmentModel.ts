@@ -1,14 +1,21 @@
 export interface Assignment {
   id: string;
   name: string;
+  availableDate?: Date;
+  closedDate?: Date;
+  type: AssignmentType;
+  prereqAssignmentIds: string[];
+  stages: AssignmentStage[];
+}
+
+export interface AssignmentStage {
+  id: string;
+  assignmentId: string;
   text: string;
   points: number;
   showLivePreview: boolean;
   showReferenceBraille: boolean;
   referenceBraille?: string;
-  availableDate?: Date;
-  closedDate?: Date;
-  type: AssignmentType;
 }
 
 export enum AssignmentType {

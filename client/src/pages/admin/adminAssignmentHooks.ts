@@ -48,6 +48,17 @@ export const useUpdateAssignmentMutation = (assignmentId: string) =>
     },
   });
 
+export const useAddStageMutation = (assignmentId: string) => 
+useMutation({
+  mutationFn: async () => {
+    const url = `/api/admin/assignments/${assignmentId}/stage`;
+    await axiosClient.post(url);
+  },
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ["assignments"] });
+  },
+});
+
 export const useAdminAllAssignmentsQuery = () =>
   useQuery({
     queryKey: adminAssignmentKeys.allAssignments,

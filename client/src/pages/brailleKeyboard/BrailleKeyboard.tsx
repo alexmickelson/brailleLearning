@@ -72,7 +72,7 @@ export const BrailleKeyboard: FC<{
             font-mono
             p-5
             
-            bg-slate-100          
+            bg-slate-100
             dark:bg-gray-700
             dark:border-gray-600
           "

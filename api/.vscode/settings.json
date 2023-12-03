@@ -5,7 +5,7 @@
     "editor.defaultFormatter": "ms-python.black-formatter"
   },
   "python.terminal.activateEnvInCurrentTerminal": true,
-  "python.venvPath": "/home/developer/virtualenv/bin/python",
+  "python.defaultInterpreterPath": "/home/developer/virtualenv/bin/python",
   "python.testing.pytestArgs": ["src/tests"],
   "files.exclude": {
     "**/__pycache__": true,

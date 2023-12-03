@@ -3,7 +3,11 @@ from typing import List, Optional, Type
 from uuid import UUID
 from fastapi import Depends
 from pydantic import BaseModel
-from src.features.assignment.assignment_models import Assignment, AssignmentType
+from src.features.assignment.assignment_models import (
+    Assignment,
+    AssignmentStage,
+    AssignmentType,
+)
 from src.services.db_service import RunSql
 
 
@@ -14,100 +18,117 @@ class AssignmentService:
     async def create_assignment(
         self,
         name: str,
-        text: str,
-        points: int,
-        show_reference_braille: Optional[bool],
-        show_live_preview: Optional[bool],
         available_date: Optional[datetime],
         closed_date: Optional[datetime],
-        type: Optional[AssignmentType],
     ):
         sql = """
             INSERT INTO Assignment
                 (
-                    name, 
-                    text, 
-                    points,
-                    show_reference_braille, 
-                    show_live_preview,
+                    name,
                     available_date,
-                    closed_date,
-                    type
+                    closed_date
                 )
             values
                 (
                     %(name)s, 
-                    %(text)s, 
-                    %(points)s,
-                    %(show_reference_braille)s, 
-                    %(show_live_preview)s, 
                     %(available_date)s,
-                    %(closed_date)s,
-                    %(type)s
+                    %(closed_date)s
                 )
             returning
                 id,
                 name,
-                text,
-                points,
-                show_reference_braille,
-                show_live_preview,
-                reference_braille,
                 available_date,
-                closed_date,
-                type
+                closed_date
         """
         params = {
             "name": name,
-            "text": text,
-            "points": points,
-            "show_reference_braille": show_reference_braille,
-            "show_live_preview": show_live_preview,
             "available_date": available_date,
             "closed_date": closed_date,
-            "type": type,
         }
 
         result = await self.run_sql(sql, params, output_class=Assignment)
         return result[0]
 
-    async def update(
+    async def create_stage(self, assignment_id: UUID):
+        sql = """
+            insert into AssignmentStage
+                (
+                    assignment_id,
+                    text,
+                    points,
+                    type,
+                    show_live_preview,
+                    show_reference_braille
+                )
+            values
+                (
+                    %(assignment_id)s,
+                    %(text)s,
+                    %(points)s,
+                    %(type)s,
+                    %(show_live_preview)s,
+                    %(show_reference_braille)s
+                )
+        """
+        params = {
+            "assignment_id": assignment_id,
+            "text": "",
+            "points": 0,
+            "type": AssignmentType.BRAILLE_TO_PRINT,
+            "show_live_preview": False,
+            "show_reference_braille": False,
+        }
+        await self.run_sql(sql, params)
+
+    async def update_assignment(
         self,
         assignment_id: UUID,
         name: str,
-        text: str,
-        points: int,
-        show_reference_braille: bool,
-        show_live_preview: bool,
-        type: AssignmentType,
-        reference_braille: Optional[str],
         available_date: Optional[datetime],
         closed_date: Optional[datetime],
     ):
         sql = """
             update Assignment
             set name = %(name)s,
-                text = %(text)s,
-                show_reference_braille = %(show_reference_braille)s,
-                show_live_preview = %(show_live_preview)s,
-                reference_braille = %(reference_braille)s,
                 available_date = %(available_date)s,
-                closed_date = %(closed_date)s,
-                points = %(points)s,
-                type = %(type)s
+                closed_date = %(closed_date)s
             where id = %(assignment_id)s
         """
         params = {
-            "name": name,
-            "text": text,
             "assignment_id": assignment_id,
-            "show_reference_braille": show_reference_braille,
-            "show_live_preview": show_live_preview,
-            "reference_braille": reference_braille,
+            "name": name,
             "available_date": available_date,
             "closed_date": closed_date,
-            "points": points,
-            "type": type,
+        }
+        await self.run_sql(sql, params)
+
+    async def remove_stage(self, stage_id: UUID):
+        sql = """
+            delete from AssignmentStage
+            where id = %(id)s
+        """
+        params = {"id": stage_id}
+        await self.run_sql(sql, params)
+
+    async def update_stage(self, stage: AssignmentStage):
+        sql = """
+            update AssignmentStage
+            set text = %(text)s,
+                points = %(points)s,
+                show_reference_braille = %(show_reference_braille)s,
+                reference_braille = %(reference_braille)s,
+                show_live_preview = %(show_live_preview)s,
+                type = %(type)s
+            where id = %(id)s
+        """
+        params = {
+            "text": stage.text,
+            "points": stage.points,
+            "show_reference_braille": stage.show_reference_braille,
+            "reference_braille": stage.reference_braille,
+            "show_live_preview": stage.show_live_preview,
+            "type": stage.type,
+            "id": stage.id,
         }
         await self.run_sql(sql, params)
 
@@ -120,14 +141,34 @@ class AssignmentService:
         params = {"assignment_id": assignment_id}
         await self.run_sql(sql, params)
 
-    async def get_assignment(self, id: UUID):
+    async def get_assignment(self, id: UUID) -> Assignment:
         sql = """
             select 
                 a.*, 
-                COALESCE(array_agg(ap.prereq_assignment_id) FILTER (WHERE ap.prereq_assignment_id IS NOT NULL), '{}') AS prereq_assignment_ids
+                COALESCE(array_agg(ap.prereq_assignment_id) FILTER (WHERE ap.prereq_assignment_id IS NOT NULL), '{}') AS prereq_assignment_ids,
+                COALESCE(
+                    json_agg(
+                        json_build_object(
+                            'id', astg.id,
+                            'text', astg.text, 
+                            'points', astg.points,
+                            'show_reference_braille', astg.show_reference_braille,
+                            'show_live_preview', astg.show_live_preview,
+                            'reference_braille', astg.reference_braille,
+                            'type', astg.type
+                        )
+                    )
+                    FILTER (WHERE astg.assignment_id IS NOT NULL), '[]'
+                ) as stages
             from Assignment a
                 left join AssignmentPrerequisite ap on a.id = ap.assignment_id
-            where id = %(id)s
+                left join AssignmentStage astg on a.id = astg.assignment_id
+            where a.id = %(id)s
+            group by 
+                a.id,
+                a.name,
+                a.available_date,
+                a.closed_date
         """
         params = {"id": id}
         assignments = await self.run_sql(sql, params, output_class=Assignment)
@@ -138,20 +179,29 @@ class AssignmentService:
         sql = """
             select 
                 a.*, 
-                COALESCE(array_agg(ap.prereq_assignment_id) FILTER (WHERE ap.prereq_assignment_id IS NOT NULL), '{}') AS prereq_assignment_ids
+                COALESCE(array_agg(ap.prereq_assignment_id) FILTER (WHERE ap.prereq_assignment_id IS NOT NULL), '{}') AS prereq_assignment_ids,
+                COALESCE(
+                    json_agg(
+                        json_build_object(
+                            'id', astg.id,
+                            'text', astg.text, 
+                            'points', astg.points,
+                            'show_reference_braille', astg.show_reference_braille,
+                            'show_live_preview', astg.show_live_preview,
+                            'reference_braille', astg.reference_braille,
+                            'type', astg.type
+                        )
+                    )
+                    FILTER (WHERE astg.assignment_id IS NOT NULL), '[]'
+                ) as stages
             from Assignment a
                 left join AssignmentPrerequisite ap on a.id = ap.assignment_id
+                left join AssignmentStage astg on a.id = astg.assignment_id
             group by 
                 a.id,
                 a.name,
-                a.text,
-                a.points,
-                a.show_reference_braille,
-                a.show_live_preview,
-                a.reference_braille,
                 a.available_date,
-                a.closed_date,
-                a.type
+                a.closed_date
             order by closed_date asc
         """
         return await self.run_sql(sql, {}, output_class=Assignment)
@@ -160,9 +210,24 @@ class AssignmentService:
         sql = """
             select 
                 a.*, 
-                COALESCE(array_agg(ap.prereq_assignment_id) FILTER (WHERE ap.prereq_assignment_id IS NOT NULL), '{}') AS prereq_assignment_ids
+                COALESCE(array_agg(ap.prereq_assignment_id) FILTER (WHERE ap.prereq_assignment_id IS NOT NULL), '{}') AS prereq_assignment_ids,
+                COALESCE(
+                    json_agg(
+                        json_build_object(
+                            'id', astg.id,
+                            'text', astg.text, 
+                            'points', astg.points,
+                            'show_reference_braille', astg.show_reference_braille,
+                            'show_live_preview', astg.show_live_preview,
+                            'reference_braille', astg.reference_braille,
+                            'type', astg.type
+                        )
+                    )
+                    FILTER (WHERE astg.assignment_id IS NOT NULL), '[]'
+                ) as stages
             from Assignment a
                 left join AssignmentPrerequisite ap on a.id = ap.assignment_id
+                left join AssignmentStage astg on a.id = astg.assignment_id
                 left outer join submission s on s.assignment_id = a.id and s.user_sub = %(username)s
             where now() < a.closed_date
                 and now() > a.available_date
@@ -170,26 +235,35 @@ class AssignmentService:
             group by 
                 a.id,
                 a.name,
-                a.text,
-                a.points,
-                a.show_reference_braille,
-                a.show_live_preview,
-                a.reference_braille,
                 a.available_date,
-                a.closed_date,
-                a.type
+                a.closed_date
             order by a.closed_date asc
         """
-        params = {'username': username}
+        params = {"username": username}
         return await self.run_sql(sql, params, output_class=Assignment)
 
     async def get_completed_assignments(self, username: str):
         sql = """
             select 
                 a.*, 
-                COALESCE(array_agg(ap.prereq_assignment_id) FILTER (WHERE ap.prereq_assignment_id IS NOT NULL), '{}') AS prereq_assignment_ids
+                COALESCE(array_agg(ap.prereq_assignment_id) FILTER (WHERE ap.prereq_assignment_id IS NOT NULL), '{}') AS prereq_assignment_ids,
+                COALESCE(
+                    json_agg(
+                        json_build_object(
+                            'id', astg.id,
+                            'text', astg.text, 
+                            'points', astg.points,
+                            'show_reference_braille', astg.show_reference_braille,
+                            'show_live_preview', astg.show_live_preview,
+                            'reference_braille', astg.reference_braille,
+                            'type', astg.type
+                        )
+                    )
+                    FILTER (WHERE astg.assignment_id IS NOT NULL), '[]'
+                ) as stages
             from Assignment a
                 left join AssignmentPrerequisite ap on a.id = ap.assignment_id
+                left join AssignmentStage astg on a.id = astg.assignment_id
                 left outer join submission s on s.assignment_id = a.id
             where now() < a.closed_date
                 and now() > a.available_date
@@ -198,38 +272,41 @@ class AssignmentService:
             group by 
                 a.id,
                 a.name,
-                a.text,
-                a.points,
-                a.show_reference_braille,
-                a.show_live_preview,
-                a.reference_braille,
                 a.available_date,
-                a.closed_date,
-                a.type
+                a.closed_date
             order by a.closed_date asc
         """
-        params = {'username': username}
+        params = {"username": username}
         return await self.run_sql(sql, params, output_class=Assignment)
 
     async def get_past_assignments(self):
         sql = """
             select 
                 a.*, 
-                COALESCE(array_agg(ap.prereq_assignment_id) FILTER (WHERE ap.prereq_assignment_id IS NOT NULL), '{}') AS prereq_assignment_ids
+                COALESCE(array_agg(ap.prereq_assignment_id) FILTER (WHERE ap.prereq_assignment_id IS NOT NULL), '{}') AS prereq_assignment_ids,
+                COALESCE(
+                    json_agg(
+                        json_build_object(
+                            'id', astg.id,
+                            'text', astg.text, 
+                            'points', astg.points,
+                            'show_reference_braille', astg.show_reference_braille,
+                            'show_live_preview', astg.show_live_preview,
+                            'reference_braille', astg.reference_braille,
+                            'type', astg.type
+                        )
+                    )
+                    FILTER (WHERE astg.assignment_id IS NOT NULL), '[]'
+                ) as stages
             from Assignment a
                 left join AssignmentPrerequisite ap on a.id = ap.assignment_id
+                left join AssignmentStage astg on a.id = astg.assignment_id
             where now() > a.closed_date
-            group by 
+            group by
                 a.id,
                 a.name,
-                a.text,
-                a.points,
-                a.show_reference_braille,
-                a.show_live_preview,
-                a.reference_braille,
                 a.available_date,
-                a.closed_date,
-                a.type
+                a.closed_date
             order by a.closed_date asc
         """
         return await self.run_sql(sql, {}, output_class=Assignment)

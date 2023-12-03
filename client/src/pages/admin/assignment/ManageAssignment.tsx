@@ -1,21 +1,20 @@
 import { FC, useState } from "react";
-import { Assignment, AssignmentType } from "../../../models/assignmentModel";
+import {
+  Assignment,
+  AssignmentStage,
+  AssignmentType,
+} from "../../../models/assignmentModel";
 import { TextInputRow } from "../../../sharedComponents/forms/text/TextInputRow";
 import { useTextInput } from "../../../sharedComponents/forms/text/useTextInput";
-import { CheckInputRow } from "../../../sharedComponents/forms/check/CheckInputRow";
-import { useCheckInput } from "../../../sharedComponents/forms/check/useCheckInput";
-import { BrailleKeyboard } from "../../brailleKeyboard/BrailleKeyboard";
 import DatePicker from "react-datepicker";
 import {
+  useAddStageMutation,
   useDeleteAssignmentMutation,
   useUpdateAssignmentMutation,
 } from "../adminAssignmentHooks";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "../../../sharedComponents/Spinner";
-import { useNumberInput } from "../../../sharedComponents/forms/number/useNumberInput";
-import { NumberInputRow } from "../../../sharedComponents/forms/number/NumberInputRow";
-import { useRadioInput } from "../../../sharedComponents/forms/select/useRadioInput";
-import { RadioInputRow } from "../../../sharedComponents/forms/select/RadioInputRow";
+import { ManageAssignmentStage } from "./ManageAssignmentStage";
 
 export const ManageAssignment: FC<{
   assignment: Assignment;
@@ -24,27 +23,9 @@ export const ManageAssignment: FC<{
   const navigate = useNavigate();
   const updateAssignmentMutation = useUpdateAssignmentMutation(assignment.id);
   const deleteAssignmentMutation = useDeleteAssignmentMutation(assignment.id);
+  const addStageMutation = useAddStageMutation(assignment.id);
   const nameControl = useTextInput(assignment.name);
-  const textControl = useTextInput(assignment.text);
 
-  const typeToText = (i: AssignmentType) =>
-    i === AssignmentType.PRINT_TO_BRAILLE
-      ? "Print to Braille"
-      : "Braille to Print";
-
-  const typeControl = useRadioInput({
-    initialValue: assignment.type,
-    options: [AssignmentType.PRINT_TO_BRAILLE, AssignmentType.BRAILLE_TO_PRINT],
-    getKey: typeToText,
-    required: true,
-    onChange: () => textControl.setValue(""),
-  });
-  const pointsControl = useNumberInput(assignment.points);
-  const livePreviewControl = useCheckInput(assignment.showLivePreview);
-  const showReferenceBrailleControl = useCheckInput(
-    assignment.showReferenceBraille
-  );
-  const [referenceBrailleInput, setReferenceBrailleInput] = useState("");
   const [availableDate, setAvailableDate] = useState<Date | undefined>(
     assignment.availableDate
   );
@@ -52,70 +33,51 @@ export const ManageAssignment: FC<{
     assignment.closedDate
   );
 
+  const [inProgressStages, setInProgressStages] = useState(assignment.stages);
+
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     updateAssignmentMutation
       .mutateAsync({
         ...assignment,
         name: nameControl.value,
-        text: textControl.value,
-        showLivePreview: livePreviewControl.value,
-        showReferenceBraille: showReferenceBrailleControl.value,
-        referenceBraille: referenceBrailleInput,
         availableDate: availableDate,
         closedDate: closedDate,
-        points: pointsControl.value,
-        type: typeControl.value ?? AssignmentType.PRINT_TO_BRAILLE,
+        stages: inProgressStages,
       })
       .then(() => onSaveCallback());
   };
 
-  console.log(assignment);
+  const updateStage = (s: AssignmentStage) => {
+    setInProgressStages((oldStages) =>
+      oldStages.map((oldStage) => (oldStage.id === s.id ? s : oldStage))
+    );
+  };
   return (
     <div className="m-auto">
       <h3 className="text-center">Update Assignment</h3>
       <form onSubmit={submitHandler}>
         <TextInputRow label="Assignment Name" control={nameControl} />
-        <RadioInputRow label="Assignment Type" control={typeControl} />
-        {typeControl.value === AssignmentType.PRINT_TO_BRAILLE && (
-          <TextInputRow label="Text" control={textControl} isTextArea={true} />
-        )}
 
-        {typeControl.value === AssignmentType.BRAILLE_TO_PRINT && (
-          <BrailleKeyboard
-            startingBraille={textControl.value}
-            updateBrail={(b) => textControl.setValue(b)}
+        {inProgressStages.map((stage) => (
+          <ManageAssignmentStage
+            assignment={assignment}
+            stage={stage}
+            updateStage={updateStage}
+            removeStage={() => {
+              setInProgressStages((stageList) =>
+                stageList.filter((s) => s.id !== stage.id)
+              );
+            }}
           />
-        )}
-
-        <hr />
-        <h4 className="text-center">Assignment Options</h4>
-
-        {typeControl.value === AssignmentType.PRINT_TO_BRAILLE && (
-          <div className="flex flex-col justify-center align-center">
-            <div>
-              <CheckInputRow
-                label="show live reference"
-                control={livePreviewControl}
-              />
-              <CheckInputRow
-                label="show reference braille"
-                control={showReferenceBrailleControl}
-              />
-            </div>
-            <div>
-              {showReferenceBrailleControl.value && (
-                <div>
-                  <BrailleKeyboard
-                    startingBraille={assignment.referenceBraille}
-                    updateBrail={setReferenceBrailleInput}
-                  />
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-        <NumberInputRow label={"Points"} control={pointsControl} />
+        ))}
+        <button
+          onClick={() => addStageMutation.mutateAsync()}
+          disabled={addStageMutation.isPending}
+          type="button"
+        >
+          Add Stage
+        </button>
         <div className="w-100 mt-3">
           <label>Available Date</label>
           <DatePicker
