@@ -16,6 +16,7 @@ export interface AssignmentStage {
   showReferenceBraille: boolean;
   referenceBraille?: string;
   type: AssignmentType;
+  index: number;
 }
 
 export enum AssignmentType {

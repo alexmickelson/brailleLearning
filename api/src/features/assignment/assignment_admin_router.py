@@ -75,7 +75,13 @@ async def create_assignment_stage(
     assignment_service: AssignmentService = Depends(),
     user: UserProfile = Depends(authorize_admin),
 ):
-    new_stage = await assignment_service.create_stage(assignment_id, 0)
+    previous_assignment = await assignment_service.get_assignment(assignment_id)
+    next_index = (
+        max([s.index for s in previous_assignment.stages])
+        if previous_assignment.stages
+        else -1
+    ) + 1
+    new_stage = await assignment_service.create_stage(assignment_id, next_index)
     return new_stage
 
 
@@ -112,7 +118,7 @@ async def update_assignment(
     pprint(body.stages)
     stage_ids = [s.id for s in body.stages]
     # remove old stages
-    for previous_stage  in previous_assignment.stages:
+    for previous_stage in previous_assignment.stages:
         if previous_stage.id not in stage_ids:
             await assignment_service.remove_stage(previous_stage.id)
     # update incoming stages

@@ -43,6 +43,7 @@ export const ManageAssignmentStage: FC<{
     const newStage: AssignmentStage = {
       id: stage.id,
       assignmentId: stage.assignmentId,
+      index: stage.index,
       text: textControl.value,
       points: pointsControl.value,
       showLivePreview: livePreviewControl.value,
@@ -61,6 +62,7 @@ export const ManageAssignmentStage: FC<{
     textControl.value,
     updateStage,
     typeControl.value,
+    stage.index,
   ]);
 
   return (

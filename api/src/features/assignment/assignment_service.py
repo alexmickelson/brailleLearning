@@ -59,7 +59,7 @@ class AssignmentService:
                     type,
                     show_live_preview,
                     show_reference_braille,
-                    index,
+                    index
                 )
             values
                 (
@@ -172,7 +172,7 @@ class AssignmentService:
                             'reference_braille', astg.reference_braille,
                             'type', astg.type,
                             'index', astg.index
-                        )
+                        ) order by astg.index asc
                     )
                     FILTER (WHERE astg.assignment_id IS NOT NULL), '[]'
                 ) as stages
@@ -207,7 +207,7 @@ class AssignmentService:
                             'reference_braille', astg.reference_braille,
                             'type', astg.type,
                             'index', astg.index
-                        )
+                        ) order by astg.index asc
                     )
                     FILTER (WHERE astg.assignment_id IS NOT NULL), '[]'
                 ) as stages
@@ -239,7 +239,7 @@ class AssignmentService:
                             'reference_braille', astg.reference_braille,
                             'type', astg.type,
                             'index', astg.index
-                        )
+                        ) order by astg.index asc
                     )
                     FILTER (WHERE astg.assignment_id IS NOT NULL), '[]'
                 ) as stages
@@ -276,7 +276,7 @@ class AssignmentService:
                             'reference_braille', astg.reference_braille,
                             'type', astg.type,
                             'index', astg.index
-                        )
+                        ) order by astg.index asc
                     )
                     FILTER (WHERE astg.assignment_id IS NOT NULL), '[]'
                 ) as stages
@@ -314,7 +314,7 @@ class AssignmentService:
                             'reference_braille', astg.reference_braille,
                             'type', astg.type,
                             'index', astg.index
-                        )
+                        ) order by astg.index asc
                     )
                     FILTER (WHERE astg.assignment_id IS NOT NULL), '[]'
                 ) as stages

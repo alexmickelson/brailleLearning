@@ -33,7 +33,6 @@ export const ManageAssignment: FC<{
     assignment.closedDate
   );
 
-  console.log(assignment.stages)
   const [inProgressStages, setInProgressStages] = useState(assignment.stages);
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
