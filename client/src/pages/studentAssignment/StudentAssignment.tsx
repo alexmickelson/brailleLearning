@@ -11,13 +11,12 @@ import { SubmissionList } from "./SubmissionList";
 import { AssignmentType } from "../../models/assignmentModel";
 import { useTextInput } from "../../sharedComponents/forms/text/useTextInput";
 import { TextInputRow } from "../../sharedComponents/forms/text/TextInputRow";
+import { StudentAssignmentStage } from "./StudentAssignmentStage";
 
 export const StudentAssignment: FC<{ assignmentId: string }> = ({
   assignmentId,
 }) => {
   const navigate = useNavigate();
-  const [brailInput, setBrailInput] = useState("");
-  const textControl = useTextInput("");
 
   const assignmentQuery = useAssignmentDetailsQuery(assignmentId);
   const submissionMutation = useSubmitAssignmentMutation(assignmentId);
@@ -33,28 +32,28 @@ export const StudentAssignment: FC<{ assignmentId: string }> = ({
     const difference = currentTime.getTime() - loadTime.getTime();
     const differenceInSeconds = difference / 1000;
 
-    if (assignmentQuery.data.type === AssignmentType.PRINT_TO_BRAILLE) {
-      submissionMutation
-        .mutateAsync({
-          submissionString: brailInput,
-          secondsToComplete: differenceInSeconds,
-        })
-        .then(() => {
-          setLoadTime(new Date());
-          navigate("/");
-        });
-    }
-    if (assignmentQuery.data.type === AssignmentType.BRAILLE_TO_PRINT) {
-      submissionMutation
-        .mutateAsync({
-          submissionString: textControl.value,
-          secondsToComplete: differenceInSeconds,
-        })
-        .then(() => {
-          setLoadTime(new Date());
-          navigate("/");
-        });
-    }
+    // if (assignmentQuery.data.type === AssignmentType.PRINT_TO_BRAILLE) {
+    //   submissionMutation
+    //     .mutateAsync({
+    //       submissionString: brailInput,
+    //       secondsToComplete: differenceInSeconds,
+    //     })
+    //     .then(() => {
+    //       setLoadTime(new Date());
+    //       navigate("/");
+    //     });
+    // }
+    // if (assignmentQuery.data.type === AssignmentType.BRAILLE_TO_PRINT) {
+    //   submissionMutation
+    //     .mutateAsync({
+    //       submissionString: textControl.value,
+    //       secondsToComplete: differenceInSeconds,
+    //     })
+    //     .then(() => {
+    //       setLoadTime(new Date());
+    //       navigate("/");
+    //     });
+    // }
   };
 
   const allowSubmission = assignmentQuery.data.closedDate
@@ -70,39 +69,12 @@ export const StudentAssignment: FC<{ assignmentId: string }> = ({
       {allowSubmission && (
         <>
           <hr />
-          <div
-            className="
-              text-center
-              rounded-lg
-              m-5
-              p-2
-              bg-slate-200
-              border-slate-300
 
-              dark:bg-gray-700
-              dark:border-gray-800
-            "
-          >
-            <div className="text-sm">Translate the Following Text:</div>
-            <div className="flex justify-center mt-2">
-              <pre className="font-mono text-start">
-                <strong>{assignmentQuery.data.text}</strong>
-              </pre>
+          {assignmentQuery.data.stages.map((stage) => (
+            <div key={stage.id} className="m-5 p-5 border rounded-lg bg-trueGray-900">
+              <StudentAssignmentStage stage={stage} />
             </div>
-          </div>
-
-          {assignmentQuery.data.type === AssignmentType.PRINT_TO_BRAILLE && (
-            <BrailleKeyboard updateBrail={setBrailInput} />
-          )}
-          {assignmentQuery.data.type === AssignmentType.BRAILLE_TO_PRINT && (
-            <>
-              <TextInputRow
-                label="Text Translation"
-                control={textControl}
-                isTextArea={true}
-              />
-            </>
-          )}
+          ))}
 
           <div className="flex justify-center">
             <button
@@ -114,12 +86,6 @@ export const StudentAssignment: FC<{ assignmentId: string }> = ({
               Submit
             </button>
           </div>
-
-          {assignmentQuery.data.showReferenceBraille && (
-            <>
-              <div>Reference: {assignmentQuery.data.referenceBraille}</div>
-            </>
-          )}
         </>
       )}
       <div className="flex justify-center">

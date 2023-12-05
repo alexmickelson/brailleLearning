@@ -1,6 +1,7 @@
 -- psql -U $POSTGRES_USER $POSTGRES_DB
 
 
+drop table if exists SubmissionStage;
 drop table if exists Submission;
 drop table if exists AssignmentStage;
 drop table if exists AssignmentPrerequisite;
@@ -40,12 +41,18 @@ create table AssignmentStage (
 create table Submission (
   id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   assignment_id       UUID NOT NULL REFERENCES Assignment (id),
-  user_sub             TEXT NOT NULL,
-  grade               FLOAT,
+  user_sub            TEXT NOT NULL,
   seconds_to_complete FLOAT NOT NULL,
-  submitted_text      TEXT,
   submitted_date      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   graded_by_user_sub  TEXT
+);
+
+create table SubmissionStage (
+  id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  submission_id       UUID NOT NULL REFERENCES Submission (id),
+  stage_id            UUID NOT NULL REFERENCES AssignmentStage (id),
+  grade               FLOAT,
+  submitted_text      TEXT
 );
 
 

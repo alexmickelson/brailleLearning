@@ -32,15 +32,15 @@ async def get_assignment_submissions(
     return submissions_by_student
 
 
-class AssignmentSubmission(BaseModel):
-    submission_string: str
+class AssignmentSubmissionRequest(BaseModel):
+    student_string_by_stage: Dict[UUID, str]
     seconds_to_complete: float
 
 
 @router.post("/{assignment_id}")
 async def submit_assignment(
     assignment_id: UUID,
-    body: AssignmentSubmission,
+    body: AssignmentSubmissionRequest,
     profile: UserProfile = Depends(authenticate_user),
     submissions_service: SubmissionsService = Depends(),
     assignment_service: AssignmentService = Depends(),
@@ -52,9 +52,8 @@ async def submit_assignment(
     await submissions_service.submit_assignment(
         user_sub=profile.sub,
         assignment_id=assignment_id,
-        submission_string=body.submission_string,
-        seconds_to_complete=body.seconds_to_complete,
-        grade=None,
+        student_string_by_stage=body.student_string_by_stage,
+        seconds_to_complete=body.seconds_to_complete
     )
 
 

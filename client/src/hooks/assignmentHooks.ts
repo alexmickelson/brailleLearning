@@ -91,7 +91,7 @@ export const useAssignmentSubmissionsQuery = (assignmentId: string) =>
   useQuery({
     queryKey: assignmentKeys.assignmentSubmissions(assignmentId),
     queryFn: async (): Promise<Submission[]> => {
-      const url = `/api/assignments/submissions/${assignmentId}`;
+      const url = `/api/submissions/${assignmentId}`;
       const response = await axiosClient.get(url);
       return response.data;
     },

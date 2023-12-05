@@ -79,6 +79,8 @@ https://iceb.org/Rules%20of%20Unified%20English%20Braille%202013.pdf
 
 nov 27th: features done
 
+-  stages, one at a time? autosave cant come until later.
+
 dec 11th: ship the code
 
 sem start jan: 8
